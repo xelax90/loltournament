@@ -1,60 +1,89 @@
+<?php if(!empty($_GET["page"]) && $_GET["page"] == "riot"):
+	echo "8e447855-8376-4caf-ab35-5f8f9f951914"; 
+	die();
+endif; ?>
 <?php echo $this->doctype(); ?>
+<!-- Website Template by freewebsitetemplates.com -->
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
+    <?php echo $this->headMeta()
+        ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+        ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+    ?>
 
-        <?php echo $this->headMeta()
-            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
-            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
-        ?>
+    <!-- Le styles -->
+    <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+                    ->prependStylesheet($this->basePath() . '/css/style.css')
+                    ->prependStylesheet($this->basePath() . '/css/iconselect.css')
+                    ->prependStylesheet($this->basePath() . '/css/template.css') ?>
 
-        <!-- Le styles -->
-        <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
-                        ->prependStylesheet($this->basePath() . '/css/style.css')
-                        ->prependStylesheet($this->basePath() . '/css/bootstrap-theme.min.css')
-                        ->prependStylesheet($this->basePath() . '/css/bootstrap.min.css') ?>
-
-        <!-- Scripts -->
-        <?php echo $this->headScript()
-            ->prependFile($this->basePath() . '/js/bootstrap.min.js')
-            ->prependFile($this->basePath() . '/js/jquery.min.js')
-            ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
-            ->prependFile($this->basePath() . '/js/html5shiv.js',   'text/javascript', array('conditional' => 'lt IE 9',))
-        ; ?>
-
-    </head>
-    <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="<?php echo $this->url('home') ?>"><img src="<?php echo $this->basePath('img/zf2-logo.png') ?>" alt="Zend Framework 2"/>&nbsp;<?php echo $this->translate('Skeleton Application') ?></a>
-                </div>
-                <div class="collapse navbar-collapse">
-						<?php echo $this->navigation('navigation')
-										->menu()
-										->setMinDepth(0)
-										->setMaxDepth(0)
-										->setonlyActiveBranch(false)
-										->setUlClass('')
-										->setPartial('partial/navigation.phtml')
-										->render(); ?>
-                </div><!--/.nav-collapse -->
-            </div>
-        </nav>
-        <div class="container">
-            <?php echo $this->content; ?>
-            <hr>
-            <footer>
-                <p>&copy; 2005 - <?php echo date('Y') ?> by Zend Technologies Ltd. <?php echo $this->translate('All rights reserved.') ?></p>
-            </footer>
-        </div> <!-- /container -->
-        <?php echo $this->inlineScript() ?>
-    </body>
+    <!-- Scripts -->
+    <?php echo $this->headScript()
+        ->prependFile($this->basePath() . '/js/bootstrap.min.js')
+        ->prependFile($this->basePath() . '/js/jquery.min.js')
+        ->prependFile($this->basePath() . '/js/respond.min.js', 'text/javascript', array('conditional' => 'lt IE 9',))
+        ->prependFile($this->basePath() . '/js/html5shiv.js',   'text/javascript', array('conditional' => 'lt IE 9',))
+    ; ?>
+</head>
+<body>
+	<div id="background">
+		<div id="header">
+			<div>
+				<div>
+					<a href="<?php echo $this->url('home') ?>" class="logo"><img src="img/logo.png" alt=""></a>
+					<?php echo $this->navigation('navigation')
+									->menu()
+									->setMinDepth(0)
+									->setMaxDepth(0)
+									->setonlyActiveBranch(false)
+									->setUlClass('')
+									->setPartial('partial/navigation.phtml')
+									->render(); ?>
+				</div>
+			</div>
+		</div>
+		<div id="body">
+			<div>
+				<div>
+		            <?php echo $this->content; ?>
+				</div>
+			</div>
+		</div>
+		<div id="footer">
+			<div>
+				<ul>
+					<li id="facebook"> <!-- Turniergruppe -->
+						<a target="_blank" href="https://www.facebook.com/groups/339517166200659/">facebook</a>
+					</li>
+					<li id="googleplus"> <!-- Communitygruppe -->
+						<a target="_blank" href="https://www.facebook.com/groups/439327219510270/">RWTH GG</a>
+					</li>
+					<li id="bitstars">
+						<a target="_blank" href="http://www.bitstars.com">Bitstars</a>
+					</li>
+					<li id="fachschaft">
+						<a target="_blank" href="http://www.fsmpi.rwth-aachen.de">Fachschaft</a>
+					</li>					
+					
+					<!--li id="facebook">
+						<a target="_blank" href="https://www.facebook.com/groups/439327219510270/">facebook</a>
+					</li -->
+					<!-- li id="twitter">
+						<a href="http://freewebsitetemplates.com/go/twitter/">twitter</a>
+					</li>
+					<li id="googleplus" style="height: 73px">
+						<a href="http://freewebsitetemplates.com/go/googleplus/">googleplus</a>
+					</li -->
+				</ul>
+				<p>
+					League of Legends AK isn’t endorsed by Riot Games and doesn’t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.
+				</p>
+			</div>
+		</div>
+	</div>
+    <?php echo $this->inlineScript() ?>
+</body>
 </html>

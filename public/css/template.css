@@ -1,0 +1,1469 @@
+/*Website Template by freewebsitetemplates.com*/
+@font-face {
+	font-family: 'Philosopher-Regular';
+	src: url('../fonts/Philosopher-Regular/Philosopher-Regular.eot');
+	src: url('../fonts/Philosopher-Regular/Philosopher-Regular.woff') format('woff'), url('../fonts/Philosopher-Regular/Philosopher-Regular.ttf') format('truetype'), url('../fonts/Philosopher-Regular/Philosopher-Regular.svg') format('svg');
+}
+@font-face {
+	font-family: 'Philosopher-Bold';
+	src: url('../fonts/Philosopher-Bold/Philosopher-Bold.eot');
+	src: url('../fonts/Philosopher-Bold/Philosopher-Bold.woff') format('woff'), url('../fonts/Philosopher-Bold/Philosopher-Bold.ttf') format('truetype'), url('../fonts/Philosopher-Bold/Philosopher-Bold.svg') format('svg');
+}
+body {
+	background: url(../img/bg-body.jpg) repeat;
+	color: #727272;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	line-height: 1;
+	margin: 0;
+	min-width: 960px;
+	padding: 0;
+}
+#background {
+	background: url(../img/background-rep.png) repeat top center;
+	margin: 0;
+	padding: 0;
+}
+#header {
+	background: url(../img/bg-header2.png) repeat-x top center;
+	margin: 0;
+	padding: 0;
+}
+#header > div {
+	background: url(../img/bg-header.png) no-repeat top center;
+	margin: 0;
+	padding: 0;
+}
+#header > div > div {
+	height: 147px;
+	margin: 0 auto;
+	padding: 49px 0 0;
+	position: relative;
+	width: 960px;
+	z-index: 5;
+}
+#header a.logo {
+	display: block;
+	margin: 0 auto;
+	padding: 0;
+	width: 841px;
+}
+#header a.logo img {
+	border: 0;
+	display: block;
+}
+#header ul {
+	background: url(../img/bg-navigation.png) no-repeat center center;
+	bottom: -107px;
+	height: 98px;
+	left: 30px;
+	margin: 0 auto;
+	overflow: hidden;
+	padding: 9px 17px;
+	position: absolute;
+	width: 865px;
+}
+#header ul li {
+	display: block;
+	float: left;
+	list-style: none;
+	margin: 0 5px;
+	padding: 0;
+}
+#header ul li a {
+	background: url(../img/menu.png) no-repeat;
+	color: #a8a8a8;
+	display: block;
+	font-family: 'Philosopher-Bold';
+	font-size: 16px;
+	font-weight: normal;
+	height: 98px;
+	letter-spacing: 0.07em;
+	line-height: 104px;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	text-decoration: none;
+	text-transform: uppercase;
+	width: 163px;
+}
+#header ul li#menu1 a {
+	background-position: 0 0;
+}
+#header ul li#menu2 a{
+	background-position: -168px 0;
+}
+#header ul li#menu3 a{
+	background-position: -335px 0;
+}
+#header ul li#menu4 a{
+	background-position: -502px 0;
+}
+#header ul li#menu5 a{
+	background-position: -669px 0;
+}
+#header ul li a:hover, #header ul li.selected a {
+	color: #fff;
+}
+#header ul li #menu1:hover, #header ul li.selected#menu1 a {
+	background-position: 0 -113px;
+}
+#header ul li #menu2:hover, #header ul li.selected#menu2 a{
+	background-position: -168px -113px;
+}
+#header ul li #menu3:hover, #header ul li.selected#menu3 a{
+	background-position: -335px -113px;
+}
+#header ul li #menu4:hover, #header ul li.selected#menu4 a{
+	background-position: -502px -113px;
+}
+#header ul li #menu5:hover, #header ul li.selected#menu5 a{
+	background-position: -669px -113px;
+}
+#body {
+	background: url(../img/bg-body-header.png) no-repeat top center;
+	margin: 0 auto;
+	padding: 112px 0 0;
+	width: 960px;
+}
+#body p {
+	margin: 0;
+	padding: 0;
+}
+#body p a {
+	color: #797979;
+}
+#body p a:hover {
+	color: #a3a3a3;
+}
+#body > div {
+	background: url(../img/bg-body-footer.png) no-repeat bottom center;
+	margin: 0;
+	padding: 0 0 114px;
+}
+#body > div > div {
+	background: url(../img/bg-body2.png) repeat-y top center;
+	min-height: 400px;
+	margin: 0;
+	padding: 0;
+}
+#body div div .featured {
+	height: 361px;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	width: 960px;
+}
+#body div div .featured img {
+	display: block;
+	left: 0;
+	position: absolute;
+	top: -112px;
+	z-index: 1;
+	-moz-transition-property: opacity;
+	-moz-transition-duration: 1s;
+	-webkit-transition-property: opacity;
+	-webkit-transition-duration: 1s;
+	transition-property: opacity;
+	transition-duration: 1s;
+}
+#body div div .featured img#img1{
+	opacity: 0.0;
+}
+#body div div .section {
+	background: #0a0a0a url(../img/gradient.png) repeat-x bottom center;
+	margin: 0 auto;
+	overflow: hidden;
+	padding: 102px 9px 22px 9px;
+	width: 940px;
+}
+#body div div .section > div {
+	background: url(../img/border.gif) repeat-x top left;
+	float: left;
+	margin: 5px 10px;
+	padding: 3px 0 0;
+	width: 920px;
+}
+#body div div .section > div:first-child {
+	width: 920px;
+}
+#body div div .section div h4 {
+	background: #070707 url(../img/gradient2.png) repeat-x top center;
+	border: 1px solid #22272a;
+	color: #fff;
+	font-size: 14px;
+	line-height: 24px;
+	margin: 0 0 1px;
+	padding: 10px 19px;
+}
+#body div div .section div div {
+	background: #181818;
+	border: 1px solid #22272a;
+	margin: 0;
+	padding: 20px 19px;
+}
+#body div div .section div:first-child div {
+	padding: 14px 19px 30px;
+}
+#body div div .section div div p {
+	line-height: 24px;
+	margin: 0;
+	padding: 0;
+}
+/* Space for registration buttons
+#body div div .section div:first-child div p {
+	width: 83.5%;
+}
+*/
+#body div div .section div div p a {
+	color: #727272;
+}
+#body div div .section div div p a.more {
+	background: url(../img/bg-more.png) no-repeat center center;
+	color: #bababa;
+	display: inline-block;
+	height: 23px;
+	font-size: 10px;
+	font-weight: normal;
+	line-height: 22px;
+	margin: 0 0 0 12px;
+	padding: 0;
+	text-align: center;
+	text-decoration: none;
+	text-transform: lowercase;
+	width: 70px;
+}
+#body div div .section div div p a:hover {
+	color: #a3a3a3;
+}
+#body div div .section div div p a.more:hover {
+	background: url(../img/bg-more-hover.png) no-repeat center center;
+	color: #bababa;
+}
+#body div div .section div h3 {
+	background: #070707 url(../img/gradient3.png) repeat-x top center;
+	border: 1px solid #22272a;
+	color: #fff;
+	font-family: 'Philosopher-Bold';
+	font-size: 16px;
+	font-weight: normal;
+	height: 50px;
+	letter-spacing: 0.07em;
+	line-height: 50px;
+	margin: 0 0 1px;
+	padding: 0 19px;
+	text-transform: uppercase;
+}
+#body div div .section div div a.figure {
+	border: 1px solid #22272a;
+	display: block;
+	margin: 0;
+	padding: 0;
+}
+#body div div .section div div a.figure:hover {
+	opacity: 0.8;
+}
+#body div div .section div div a.figure img {
+	border: 1px solid #000;
+	display: block;
+}
+#body div div .section div div span {
+	background: #181a1a url(../img/gradient4.png) repeat-x bottom left;
+	border-bottom: 1px solid #22272a;
+	border-left: 1px solid #22272a;
+	border-right: 1px solid #22272a;
+	display: block;
+	height: 38px;
+}
+#body div div .section div div span a {
+	color: #a7a9ac;
+	display: block;
+	font-size: 12px;
+	line-height: 38px;
+	margin: 0;
+	padding: 0 9px;
+	text-align: center;
+	text-decoration: none;
+}
+#body div div .section div div span a:hover {
+	color: #fff;
+}
+#body .media, #body .games, #body .about, #body .blog, #body .anmeldung, #body .kontakt{
+	margin: 0;
+	padding: 24px 0;
+}
+#body .media > div, 
+#body .kontakt > div {
+	margin: 0;
+	overflow: hidden;
+	padding: 0 10px;
+}
+#body .media > div > div,
+#body .kontakt > div > div {
+	background: url(../img/border.gif) repeat-x top left;
+	float: left;
+	margin: 0 10px;
+	padding: 3px 0 0;
+	width: 450px;
+}
+#body .media h3,
+#body .kontakt h3 {
+	background: #070707 url(../img/gradient3.png) repeat-x top center;
+	border: 1px solid #22272a;
+	color: #fff;
+	font-family: 'Philosopher-Bold';
+	font-size: 16px;
+	font-weight: normal;
+	height: 50px;
+	letter-spacing: 0.07em;
+	line-height: 50px;
+	margin: 0 0 1px;
+	padding: 0 19px;
+	text-transform: uppercase;
+}
+#body .media ul,
+#body .kontakt ul {
+	background: #181818;
+	border: 1px solid #22272a;
+	margin: 0;
+	overflow: hidden;
+	padding: 0;
+}
+#body .media ul li,
+#body .kontakt ul li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+#body .media div div ul {
+	padding: 8px;
+}
+#body .media div div ul li {
+	border: 1px solid #22272a;
+	display: block;
+	float: left;
+	margin: 8px 10px;
+	padding: 0;
+	width: 194px;
+}
+#body .media div div ul li a.figure {
+	display: block;
+	margin: 0;
+	padding: 0;
+}
+#body .media div div ul li a.figure:hover {
+	opacity: 0.8;
+}
+#body .media div div ul li a.figure img {
+	border: 1px solid #000;
+	display: block;
+}
+#body .media div div ul li span {
+	background: #181a1a url(../img/gradient4.png) repeat-x bottom left;
+	border-top: 1px solid #22272a;
+	display: block;
+	height: 38px;
+}
+#body .media div div ul li span a {
+	color: #a7a9ac;
+	display: block;
+	font-size: 12px;
+	line-height: 38px;
+	margin: 0;
+	padding: 0 9px;
+	text-align: center;
+	text-decoration: none;
+}
+#body .media div div ul li span a:hover {
+	color: #fff;
+}
+#body .media .article {
+	background: url(../img/border.gif) repeat-x top left;
+	margin: 17px auto 17px;
+	padding: 3px 0 0;
+	width: 920px
+}
+#body .media .article ul {
+	padding: 0 10px;
+}
+#body .media .article ul li {
+	display: block;
+	float: left;
+	margin: 0 9px;
+	overflow: hidden;
+	padding: 0 0 10px;
+	width: 430px;
+}
+#body .media .article ul li a.figure {
+	border: 1px solid #22272a;
+	float: left;
+	display: block;
+	margin: 19px 13px 0 0;
+	padding: 0;
+}
+#body .media .article ul li a.figure:hover {
+	opacity: 0.8;
+}
+#body .media .article ul li a.figure img {
+	border: 1px solid #000;
+	display: block;
+}
+#body .media .article ul li p {
+	font-size: 12px;
+	line-height: 17px;
+	padding: 13px 0 0;
+}
+#body .media .article ul li p a {
+	color: #727272;
+}
+#body .media .article ul li p a:hover {
+	color: #a3a3a3;
+}
+#body .games {
+	overflow: hidden;
+}
+#body .games div {
+	margin: 0;
+	padding: 0;
+}
+#body .games h3 {
+	background: #070707 url(../img/gradient3.png) repeat-x top center;
+	border: 1px solid #22272a;
+	color: #fff;
+	font-family: 'Philosopher-Bold';
+	font-size: 16px;
+	font-weight: normal;
+	height: 50px;
+	letter-spacing: 0.07em;
+	line-height: 50px;
+	margin: 0 0 1px;
+	padding: 0 19px;
+	text-transform: uppercase;
+}
+#body .games div ul {
+	background: #181818;
+	border: 1px solid #22272a;
+	margin: 0;
+	padding: 0;
+}
+#body .games div ul li {
+	border: 1px solid #22272a;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+#body .games div ul li a.figure {
+	display: block;
+	margin: 0;
+	padding: 0;
+}
+#body .games div ul li a.figure:hover {
+	opacity: 0.8;
+}
+#body .games div ul li a.figure img {
+	border: 1px solid #000;
+	display: block;
+}
+#body .games div ul li span {
+	background: #181a1a url(../img/gradient3.png) repeat-x bottom left;
+	border-top: 1px solid #22272a;
+	display: block;
+}
+#body .games div ul li span a {
+	color: #a7a9ac;
+	display: block;
+	margin: 0;
+	padding: 0 9px;
+	text-decoration: none;
+}
+#body .games div ul li span a:hover {
+	color: #fff;
+}
+#body .games .content {
+	background: url(../img/border.gif) repeat-x top left;
+	float: left;
+	margin: 0 0 0 19px;
+	padding: 3px 0 0;
+	width: 445px;
+}
+#body .games .content ul {
+	padding: 16px 19px 1px;
+}
+#body .games .content ul li {
+	margin: 0 0 20px;
+}
+#body .games .content ul li .player{
+	margin: 0 0 10px 0;
+	background-repeat: no-repeat;
+	background-size: 52px;
+	background-position-x: left;
+	min-height: 44px;
+	padding: 6px 2px 2px 58px;	
+	line-height: 20px;
+	position: relative;
+}
+#body .games .content ul li .player .player_summonername,
+#body .games .content ul li .player .player_level{
+	float: left;
+}
+
+#body .games .content ul li .player .player_level{
+	clear: left;
+}
+#body .games .content ul li .player .player_summonername{
+	font-weight: bold;
+}
+#body .games .content ul li .player .player_summonername.captain{
+	color: red;
+}
+#body .games .content ul li .player .player_normalWins,
+#body .games .content ul li .player .player_rankedWins{
+	float: right;
+}
+
+#body .games .content ul li .player .player_rankedWins{
+	clear: right;
+}
+#body .games .content ul li .player .player_subborder{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 48px;
+	height: 48px;
+	border: 2px solid #FFD700;
+}
+
+#body .games .content ul li span a {
+	font-size: 14px;
+	height: 48px;
+	line-height: 48px;
+}
+#body .games .aside {
+	background: url(../img/border.gif) repeat-x top left;
+	float: left;
+	margin: 0 0 0 30px;
+	padding: 3px 0 0;
+	width: 445px;
+}
+#body .games .aside ul li p{
+	margin: 0 0 10px 0;
+	background-repeat: no-repeat;
+	background-size: 52px;
+	background-position-x: left;
+	min-height: 48px;
+	padding: 2px 2px 2px 58px;	
+}
+
+#body .games .aside ul li .team{
+	margin: 0 0 10px 0;
+	background-repeat: no-repeat;
+	background-size: 52px;
+	background-position-x: left;
+	min-height: 48px;
+	padding: 2px 2px 2px 58px;	
+}
+#body .games .aside ul li .team .team_name{
+	font-weight: bold;
+	margin: 0 0 10px 0;
+	font-size: 17px;
+}
+#body .games .aside ul li .team .players{
+	
+}
+#body .games .aside ul li .team .players .player{
+	margin: 0 0 10px 0;
+	background-repeat: no-repeat;
+	background-size: 52px;
+	background-position-x: left;
+	min-height: 44px;
+	padding: 6px 2px 2px 58px;	
+	line-height: 20px;
+	position: relative;
+	overflow: auto;
+}
+#body .games .aside ul li .team .players .player .player_summonername,
+#body .games .aside ul li .team .players .player .player_level{
+	float: left;
+}
+#body .games .aside ul li .team .players .player .player_level{
+	clear: left;
+}
+#body .games .aside ul li .team .players .player .player_summonername{
+	font-weight: bold;
+}
+#body .games .aside ul li .team .players .player .player_summonername.captain{
+	color: red;
+}
+#body .games .aside ul li .team .players .player .player_normalWins,
+#body .games .aside ul li .team .players .player .player_rankedWins{
+	float: right;
+}
+
+#body .games .aside ul li .team .players .player .player_rankedWins{
+	clear: right;
+}
+#body .games .aside ul li .team .players .player .player_subborder{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 48px;
+	height: 48px;
+	border: 2px solid #FFD700;
+}
+
+#body .games .aside ul {
+	padding: 16px 19px 1px;
+}
+#body .games .aside ul li {
+	margin: 0 0 20px;
+}
+#body .games .aside ul li span a {
+	font-size: 14px;
+	height: 48px;
+	line-height: 48px;
+}
+#body .games .article {
+	clear: both;
+	float: left;
+	width: 960px;
+}
+#body .games .article p {
+	font-size: 12px;
+	line-height: 24px;
+	padding: 11px 20px 0;
+}
+#body .games .article p a {
+	color: #797979;
+}
+#body .games .article p a:hover {
+	color: #a3a3a3;
+}
+
+.players{
+	
+}
+.players .player{
+	margin: 0 0 10px 0;
+	background-repeat: no-repeat;
+	background-size: 52px;
+	background-position-x: left;
+	min-height: 44px;
+	padding: 6px 2px 2px 58px;	
+	line-height: 20px;
+	position: relative;
+	overflow: auto;
+}
+.players .player .player_summonername,
+.players .player .player_level{
+	float: left;
+}
+.players .player .player_summonername,
+.players .player .player_level{
+	clear: left;
+}
+.players .player .player_summonername{
+	font-weight: bold;
+}
+.players .player .player_summonername.captain{
+	color: red;
+}
+.players .player .player_normalWins,
+.players .player .player_rankedWins{
+	float: right;
+}
+
+.players .player .player_rankedWins{
+	clear: right;
+}
+.players .player .player_subborder{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 48px;
+	height: 48px;
+	border: 2px solid #FF4400;
+}
+
+.gamereport{
+	
+}
+
+.report_team{
+	overflow: auto;
+	margin-top: 30px;
+}
+
+.report_team .report_teamname{
+	font-size: 17px;
+}
+
+.report_team:first-child {
+	margin-top: 0;
+}
+
+.report_players{
+	
+}
+
+.report_player{
+	background-repeat: no-repeat;
+	height: 305px;
+	background-size: 168px 305px;
+	margin-right: 10px;
+	width: 168px;
+	float: left;
+	position: relative;
+}
+
+.report_player:last-child {
+	margin-right: 0px;
+}
+
+.report_player .report_player_icon{
+	background-repeat: no-repeat;
+	background-size: 40px;
+	background-position-x: left;
+	height: 40px;
+	width: 40px;
+	position: absolute;
+	bottom: 20px;
+	left: 10px;
+}
+
+.report_player .report_summonername{
+	position: absolute;
+	bottom: 30px;
+	right: 15px;
+	color: white;
+}
+
+.report_player .report_kda {
+	color: white;
+	position: absolute;
+	bottom: 82px;
+	right: 15px;
+}
+
+.report_player .report_spells{
+	position: absolute;
+	bottom: 70px;
+	left: 10px;
+}
+
+.report_player .report_spells .report_spell {
+	background-repeat: no-repeat;
+	background-size: 40px;
+	background-position-x: left;
+	height: 40px;
+	width: 40px;
+	float: left;
+	margin-right: 6px;
+}
+
+.report_player .report_spells .report_spell.s_1{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerBoost.png'); }
+.report_player .report_spells .report_spell.s_2{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerClairvoyance.png'); }
+.report_player .report_spells .report_spell.s_3{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerExhaust.png'); }
+.report_player .report_spells .report_spell.s_4{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerFlash.png'); }
+.report_player .report_spells .report_spell.s_6{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerHaste.png'); }
+.report_player .report_spells .report_spell.s_7{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerHeal.png'); }
+.report_player .report_spells .report_spell.s_10{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerRevive.png'); }
+.report_player .report_spells .report_spell.s_11{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerSmite.png'); }
+.report_player .report_spells .report_spell.s_12{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerTeleport.png'); }
+.report_player .report_spells .report_spell.s_13{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerMana.png'); }
+.report_player .report_spells .report_spell.s_14{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerDot.png'); }
+.report_player .report_spells .report_spell.s_17{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerOdinGarrison.png'); }
+.report_player .report_spells .report_spell.s_21{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerBarrier.png'); }
+
+.report_player .report_items {
+	overflow: auto;
+	position: absolute;
+	bottom: 120px;
+	left: 10px;
+}
+
+.report_player .report_items .report_item {
+	background-repeat: no-repeat;
+	background-size: 30px;
+	background-position-x: left;
+	height: 30px;
+	width: 30px;
+	float: left;
+	margin-right: 9px;
+	margin-top: 9px;	
+}
+
+.report_player .report_gold {
+	color: #FFF700;
+	position: absolute;
+	bottom: 200px;
+	left: 10px;
+}
+
+.report_player .report_level {
+	display: none;
+}
+
+
+#body .about {
+	overflow: hidden;
+}
+#body .about ul {
+	margin: 0;
+	padding: 0;
+}
+#body .about ul li {
+	background: url(../img/border.gif) repeat-x top left;
+	list-style: none;
+	margin: 0 0 20px;
+	padding: 3px 0 0;
+}
+#body .about ul li h3 {
+	background: #070707 url(../img/gradient3.png) repeat-x top center;
+	border: 1px solid #22272a;
+	color: #fff;
+	font-family: 'Philosopher-Regular';
+	font-size: 24px;
+	font-weight: normal;
+	height: 55px;
+	line-height: 55px;
+	margin: 0 0 1px;
+	padding: 0 19px;
+	text-transform: capitalize;
+}
+#body .about ul li div {
+	background: #181818;
+	border: 1px solid #22272a;
+	margin: 0;
+	min-height: 250px;
+	padding: 11px 19px;
+}
+#body .about ul li div p {
+	line-height: 24px;
+	padding: 0 0 28px;
+}
+#body .about ul li div p span {
+	font-size: 16px;
+	text-transform: uppercase;
+}
+#body .about ul li div > span {
+	text-transform: uppercase;
+	line-height: 24px;
+}
+#body .about .content {
+	float: left;
+	margin: 0 0 0 20px;
+	padding: 0;
+	width: 560px;
+}
+#body .about .aside {
+	float: left;
+	margin: 0 0 0 20px;
+	padding: 0;
+	width: 340px;
+}
+#body .blog, 
+#body .anmeldung {
+	overflow: hidden;
+}
+#body .blog ul, 
+#body .anmeldung ul {
+	margin: 0;
+	padding: 0;
+}
+#body .blog ul li,
+#body .anmeldung ul li {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+#body .anmeldung.teams ul li{
+	float: left;
+	width: 450px;
+}
+#body .blog .content,
+#body .anmeldung .content{
+	background: url(../img/border.gif) repeat-x top left;
+	float: left;
+	margin: 0 0 0 20px;
+	padding: 3px 0 0;
+	width: 610px;
+}
+#body .anmeldung .content{
+	width: 920px;
+}
+#body .blog .content ul li,
+#body .anmeldung .content ul li {
+	padding: 0 0 20px;
+}
+#body .blog .content ul li .header,
+#body .anmeldung .content ul li .header {
+	background: #070707 url(../img/gradient5.png) repeat-x top center;
+	border: 1px solid #22272a;
+	color: #fff;
+	font-size: 14px;
+	line-height: 24px;
+	margin: 0 0 1px;
+	overflow: hidden;
+	padding: 10px 18px 15px;
+}
+#body .blog .content ul li .header b,
+#body .anmeldung .content ul li .header b {
+	display: inline;
+	float:left;
+	line-height: 24px;
+	margin: 0;
+	padding: 0;
+}
+#body .blog .content ul li .header b a,
+#body .anmeldung .content ul li .header b a {
+	color: #fff;
+}
+#body .blog .content ul li .header b a:hover,
+#body .anmeldung .content ul li .header b a:hover {
+	color: #727272;
+}
+#body .blog .content ul li .header span,
+#body .anmeldung .content ul li .header span {
+	background: #181818;
+	border: 1px solid #22272a;
+	border-radius: 4px;
+	display: inline;
+	float: left;
+	margin: 0 0 0 34px;
+	overflow: hidden;
+	padding: 0;
+}
+#body .blog .content ul li .header span a,
+#body .anmeldung .content ul li .header span a {
+	color: #bababa;
+	display: block;
+	float: left;
+	font-size: 10px;
+	height: 23px;
+	line-height: 23px;
+	margin: 0;
+	padding: 0 15px;
+	text-align: center;
+	text-decoration: none;
+	text-transform: capitalize;
+}
+#body .blog .content ul li .header span a:first-child,
+#body .anmeldung .content ul li .header span a:first-child {
+	border-right: 1px solid #22272a;
+}
+#body .blog .content ul li .header span a:hover,
+#body .anmeldung .content ul li .header span a:hover {
+	color: #fff;
+}
+#body .blog .content ul li .article,
+#body .anmeldung .content ul li .article {
+	background: #181818;
+	border: 1px solid #22272a;
+	margin: 0;
+	overflow: hidden;
+	padding: 14px 19px 19px;
+}
+#body .blog .content ul li .article a.figure,
+#body .anmeldung .content ul li .article a.figure {
+	border: 1px solid #22272a;
+	display: block;
+	float: left;
+	margin: 6px 20px 0 0;
+	padding: 0;
+}
+#body .blog .content ul li .article a.figure:hover,
+#body .anmeldung .content ul li .article a.figure:hover {
+	opacity: 0.8;
+}
+#body .blog .content ul li .article a.figure img,
+#body .anmeldung .content ul li .article a.figure img {
+	border: 1px solid #000;
+	display: block;
+}
+#body .blog .content ul li .article p,
+#body .anmeldung .content ul li .article p {
+	line-height: 18px;
+	margin-bottom: 8px;
+}
+#body .blog .content ul li .article p a.more,
+#body .anmeldung .content ul li .article p a.more {
+	background: url("../img/bg-more.png") no-repeat center center;
+	color: #bababa;
+	display: inline-block;
+	font-size: 10px;
+	font-weight: normal;
+	height: 23px;
+	line-height: 22px;
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	text-decoration: none;
+	text-transform: lowercase;
+	width: 70px;
+}
+#body .blog .content ul li .article p a.more:hover,
+#body .anmeldung .content ul li .article p a.more:hover {
+	color: #fff;
+}
+
+#body .anmeldung .content input[type=text],
+#body .anmeldung .content input[type=email],
+#body .anmeldung .content input[type=file],
+#body .anmeldung .content input[type=datetime-local],
+#body .anmeldung .content select,
+#body .anmeldung .content textarea{
+	width: 81%;
+	margin: 2px 0;
+	float: right;
+	height: 15px;
+	border: 1px solid #22272a;
+	padding: 2px;
+	background-color: #7e7e7e;
+}
+
+#body .anmeldung .content input[type=file]{
+	background-color: transparent;
+	height: auto;
+}
+
+#body .anmeldung .content input.invalid,
+#body .anmeldung .content select.invalid,
+#body .anmeldung .content textarea.invalid{
+	border: 1px solid red;
+}
+
+#body .anmeldung .content select{
+	height: 19px;
+	border: none;
+}
+#body .anmeldung .content textarea{
+	height: 45px;
+}
+#body .anmeldung .content label{
+	width: 17%;
+	margin: 2px 1% 2px 0;
+	padding: 3px 0;
+	display: block;
+	height: 15px;
+	clear: both;
+	float: left;
+}
+#body .anmeldung .content label sup{
+	color: #900;
+	vertical-align: text-top;
+}
+
+#body .anmeldung .content input[type=submit]{
+	float: right;
+	background-color: #7e7e7e;
+	border: 1px solid #22272a;
+	margin: 0;
+	padding-left: 30px;
+	padding-right:30px;
+}
+#body .anmeldung .content .input_container{
+	width: 81%;
+	margin: 2px 0;
+	float: right;
+	height: 15px;
+	padding: 3px 0 3px 6px;
+}
+#body .anmeldung .content fieldset{
+	border: 1px solid #22272a;
+	margin: 5px 0;
+	clear: both;
+}
+
+#body .blog .sidebar,
+#body .anmeldung .sidebar {
+	background: url(../img/border.gif) repeat-x top left;
+	float: left;
+	margin: 0 0 0 30px;
+	padding: 3px 0 0;
+	width: 280px;
+}
+#body .blog .sidebar div,
+#body .anmeldung .sidebar div {
+	background: #070707 url(../img/gradient3.png) repeat-x top center;
+	border: 1px solid #22272a;
+	height: 48px;
+	margin: 0 0 1px;
+	overflow: hidden;
+	padding: 0;
+}
+#body .blog .sidebar div span,
+#body .anmeldung .sidebar div span {
+	display: block;
+	float: left;
+	margin: 0;
+	padding: 8px 16px;
+	width: 107px;
+}
+#body .blog .sidebar div span:first-child,
+#body .anmeldung .sidebar div span:first-child {
+	background: url(../img/border2.gif) repeat-y right top;
+}
+#body .blog .sidebar div span a,
+#body .anmeldung .sidebar div span a {
+	color: #727272;
+	display: block;
+	font-size: 14px;
+	font-weight: bold;
+	height: 30px;
+	line-height: 28px;
+	text-align: center;
+	text-decoration: none;
+	text-transform: capitalize;
+	width: 103px;
+}
+#body .blog .sidebar div span a:hover,
+#body .anmeldung .sidebar div span a:hover {
+	color: #fff;
+}
+#body .blog .sidebar div span a.selected,
+#body .anmeldung .sidebar div span a.selected {
+	color: #fff;
+	background: #000;
+	border: 1px solid #22272a;
+	border-radius: 6px;
+}
+#body .blog .sidebar ul,
+#body .anmeldung .sidebar ul {
+	border: 1px solid #22272a;
+	background: #181818;
+}
+#body .blog .sidebar ul li,
+#body .anmeldung .sidebar ul li {
+	background: url(../img/border2.gif) repeat-x top left;
+	padding: 9px 19px 11px;
+}
+#body .blog .sidebar ul li:first-child,
+#body .anmeldung .sidebar ul li:first-child {
+	background: none;
+}
+#body .blog .sidebar ul li > a,
+#body .anmeldung .sidebar ul li > a {
+	color: #727272;
+	display: block;
+	line-height: 24px;
+	padding: 0 0 5px;
+	text-decoration: none;
+}
+#body .blog .sidebar ul li > a:hover,
+#body .anmeldung .sidebar ul li > a:hover {
+	color: #a3a3a3
+}
+#body .blog .sidebar ul li span,
+#body .anmeldung .sidebar ul li span {
+	background: #181818;
+	border: 1px solid #22272a;
+	border-radius: 4px;
+	display: inline-block;
+	margin: 0;
+	overflow: hidden;
+	padding: 0;
+}
+#body .blog .sidebar ul li span a,
+#body .anmeldung .sidebar ul li span a {
+	color: #bababa;
+	display: block;
+	float: left;
+	font-size: 10px;
+	height: 23px;
+	line-height: 23px;
+	margin: 0;
+	padding: 0 15px;
+	text-align: center;
+	text-decoration: none;
+	text-transform: capitalize;
+}
+#body .blog .sidebar ul li span a:first-child,
+#body .anmeldung .sidebar ul li span a:first-child {
+	border-right: 1px solid #22272a;
+}
+#body .blog .sidebar ul li span a:hover,
+#body .anmeldung .sidebar ul li span a:hover {
+	color: #fff;
+}
+#body .ergebnisse ul li .article .standings{
+	
+}
+
+#body .ergebnisse ul li .article .standings .standing{
+	border-bottom: 1px solid gray;
+	padding: 4px 10px;
+}
+
+#body .ergebnisse ul li .article .standings .standing.first{
+	border-top: 1px solid gray;
+}
+
+#body .ergebnisse ul li .article .standings .standing .position{
+	float: left;
+	line-height: 48px;
+	font-size: 28px;
+}
+
+#body .ergebnisse ul li .article .standings .standing .team{
+	background-repeat: no-repeat;
+	background-size: 52px;
+	background-position-x: left;
+	min-height: 48px;
+	padding: 2px 2px 2px 58px;
+	margin-left: 80px;
+}
+
+#body .ergebnisse ul li .article .standings .standing .team .teamname{
+	font-weight: bold;
+	margin: 0 0 10px 0;
+	font-size: 17px;
+}
+
+#body .ergebnisse ul li .article .standings .standing .team .teamname.blocked{
+	color: red;
+}
+
+#body .ergebnisse ul li .article .standings .standing .team .players{
+	display: none;
+}
+
+#body .ergebnisse ul li .article .standings .standing .team .players .player{
+	margin: 0 0 10px 0;
+	background-repeat: no-repeat;
+	background-size: 52px;
+	background-position-x: left;
+	min-height: 44px;
+	padding: 6px 2px 2px 58px;	
+	line-height: 20px;
+	position: relative;
+	overflow: auto;
+}
+
+#body .ergebnisse ul li .article .standings .standing .team .players .player .player_summonername,
+#body .ergebnisse ul li .article .standings .standing .team .players .player .player_level{
+	float: left;
+}
+#body .ergebnisse ul li .article .standings .standing .team .players .player .player_level{
+	clear: left;
+}
+#body .ergebnisse ul li .article .standings .standing .team .players .player .player_summonername{
+	font-weight: bold;
+}
+#body .ergebnisse ul li .article .standings .standing .team .players .player .player_summonername.captain{
+	color: red;
+}
+#body .ergebnisse ul li .article .standings .standing .team .players .player .player_normalWins,
+#body .ergebnisse ul li .article .standings .standing .team .players .player .player_rankedWins{
+	float: right;
+}
+
+#body .ergebnisse ul li .article .standings .standing .team .players .player .player_rankedWins{
+	clear: right;
+}
+#body .ergebnisse ul li .article .standings .standing .team .players .player .player_subborder{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 48px;
+	height: 48px;
+	border: 2px solid #FFD700;
+}
+#body .ergebnisse ul li .article .standings .standing .score{
+	float: right;
+	line-height: 48px;
+	font-size: 28px;
+	width: 60px;
+	text-align: right;
+}
+
+#body .ergebnisse ul li .article .standings .standing .buchholz{
+	float: right;
+	line-height: 22px;
+	font-size: 13px;
+	width: 60px;
+	text-align: center;
+	margin-right: -10px;
+	padding-top: 3px;
+}
+
+#body .ergebnisse ul li .article .matches{
+	
+}
+
+#body .ergebnisse ul li .article .matches .match{
+	border-bottom: 1px solid gray;
+	padding: 4px 10px;
+	overflow: auto;
+}
+
+#body .ergebnisse ul li .article .matches .match.first{
+	border-top: 1px solid gray;
+}
+
+#body .ergebnisse ul li .article .matches .match .position{
+	float: left;
+	line-height: 48px;
+	font-size: 28px;
+	width: 50px;
+}
+
+#body .ergebnisse ul li .article .matches .match .gamedate{
+	float: left;
+	width: 80px;
+	padding: 9px 0;
+	line-height: 17px;
+	text-align: left;
+}
+
+#body .ergebnisse ul li .article .matches .match .team{
+	background-repeat: no-repeat;
+	background-size: 52px;
+	background-position-x: left;
+	min-height: 48px;
+	padding: 2px 2px 2px 58px;
+	margin-left: 0px;
+	width: 255px;
+	float: left;
+}
+
+#body .ergebnisse.personal ul li .article .matches .match .team{
+	width: 290px;
+}
+
+#body .ergebnisse ul li .article .matches .match .team.guest{
+	margin-left: 20px;
+}
+
+#body .ergebnisse ul li .article .matches .match .team .teamname{
+	font-weight: bold;
+	margin: 0 0 10px 0;
+	font-size: 17px;
+
+}
+#body .ergebnisse ul li .article .matches .match .team .teamname.blocked{
+	color: red;
+}
+
+#body .ergebnisse ul li .article .matches .match .team .players{
+	display: none;
+}
+
+#body .ergebnisse ul li .article .matches .match .result{
+	float: right;
+	line-height: 48px;
+	font-size: 28px;
+	width: 75px;
+	text-align: center;
+}
+
+#body .ergebnisse ul li .article .matches .match .result a{
+	text-decoration: none;
+	color: #727272;
+}
+
+
+#body .ergebnisse ul li .article .ergebnismeldung,
+#body .ergebnisse ul li .article .tournament_codes{
+	margin-top: 20px;
+	clear: both;
+	overflow: auto;
+}
+
+#body .ergebnisse ul li .article .tournament_codes .tournament_code{
+	margin: 5px 0 5px 10px;
+}
+
+#body .ergebnisse ul li .article .tournament_codes .tournament_code a{
+	color: #727272;
+}
+
+#body .ergebnisse ul li .article .heading{
+	font-size: 17px;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+#body .ergebnisse ul li .article .ergebnismeldung .reportresult{
+	margin: 10px 0;
+	border: 1px solid green;
+}
+
+#body .ergebnisse ul li .article .ergebnismeldung .reportresult.error{
+	border-color: red;
+}
+
+#footer {
+	background: url(../img/bg-footer2.png) repeat-x bottom left;
+	margin: 0;
+	padding: 0;
+	-webkit-text-size-adjust: none;
+}
+#footer > div {
+	background: url(../img/bg-footer.png) no-repeat bottom center;
+	margin: 0;
+	text-align: center;
+	padding: 73px 0 42px;
+}
+#footer ul {
+	display: block;
+	margin: 0 auto;
+	padding: 0 0 41px;
+	overflow: hidden;
+	width: 800px;
+}
+#footer ul li {
+	display: block;
+	float: left;
+	list-style: none;
+	margin: 0 22px;
+	padding: 0;
+}
+#footer ul li a {
+	background: url(../img/icons.png) no-repeat;
+	color: #fff;
+	display: block;
+	line-height: 73px;
+	height: 73px;
+	text-decoration: none;
+	text-indent: -99999px;
+	width: 73px;
+}
+#footer ul #facebook a {
+	background-position: 0 0;
+}
+#footer ul #facebook a:hover {
+	background-position: -78px 0;
+}
+#footer ul #bitstars a {
+	background: url(../img/bitstars.png) no-repeat;
+	background-color: black;
+	padding: 0 7px;
+	border-radius: 30px;
+	background-position: 0 -9px;
+	width: 260px;
+}
+#footer ul #fachschaft a {
+	background: url(../img/geier3d.png) no-repeat;
+	background-size: 100%;
+}
+#footer ul #twitter a {
+	background-position: 0 -78px;
+}
+#footer ul #twitter a:hover {
+	background-position: -78px -78px;
+}
+#footer ul #googleplus a {
+	background-position: 0 -156px;
+}
+#footer ul #googleplus a:hover {
+	background-position: -78px -156px;
+}
+#footer p {
+	color: #4e5151;
+	font-size: 12px;
+	margin: 0 auto;
+	padding: 0;
+	text-align: center;
+	/*text-transform: capitalize;*/
+	width: 700px;
+}
