@@ -28,4 +28,15 @@ class Module
             ),
         );
     }
+
+	public function getServiceConfig(){
+		return array(
+            'invokables' => array(
+            ),
+			'factories' => array(
+				'Navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
+			),
+		);
+	}
+
 }

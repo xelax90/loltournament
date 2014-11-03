@@ -1,6 +1,0 @@
-<ul>
-	<?php $c = 0;?>
-	<?php foreach ($this->container as $key => $page): ?>
-		<li <?= $page->active ? 'class="active"' : '' ?>><?= $this->navigation()->menu()->htmlify($page) ?></li>
-	<?php $c++; endforeach; ?>
-</ul>
