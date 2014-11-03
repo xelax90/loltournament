@@ -1,0 +1,18 @@
+{
+    "name": "xelax90/loltournament",
+    "description": "Tournament management for FSMPI and RWTH GG",
+    "license": "GNU GPL 2.0",
+    "keywords": [
+        "FSMPI",
+        "RWTH",
+				"Gaming",
+				"Group",
+				"League of Legends",
+				"Tournament"
+    ],
+    "homepage": "http://lol.fsmpi.rwth-aachen.de/",
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zendframework": "2.3.*"
+    }
+}
