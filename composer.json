@@ -12,7 +12,14 @@
     ],
     "homepage": "http://lol.fsmpi.rwth-aachen.de/",
     "require": {
-        "php": ">=5.3.3",
-        "zendframework/zendframework": "2.3.*"
+		"php": ">=5.3.3",
+		"zendframework/zendframework": "2.3.*",
+		"articus/zf2-bower-module" : "dev-master",
+		"doctrine/doctrine-module" : "dev-master",
+		"doctrine/doctrine-orm-module": "dev-master",
+		"zf-commons/zfc-user": "1.*",
+		"zf-commons/zfc-user-doctrine-orm": "dev-master",
+		"zf-commons/zfc-admin" : "dev-master",
+		"danielss89/zfc-user-admin" : "dev-master"
     }
 }
