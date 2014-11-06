@@ -49,7 +49,7 @@ class Player implements InputFilterAwareInterface, JsonSerializable
 	protected $isCaptain;
  	
 	/**
-	 * @ORM\Column(type="int");
+	 * @ORM\Column(type="integer");
 	 */
 	protected $summonerId;
 	

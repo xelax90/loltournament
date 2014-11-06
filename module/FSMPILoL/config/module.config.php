@@ -35,10 +35,28 @@ return array(
 		'factories' => array(
 			'FSMPILoL\Log' => function ($sm) {
 				$log = new Zend\Log\Logger();
-				$writer = new Zend\Log\Writer\Stream('./data/logs/fsmpilol');
+				$writer = new Zend\Log\Writer\Stream('./data/logs/fsmpilol.log');
 				$log->addWriter($writer);
 				return $log;
 			},
+			'FSMPILoL\RiotCache' => function (){
+				$frontendOptions = array(
+					'lifetime' => 86400, // Lifetime 24h
+					'automatic_serialization' => true,
+					'cache_id_prefix' => 'riotcache_'
+				);
+
+				$backendOptions = array(
+				    'cache_dir' => './data/cache/' // Cache dir
+				);
+
+				// Ein Zend_Cache_Core Objekt erzeugen
+				$cache = Zend_Cache::factory('Core',
+				                             'File',
+				                             $frontendOptions,
+				                             $backendOptions);
+				return $cache;
+			}
 		),
     ),
     

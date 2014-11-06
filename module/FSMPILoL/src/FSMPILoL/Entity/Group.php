@@ -43,12 +43,12 @@ class Group implements InputFilterAwareInterface, JsonSerializable
 	protected $number;
  	
 	/**
-     * @ORM\ManyToOne(targetEntity="Team", mappedBy="group")
+     * @ORM\OneToMany(targetEntity="Team", mappedBy="group")
 	 */
 	protected $teams;
  	
 	/**
-	 * @ORM\ManyToOne(targetEntity="Round", mappedBy="group")
+	 * @ORM\OneToMany(targetEntity="Round", mappedBy="group")
 	 */
 	protected $rounds;
 	
