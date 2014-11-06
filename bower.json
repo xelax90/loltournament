@@ -1,0 +1,37 @@
+{
+  "name": "fsmpilol",
+  "version": "0.0.0",
+  "description": "Tournament Management for FSMPI LoL AK",
+  "keywords": [
+    "RWTH",
+    "FSMPI",
+    "LoL",
+    "League",
+    "Legends",
+    "Gaming",
+    "Group"
+  ],
+  "authors": [
+    "aleksandr@fsmpi.rwth-aachen.de"
+  ],
+  "license": "GPL V2",
+  "homepage": "http://lol.fsmpi.rwth-aachen.de",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+	"dependencies" : {
+		"jquery" : "1.*",
+		"bootstrap" : "3.*",
+		"html5shiv" : "*",
+		"respond" : "*",
+		"bootflat" : "*",
+		"Selecter" : "*",
+		"Stepper" : "*",
+		"iCheck" : "*",
+		"bootstrap-switch" : "*"
+	}
+}

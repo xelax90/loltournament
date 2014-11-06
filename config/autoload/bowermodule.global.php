@@ -18,11 +18,11 @@ return array(
 				'token' => 'ababababa',
 				'modules' => array(
 					'jquery',
-					'bootstrap',
-					"Selecter",
-					"Stepper",
-					"iCheck",
-					"bootstrap-switch"
+					//'bootstrap',
+					//"Selecter",
+					//"Stepper",
+					//"iCheck",
+					//"bootstrap-switch"
 				)
 			),
 			'ieLT9' => array(
@@ -30,7 +30,10 @@ return array(
 				'modules' => array(
 					'html5shiv',
 					'respond',
-				)
+				),
+				'attributes' =>  array(
+					'conditional' => 'lt IE 9',
+				),
 			)
 		)
     ),
