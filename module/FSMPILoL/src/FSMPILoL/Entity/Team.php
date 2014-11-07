@@ -64,6 +64,11 @@ class Team implements InputFilterAwareInterface, JsonSerializable
 	 * @ORM\JoinColumn(name="ansprechpartner_id", referencedColumnName="user_id")
 	 */
 	protected $ansprechpartner;
+ 	
+	/**
+     * @ORM\OneToMany(targetEntity="Player", mappedBy="team")
+	 */
+	protected $players;
 	
 
 	public function getId(){
@@ -121,6 +126,51 @@ class Team implements InputFilterAwareInterface, JsonSerializable
 	public function setAnsprechpartner($ansprechpartner){
 		$this->ansprechpartner = $ansprechpartner;
 	}
+	
+	public function getPlayers(){
+		return $this->players;
+	}
+	
+	public function setPlayers($players){
+		$this->players = $players;
+	}
+	
+	public function getScore(){
+		$score = 0;
+		if($this->getPlayers()){
+			foreach($this->getPlayers() as $player){
+				$score += $player->getScore();
+			}
+		}
+		return $score;
+	}
+	
+	public static function compare($a, $b){
+		return $a->getScore() - $b->getScore();
+	}
+	
+	public static function comparePoints($a, $b){
+		if($b->getPoints() == $a->getPoints() && $b->getBuchholz() == $a->getBuchholz())
+			return self::compare($b, $a);
+		if($b->getPoints() == $a->getPoints())
+			return $b->getBuchholz() - $a->getBuchholz();
+		return $b->getPoints() - $a->getPoints();
+	}
+
+	public static function compareFarberwartung($a, $b){
+		$erwartungen = array("+g" => 3, "+h" => 3, "g" => 2, "h" => 2, "-o" => 1, "+o" => 1, "o" => 0);
+		if($b->getPoints() != $a->getPoints())
+			return $b->points - $a->points;
+			
+		if($b->getBuchholz() != $a->getBuchholz())
+			return $b->getBuchholz() - $a->getBuchholz();
+		
+		if($b->getFarberwartung() != $a->getFarberwartung())
+			return $erwartungen[$b->getFarberwartung()] - $erwartungen[$a->getFarberwartung()];
+		
+		return self::compare($b, $a);
+	}
+	
 	
 	/**
 	 * Populate from an array.

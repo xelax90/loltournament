@@ -83,7 +83,7 @@ class Anmeldung implements InputFilterAwareInterface, JsonSerializable
 	protected $icon;
 	
 	/**
-     * @ORM\ManyToOne(targetEntity="Tournament")
+     * @ORM\ManyToOne(targetEntity="Tournament", inversedBy="anmeldungen")
 	 * @ORM\JoinColumn(name="tournament_id", referencedColumnName="id")
 	 */
 	protected $tournament;

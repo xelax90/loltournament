@@ -32,7 +32,14 @@ class Tournament implements InputFilterAwareInterface, JsonSerializable
 	 * @ORM\Column(type="string");
 	 */
 	protected $name;
-
+	
+	/**
+	 * @ORM\OneToMany(targetEntity="Anmeldung", mappedBy="tournament");
+	 */
+	protected $anmeldungen;
+	
+	protected $subs;
+	
 	/**
 	 * Getter for ID
 	 * @return int
@@ -49,6 +56,10 @@ class Tournament implements InputFilterAwareInterface, JsonSerializable
 		return $this->name;
 	}
 	
+	public function getAnmeldungen(){
+		return $this->anmeldungen;
+	}
+	
 	/** 
 	 * Setter for ID
 	 * @param int $id
@@ -63,6 +74,20 @@ class Tournament implements InputFilterAwareInterface, JsonSerializable
 	 */
 	public function setName($id){
 		$this->name = $name;
+	}
+	
+	public function getSubs(){
+		if(null !== $this->subs){
+			$this->subs = array();
+			foreach($this->getAnmeldungen() as $anmeldung){
+				if($player = $anmeldung->getPlayer()){
+					if(!$player->getTeam()){
+						$this->subs[] = $player;
+					}
+				}
+			}
+		}
+		return $this->subs;
 	}
 	
 	/**

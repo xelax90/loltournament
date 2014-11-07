@@ -47,6 +47,23 @@ class Round implements InputFilterAwareInterface, JsonSerializable
 	 * @ORM\Column(type="string");
 	 */
 	protected $type;
+	
+	/**
+	 * @ORM\Column(type="date");
+	 */
+	protected $startDate;
+	
+	/**
+	 * Duration of the round in days
+	 * @ORM\Column(type="integer");
+	 */
+	protected $duration;
+	
+	/**
+	 * The time, the teams have to add a date for matches in days.
+	 * @ORM\Column(type="integer");
+	 */
+	protected $timeForDates;
  	
 	/**
 	 * @ORM\Column(type="boolean");
@@ -96,6 +113,30 @@ class Round implements InputFilterAwareInterface, JsonSerializable
 		$this->isHidden = $isHidden;
 	}
 
+	public function getStartDate(){
+		return $this->startDate;
+	}
+
+	public function setStartDate($startDate){
+		$this->startDate = $startDate;
+	}
+
+	public function getDuration(){
+		return $this->duration;
+	}
+
+	public function setDuration($duration){
+		$this->duration = $duration;
+	}
+
+	public function getTimeForDates(){
+		return $this->timeForDates;
+	}
+
+	public function setTimeForDates($timeForDates){
+		$this->timeForDates = $timeForDates;
+	}
+
 	public function getType(){
 		return $this->type;
 	}
@@ -129,6 +170,8 @@ class Round implements InputFilterAwareInterface, JsonSerializable
 			$this->setGroup($data['group']);
 		$this->setType($data['type']);
 		$this->setProperties($data['properties']);
+		$this->setDuration($data['duration']);
+		$this->setTimeForDates($data['timeForDates']);
 	}
  
 	public function setInputFilter(InputFilterInterface $inputFilter){
@@ -155,6 +198,22 @@ class Round implements InputFilterAwareInterface, JsonSerializable
 			
 			$inputFilter->add($factory->createInput(array(
 				'name'       => 'number',
+				'required'   => true,
+				'filters' => array(
+					array('name' => 'Int'),
+				),
+			)));
+			
+			$inputFilter->add($factory->createInput(array(
+				'name'       => 'duration',
+				'required'   => true,
+				'filters' => array(
+					array('name' => 'Int'),
+				),
+			)));
+			
+			$inputFilter->add($factory->createInput(array(
+				'name'       => 'timeForDates',
 				'required'   => true,
 				'filters' => array(
 					array('name' => 'Int'),
