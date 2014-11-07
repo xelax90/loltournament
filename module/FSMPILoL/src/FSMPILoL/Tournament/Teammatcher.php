@@ -10,7 +10,9 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-
+/**
+ * Takes all tournament registrations and creates teams with 5 players each
+ */
 class TeamMatcher{
 	
 	protected $matched;
@@ -46,7 +48,7 @@ class TeamMatcher{
 	
 	public function getAnmeldung(){
 		if(null === $this->anmeldung){
-			$this->anmeldung = new Anmeldung($this->getTournament(), $this->getEntityManager());
+			$this->anmeldung = new Anmeldung($this->getTournament(), $this->ServiceLocator());
 		}
 		return $this->anmeldung;
 	}
@@ -152,8 +154,7 @@ class TeamMatcher{
 			$matched[] = $team;
 		}
 		
-		// TODO Icons
-		$icons = array(); //array_values($anmeldung->getAvailableIcons());
+		$icons = array_values($this->getAnmeldung()->getAvailableIcons());
 		foreach($this->singles as $i => $player){
 			$team = new Team();
 			$team->setName("Team ".(100+$i));

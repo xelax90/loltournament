@@ -17,7 +17,7 @@ class RiotAPi {
 	
 	protected function getConfig(){
 		if (null === $this->config) {
-			$this->config = $this->getServiceLocator()->get('riotapi_config');
+			$this->config = $this->getServiceLocator()->get('FSMPILoL\Options\API');
 		}
 		return $this->config;
 	}

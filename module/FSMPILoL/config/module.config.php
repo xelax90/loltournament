@@ -56,9 +56,13 @@ return array(
 				));
 				return $cache;
 			},
-			'riotapi_config' => function ($sm) {
+			'FSMPILoL\Options\API' => function ($sm) {
                 $config = $sm->get('Config');
                 return new Options\APIOptions(isset($config['fsmpilol_api']) ? $config['fsmpilol_api'] : array());
+            },
+			'FSMPILoL\Options\Anmeldung' => function ($sm) {
+                $config = $sm->get('Config');
+                return new Options\APIOptions(isset($config['fsmpilol_anmeldung']) ? $config['fsmpilol_anmeldung'] : array());
             },
 		),
     ),

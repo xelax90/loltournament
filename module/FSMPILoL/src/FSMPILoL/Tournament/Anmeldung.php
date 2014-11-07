@@ -3,6 +3,8 @@ namespace FSMPILoL\Tournament;
 
 use FSMPILoL\Entity\Tournament;
 use Doctrine\ORM\EntityManager;
+use Zend\ServiceManager\ServiceLocatorInterface;
+
 class Anmeldung{
 	
 	/**
@@ -15,17 +17,36 @@ class Anmeldung{
 	 */
 	protected $tournament;
 	
+	/**
+	 * @var ServiceLocatorInterface
+	 */
+	protected $serviceLocator;
+	
+	protected function getServiceLocator(){
+		return $this->serviceLocator;
+	}
+	
 	public function getEntityManager(){
-		return $this->em;
+		if (null === $this->entityManager) {
+			$this->entityManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+		}
+		return $this->entityManager;
+	}
+
+	protected function getConfig(){
+		if (null === $this->config) {
+			$this->config = $this->getServiceLocator()->get('FSMPILoL\Options\Anmeldung');
+		}
+		return $this->config;
 	}
 	
 	public function getTournament(){
 		return $this->tournament;
 	}
 	
-	public function __construct(Tournament $tournament, EntityManager $em){
+	public function __construct(Tournament $tournament, ServiceLocatorInterface $sl){
 		$this->tournament = $tournament;
-		$this->em = $em;
+		$this->serviceLocator = $sl;
 	}
 	
 	public function getTeams(){
@@ -58,5 +79,21 @@ class Anmeldung{
 		return $this->getTournament()->getAnmeldungen();
 	}
 	
-	
+	public function getAvailableIcons(){
+		$files = scandir($this->getConfig()->getIconDir());
+		$icons = array();
+		foreach($files as $file){
+			if(in_array(pathinfo($file, PATHINFO_EXTENSION), array('jpg', 'png'))){
+				$icons[] = $file;
+			}
+		}
+		
+		$used = array();
+		foreach($this->getAll() as $anmeldung){
+			if($anmeldung->getIcon())
+				$used[] = $anmeldung->getIcon();
+		}
+		
+		return array_diff($icons, $used);
+	}
 }
