@@ -43,7 +43,7 @@ class Match implements InputFilterAwareInterface, JsonSerializable
 	protected $number;
  	
 	/**
-     * @ORM\ManyToOne(targetEntity="Round")
+     * @ORM\ManyToOne(targetEntity="Round", inversedBy="matches")
 	 * @ORM\JoinColumn(name="round_id", referencedColumnName="id")
 	 */
 	protected $round;

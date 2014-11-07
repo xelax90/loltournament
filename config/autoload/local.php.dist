@@ -25,5 +25,11 @@ return array(
 			)
 		)
 	),
-
+	
+	'fsmpilol_api' => array(
+		// insert API Key here
+		'key' => '',
+		'region' => 'euw',
+		'max_requests' => 20,
+	),
 );

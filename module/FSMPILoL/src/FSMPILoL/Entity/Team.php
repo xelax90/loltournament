@@ -39,7 +39,7 @@ class Team implements InputFilterAwareInterface, JsonSerializable
 	protected $name;
  	
 	/**
-     * @ORM\ManyToOne(targetEntity="Group")
+     * @ORM\ManyToOne(targetEntity="Group", inversedBy="teams")
 	 * @ORM\JoinColumn(name="group_id", referencedColumnName="id")
 	 */
 	protected $group;

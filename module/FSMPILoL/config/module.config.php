@@ -40,23 +40,26 @@ return array(
 				return $log;
 			},
 			'FSMPILoL\RiotCache' => function (){
-				$frontendOptions = array(
-					'lifetime' => 86400, // Lifetime 24h
-					'automatic_serialization' => true,
-					'cache_id_prefix' => 'riotcache_'
-				);
 
-				$backendOptions = array(
-				    'cache_dir' => './data/cache/' // Cache dir
-				);
-
-				// Ein Zend_Cache_Core Objekt erzeugen
-				$cache = Zend_Cache::factory('Core',
-				                             'File',
-				                             $frontendOptions,
-				                             $backendOptions);
+				$cache = \Zend\Cache\StorageFactory::factory(array(
+				    'adapter' => array(
+						'name' => 'FSMPILoL\Cache\Storage\Adapter\Filesystem',
+						'options' => array(
+							'ttl' => 60,
+							'namespace' => 'riotcache',
+							'cache_dir' => './data/cache/',
+						),
+					),
+				    'plugins' => array(
+				        'exception_handler' => array('throw_exceptions' => false),
+				    ),
+				));
 				return $cache;
-			}
+			},
+			'riotapi_config' => function ($sm) {
+                $config = $sm->get('Config');
+                return new Options\APIOptions(isset($config['fsmpilol_api']) ? $config['fsmpilol_api'] : array());
+            },
 		),
     ),
     

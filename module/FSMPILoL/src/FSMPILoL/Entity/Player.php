@@ -32,7 +32,7 @@ class Player implements InputFilterAwareInterface, JsonSerializable
 	protected $id;
  	
 	/**
-     * @ORM\ManyToOne(targetEntity="Anmeldung")
+     * @ORM\OneToOne(targetEntity="Anmeldung", inversedBy="player")
 	 * @ORM\JoinColumn(name="anmeldung_id", referencedColumnName="id")
 	 */
 	protected $anmeldung;

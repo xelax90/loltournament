@@ -87,6 +87,11 @@ class Anmeldung implements InputFilterAwareInterface, JsonSerializable
 	 * @ORM\JoinColumn(name="tournament_id", referencedColumnName="id")
 	 */
 	protected $tournament;
+
+	/**
+     * @ORM\OneToOne(targetEntity="Player", mappedBy="anmeldung")
+	 */
+	protected $player;
 	
 
 	public function getId(){
@@ -175,6 +180,10 @@ class Anmeldung implements InputFilterAwareInterface, JsonSerializable
 
 	public function setTournament($tournament){
 		$this->tournament = $tournament;
+	}
+	
+	public function getPlayer(){
+		return $this->player;
 	}
 	
 	/**

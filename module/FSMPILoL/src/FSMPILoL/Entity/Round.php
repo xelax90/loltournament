@@ -38,7 +38,7 @@ class Round implements InputFilterAwareInterface, JsonSerializable
 	protected $number;
  	
 	/**
-     * @ORM\ManyToOne(targetEntity="Group")
+     * @ORM\ManyToOne(targetEntity="Group", inversedBy="groups")
 	 * @ORM\JoinColumn(name="group_id", referencedColumnName="id")
 	 */
 	protected $group;
@@ -54,9 +54,9 @@ class Round implements InputFilterAwareInterface, JsonSerializable
 	protected $isHidden;
  	
 	/**
-     * @ORM\OneToMany(targetEntity="Game", mappedBy="round")
+     * @ORM\OneToMany(targetEntity="Match", mappedBy="round")
 	 */
-	protected $games;
+	protected $matches;
  	
 	/**
 	 * @ORM\Column(type="json_array");
@@ -112,8 +112,8 @@ class Round implements InputFilterAwareInterface, JsonSerializable
 		$this->properties = $properties;
 	}
 
-	public function getGames(){
-		return $this->games;
+	public function getMatches(){
+		return $this->matches;
 	}
 
 	/**
