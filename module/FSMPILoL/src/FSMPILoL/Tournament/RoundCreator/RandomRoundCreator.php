@@ -9,9 +9,11 @@ class RandomRoundCreator extends AbstractRoundCreator {
 	
 	public function nextRound(AlreadyPlayedInterface $gameCheck, DateTime $startDate, $properties, $isHidden = true, $duration = 14, $timeForDates = 7){
 		$defaultProperties = array(
-			'gamesPerMatch' => 3
+			'pointsPerGamePoint' => 0,
+			'pointsPerMatchWin' => 1,
+			'ignoreColors' => true
 		);
-		$properties = $properties + $defaultProperties;
+		$properties = $properties + $defaultProperties + $this->globalDefaults;
 		
 		$round = new Round();
 		$round->setNumber($group->getMaxRoundNumber() + 1);
@@ -48,24 +50,8 @@ class RandomRoundCreator extends AbstractRoundCreator {
 			$match->setNumber($number);
 			$match->setRound($round);
 			$match->setTeamHome($teams[$i]);
-			$match->setTeamGuest($teams[$i+1])
-			
-			$games = array();
-			for($j = 0; $j < $round->getProperties()['gamesPerMatch']; $j++){
-				$game = new Game();
-				if($j % 2 == 0){
-					$teamBlue = $match->getTeamHome();
-					$teamPurple = $match->getTeamGuest();
-				} else {
-					$teamBlue = $match->getTeamGuest();
-					$teamPurple = $match->getTeamHome();
-				}
-				$game->setTeamBlue($teamBlue);
-				$game->setTeamPurple($teamPurple);
-				$game->setNumber($j+1);
-				$game->setMatch($match);
-				$game->generateTournamentCode();
-			}
+			$match->setTeamGuest($teams[$i+1]);
+			$this->createGamesForMatch($match);
 			$matches[] = $match;
 			$number++;
 		}

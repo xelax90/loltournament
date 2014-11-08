@@ -70,6 +70,7 @@ class Team implements InputFilterAwareInterface, JsonSerializable
 	 */
 	protected $players;
 	
+	protected $data;
 
 	public function getId(){
 		return $this->id;
@@ -135,6 +136,14 @@ class Team implements InputFilterAwareInterface, JsonSerializable
 		$this->players = $players;
 	}
 	
+	public function getData(){
+		return $this->data;
+	}
+	
+	public function setData($data){
+		$this->data = $data;
+	}
+	
 	public function getScore(){
 		$score = 0;
 		if($this->getPlayers()){
@@ -145,28 +154,45 @@ class Team implements InputFilterAwareInterface, JsonSerializable
 		return $score;
 	}
 	
+	public function hasCaptain(){
+		foreach($this->getPlayers() as $player){
+			if($player->getIsCaptain())
+				return true;
+		}
+		return false;
+	}
+	
 	public static function compare($a, $b){
 		return $a->getScore() - $b->getScore();
 	}
 	
 	public static function comparePoints($a, $b){
-		if($b->getPoints() == $a->getPoints() && $b->getBuchholz() == $a->getBuchholz())
+		$dataA = $a->getData();
+		$dataB = $b->getData();
+		if(empty($dataA) || empty($dataB))
 			return self::compare($b, $a);
-		if($b->getPoints() == $a->getPoints())
-			return $b->getBuchholz() - $a->getBuchholz();
-		return $b->getPoints() - $a->getPoints();
+		if($dataB->getPoints() == $dataA()->getPoints() && $dataB->getBuchholz() == $dataA->getBuchholz())
+			return self::compare($b, $a);
+		if($dataB->getPoints() == $dataA->getPoints())
+			return $dataB->getBuchholz() - $dataA->getBuchholz();
+		return $dataB->getPoints() - $dataA->getPoints();
 	}
 
 	public static function compareFarberwartung($a, $b){
-		$erwartungen = array("+g" => 3, "+h" => 3, "g" => 2, "h" => 2, "-o" => 1, "+o" => 1, "o" => 0);
-		if($b->getPoints() != $a->getPoints())
-			return $b->points - $a->points;
-			
-		if($b->getBuchholz() != $a->getBuchholz())
-			return $b->getBuchholz() - $a->getBuchholz();
+		$dataA = $a->getData();
+		$dataB = $b->getData();
+		if(empty($dataA) || empty($dataB))
+			return self::compare($b, $a);
 		
-		if($b->getFarberwartung() != $a->getFarberwartung())
-			return $erwartungen[$b->getFarberwartung()] - $erwartungen[$a->getFarberwartung()];
+		$erwartungen = array("+g" => 3, "+h" => 3, "g" => 2, "h" => 2, "-o" => 1, "+o" => 1, "o" => 0);
+		if($dataB->getPoints() != $dataA->getPoints())
+			return $dataB->getPoints() - $dataA->getPoints();
+			
+		if($dataB->getBuchholz() != $dataA->getBuchholz())
+			return $dataB->getBuchholz() - $dataA->getBuchholz();
+		
+		if($dataB->getFarberwartung() != $dataA->getFarberwartung())
+			return $erwartungen[$dataB->getFarberwartung()] - $erwartungen[$dataA->getFarberwartung()];
 		
 		return self::compare($b, $a);
 	}
