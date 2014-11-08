@@ -237,6 +237,41 @@ class Game implements InputFilterAwareInterface, JsonSerializable
 		$this->streamLink = $streamLink;
 	}
 	
+	public function generateTournamentCode(){
+		
+		// Keine Codes für Spielfrei
+		if($this->getTeamBlue() == null || $this->getTeamPurple() == null)
+			return;
+		
+		$tournamentName = $this->getMatch()->getRound()->getGroup()->getTournament()->getName();
+		
+		$url = 'pvpnet://lol/customgame/joinorcreate';
+		$maps = array('map1' => "Summoners Rift", 'map10' => "Twisted Treeline", 'map8' => 'Crystal Scar', 'map12' => 'Howling Abyss');
+		$picks = array('pick1' => 'Blind Pick', 'pick2' => "Draft Mode", 'pick4' => "All Random", 'pick6' => 'Tournament Draft');
+		
+		$url .= '/map1'; // map
+		$url .= '/pick6'; // pick type
+		$url .= '/team5'; // 5 Players per team
+		$url .= '/specALL'; // allow spectate all (specLOBBY / specNONE for restriction)
+		
+		$bytes = openssl_random_pseudo_bytes(5);
+		$password = bin2hex($bytes);
+		//$password = "bbabababa";
+		
+		$codes = array();
+		$data = array(
+			"name" => $tournamentName.PHP_EOL.
+						"Rd. ".$this->getMatch()->getRound()->getNumber(). ", Match ".$this->getMatch()->getNumber(). ", Spiel ".$this->getNumber().PHP_EOL.
+						$this->getTeamBlue()->getName() . " - ".$this->getTeamPurple()->getName(),
+			"extra" => $this->gameID."_".$i,
+			"password" => $password,
+			"report" => "http://lol.fsmpi.rwth-aachen.de/gamereport.html"
+		);
+		
+		$code = $url.'/'.base64_encode(json_encode($data));
+		$this->setTournamentCode($code);
+	}
+	
 	/**
 	 * Populate from an array.
 	 *

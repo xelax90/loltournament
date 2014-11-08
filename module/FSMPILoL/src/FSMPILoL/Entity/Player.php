@@ -39,7 +39,7 @@ class Player implements InputFilterAwareInterface, JsonSerializable
  	
 	/**
      * @ORM\ManyToOne(targetEntity="Team")
-	 * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
+	 * @ORM\JoinColumn(name="team_id", referencedColumnName="id", onDelete="SET NULL")
 	 */
 	protected $team;
  	

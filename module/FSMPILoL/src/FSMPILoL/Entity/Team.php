@@ -64,9 +64,9 @@ class Team implements InputFilterAwareInterface, JsonSerializable
 	 * @ORM\JoinColumn(name="ansprechpartner_id", referencedColumnName="user_id")
 	 */
 	protected $ansprechpartner;
- 	
+	
 	/**
-     * @ORM\OneToMany(targetEntity="Player", mappedBy="team")
+     * @ORM\OneToMany(targetEntity="Player", mappedBy="team", cascade={"persist"})
 	 */
 	protected $players;
 	

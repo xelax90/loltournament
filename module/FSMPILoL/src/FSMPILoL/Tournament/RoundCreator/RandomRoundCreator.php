@@ -1,0 +1,76 @@
+<?php
+namespace FSMPILoL\Tournament\RoundCreator;
+use FSMPILoL\Entity\Round;
+use FSMPILoL\Entity\Match;
+use FSMPILoL\Entity\Game;
+use Doctrine\Collection\ArrayCollection;
+
+class RandomRoundCreator extends AbstractRoundCreator {
+	
+	public function nextRound(AlreadyPlayedInterface $gameCheck, DateTime $startDate, $properties, $isHidden = true, $duration = 14, $timeForDates = 7){
+		$defaultProperties = array(
+			'gamesPerMatch' => 3
+		);
+		$properties = $properties + $defaultProperties;
+		
+		$round = new Round();
+		$round->setNumber($group->getMaxRoundNumber() + 1);
+		$round->setGroup($this->getGroup());
+		$round->setProperties($properties);
+		$round->setStartDate($startDate);
+		$round->setDuration($duration);
+		$round->setTimeForDates($timeForDates);
+		$round->setIsHidden($isHidden);
+		
+		$em = $this->getEntityManager();
+		
+		$teams = $this->getGroup()->getTeams();
+		if(count($teams) % 2 != 0)
+			$teams[] = null;
+		
+		do {
+			$roundOK = true;
+			shuffle($teams);
+			
+			for($i = 0; $i+1 < count($teams); $i += 2){
+				if($gameCheck->alreadyPlayed($teams[$i], $teams[$i+1])){
+					$roundOK = false;
+					break;
+				}
+			}
+			
+		} while (!$roundOK);
+		
+		$matches = array();
+		$number = 1;
+		for($i = 0; $i+1 < count($teams); $i += 2){
+			$match = new Match();
+			$match->setNumber($number);
+			$match->setRound($round);
+			$match->setTeamHome($teams[$i]);
+			$match->setTeamGuest($teams[$i+1])
+			
+			$games = array();
+			for($j = 0; $j < $round->getProperties()['gamesPerMatch']; $j++){
+				$game = new Game();
+				if($j % 2 == 0){
+					$teamBlue = $match->getTeamHome();
+					$teamPurple = $match->getTeamGuest();
+				} else {
+					$teamBlue = $match->getTeamGuest();
+					$teamPurple = $match->getTeamHome();
+				}
+				$game->setTeamBlue($teamBlue);
+				$game->setTeamPurple($teamPurple);
+				$game->setNumber($j+1);
+				$game->setMatch($match);
+				$game->generateTournamentCode();
+			}
+			$matches[] = $match;
+			$number++;
+		}
+		$round->setMatches(new ArrayCollection($matches));
+		$em->persist($round);
+		$em->flush();
+	}
+}

@@ -1,6 +1,8 @@
 <?php
 namespace FSMPILoL\Entity;
 
+use FSMPILoL\Tournament\RoundCreator\AlreadyPlayedInterface;
+
 use Doctrine\ORM\Mapping as ORM;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\Factory as InputFactory;
@@ -20,7 +22,7 @@ use JsonSerializable;
  * @property array $teams
  * @property array $rounds
  */
-class Group implements InputFilterAwareInterface, JsonSerializable
+class Group implements InputFilterAwareInterface, JsonSerializable, AlreadyPlayedInterface
 {
 	protected $inputFilter;
  	
@@ -84,6 +86,14 @@ class Group implements InputFilterAwareInterface, JsonSerializable
 	public function getRounds(){
 		return $this->rounds;
 	}
+	
+	public function getMaxRoundNumber(){
+		$max = 0;
+		foreach($this->getRounds() as $round){
+			$max = max($round->getNumber(), $max);
+		}
+		return $max;
+	}
 
 	/**
 	 * Populate from an array.
@@ -133,7 +143,15 @@ class Group implements InputFilterAwareInterface, JsonSerializable
 
 		return $this->inputFilter;
 	}
-
+	
+	public function alreadyPlayed(Team $t1, Team $t2){
+		foreach($this->getRounds() as $round){
+			if($round->alreadyPlayed($t1, $t2))
+				return true;
+		}
+		return false;
+	}
+	
 	/**
 	 * Returns json String
 	 * @return string

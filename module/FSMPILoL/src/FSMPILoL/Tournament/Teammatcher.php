@@ -188,9 +188,6 @@ class TeamMatcher{
 		foreach($matched as $count => $teams){
 			foreach($teams as $team){
 				$em->persist($team);
-				foreach($team->getPlayers() as $player){
-					$em->persist($player);
-				}
 			}
 		}
 		

@@ -1,6 +1,8 @@
 <?php
 namespace FSMPILoL\Entity;
 
+use FSMPILoL\Tournament\RoundCreator\AlreadyPlayedInterface;
+
 use Doctrine\ORM\Mapping as ORM;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\Factory as InputFactory;
@@ -21,7 +23,7 @@ use JsonSerializable;
  * @property string $type
  * @property array $properties
  */
-class Round implements InputFilterAwareInterface, JsonSerializable
+class Round implements InputFilterAwareInterface, JsonSerializable, AlreadyPlayedInterface
 {
 	protected $inputFilter;
  	
@@ -71,7 +73,7 @@ class Round implements InputFilterAwareInterface, JsonSerializable
 	protected $isHidden;
  	
 	/**
-     * @ORM\OneToMany(targetEntity="Match", mappedBy="round")
+     * @ORM\OneToMany(targetEntity="Match", mappedBy="round", cascade={"persist", "remove"})
 	 */
 	protected $matches;
  	
@@ -234,6 +236,16 @@ class Round implements InputFilterAwareInterface, JsonSerializable
 		}
 
 		return $this->inputFilter;
+	}
+	
+	public function alreadyPlayed(Team $t1, Team $t2){
+		foreach($this->getMatches() as $match){
+			if($match->getTeamHome() == $t1 && $match->getTeamGuest() == $t2)
+				return true;
+			if($match->getTeamHome() == $t2 && $match->getTeamGuest() == $t1)
+				return true;
+		}
+		return false;
 	}
 
 	/**

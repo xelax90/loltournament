@@ -71,14 +71,14 @@ class Match implements InputFilterAwareInterface, JsonSerializable
 	protected $pointsGuest;
  	
 	/**
-	 * @ORM\Column(type="text");
+	 * @ORM\Column(type="text", nullable=true);
 	 */
 	protected $anmerkung;
  	
 	/**
 	 * @ORM\Column(type="boolean");
 	 */
-	protected $isBlocked;
+	protected $isBlocked = false;
  	
 	/**
 	 * @ORM\Column(type="datetime");
@@ -86,9 +86,14 @@ class Match implements InputFilterAwareInterface, JsonSerializable
 	protected $time;
  	
 	/**
-	 * @ORM\Column(type="text");
+	 * @ORM\Column(type="text", nullable=true);
 	 */
 	protected $foodleURL;
+	
+	/**
+	 * @ORM\OneToMany(targetEntity="Game", mappedBy="match", cascade={"persist", "remove"})
+	 */
+	protected $games;
 	
 	public function getId(){
 		return $this->id;
@@ -176,6 +181,14 @@ class Match implements InputFilterAwareInterface, JsonSerializable
 
 	public function setFoodleURL($foodleURL){
 		$this->foodleURL = $foodleURL;
+	}
+	
+	public function getGames(){
+		return $this->games;
+	}
+	
+	public function setGames($games){
+		$this->games = $games;
 	}
 
 	/**
