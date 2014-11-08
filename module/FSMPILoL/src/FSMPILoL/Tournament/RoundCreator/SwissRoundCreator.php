@@ -32,8 +32,8 @@ class SwissRoundCreator extends AbstractRoundCreator {
 		$teams = $this->getGroup()->getTeams();
 		
 		// get round results
-		$roundData = $this->getTeamdataPerRound();
-		$lastRound = $this->getLastFinishedRound();
+		$roundData = $this->getGroup()->getTeamdataPerRound();
+		$lastRound = $this->getGroup()->getLastFinishedRound();
 		if(!empty($lastRound))
 			$roundData = $roundData[$round->getId()];
 		else
@@ -174,5 +174,8 @@ class SwissRoundCreator extends AbstractRoundCreator {
 		
 		$em->persist($round);
 		$em->flush();
+		
+		$em->refresh($this->getGroup());
+		$this->getGroup()->setTeamdata();
 	}
 }
