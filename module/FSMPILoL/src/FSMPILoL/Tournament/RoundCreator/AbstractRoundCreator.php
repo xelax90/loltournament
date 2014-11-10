@@ -14,6 +14,7 @@ abstract class AbstractRoundCreator {
 		'pointsPerMatchWin' => 0,
 		'pointsPerMatchDraw' => 0,
 		'pointsPerMatchLoss' => 0,
+		'pointsPerMatchFree' => 2,
 		'ignoreColors' => false
 	)
 	

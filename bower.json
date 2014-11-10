@@ -32,6 +32,7 @@
 		"Selecter" : "*",
 		"Stepper" : "*",
 		"iCheck" : "*",
-		"bootstrap-switch" : "*"
+		"bootstrap-switch" : "*",
+		"iscroll" : "4.2.5"
 	}
 }

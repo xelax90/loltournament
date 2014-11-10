@@ -32,12 +32,7 @@ class SwissRoundCreator extends AbstractRoundCreator {
 		$teams = $this->getGroup()->getTeams();
 		
 		// get round results
-		$roundData = $this->getGroup()->getTeamdataPerRound();
-		$lastRound = $this->getGroup()->getLastFinishedRound();
-		if(!empty($lastRound))
-			$roundData = $roundData[$round->getId()];
-		else
-			$roundData = $roundData[0];
+		$roundData = $this->getRoundData();
 		
 		$punktegruppen = array();
 		foreach($teams as $team){
@@ -177,5 +172,31 @@ class SwissRoundCreator extends AbstractRoundCreator {
 		
 		$em->refresh($this->getGroup());
 		$this->getGroup()->setTeamdata();
+	}
+	
+	protected function getRoundData(){
+		$roundData = $this->getGroup()->getTeamdataPerRound();
+		$lastRound = $this->getGroup()->getLastFinishedRound();
+		$currentRound = $this->getGroup()->getCurrentRound();
+		$result = array();
+		if(!empty($lastRound))
+			$data = $roundData[$lastRound->getId()];
+		else
+			$data = $roundData[0];
+		foreach($data as $k => $v){
+			$result[$k] = new Teamdata($v);
+		}
+		
+		if($lastRound == $currentRound) 
+			return $result;
+		
+		$data = $roundData[$currentRound->getId()];
+		foreach($data as $k => $v){
+			$result[$k]->setPlayedHome($v->getPlayedHome());
+			$result[$k]->setPlayedGuest($v->getPlayedGuest());
+			$result[$k]->setPreviousGameHome($v->getPreviousGameHome());
+			$result[$k]->setPenultimateGameHome($v->getPenultimateGameHome());
+		}
+		return $result;
 	}
 }

@@ -98,7 +98,7 @@ class Group implements InputFilterAwareInterface, JsonSerializable, AlreadyPlaye
 	public function setTeamdata(){
 		$data = $this->getTeamdataPerRound();
 		$rounds = $this->getRounds()->toArray();
-		usort($rounds, function($r1, $r2){return $r2->getNumber() - $r1->getNumber()});
+		usort($rounds, function($r1, $r2){return $r2->getNumber() - $r1->getNumber();});
 		$roundId = 0;
 		foreach($rounds as $r){
 			if($round->getIsHidden())
@@ -114,7 +114,7 @@ class Group implements InputFilterAwareInterface, JsonSerializable, AlreadyPlaye
 	public function getLastFinishedRound(){
 		$rounds = $this->getRounds()->toArray();
 		// sort rounds by round number in descending order
-		usort($rounds, function($r1, $r2){return $r2->getNumber() - $r1->getNumber()});
+		usort($rounds, function($r1, $r2){return $r2->getNumber() - $r1->getNumber();});
 		
 		$new = new DateTime();
 		foreach($rounds as $round){
@@ -127,12 +127,21 @@ class Group implements InputFilterAwareInterface, JsonSerializable, AlreadyPlaye
 		return null;
 	}
 	
+	public function getCurrentRound(){
+		$rounds = $this->getRounds()->toArray();
+		if(empty($rounds))
+			return null;
+		// sort rounds by round number in descending order
+		usort($rounds, function($r1, $r2){return $r2->getNumber() - $r1->getNumber();});
+		return $rounds[0];
+	}
+	
 	public function getTeamdataPerRound(){
 		$rounds = $this->getRounds()->toArray();
 		$teams = $this->getTeams();
 		
 		// sort rounds by round number
-		usort($rounds, function($r1, $r2){return $r1->getNumber() - $r2->getNumber()});
+		usort($rounds, function($r1, $r2){return $r1->getNumber() - $r2->getNumber();});
 		
 		$result = array();
 		

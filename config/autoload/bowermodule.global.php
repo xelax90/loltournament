@@ -18,6 +18,7 @@ return array(
 				'token' => 'ababababa',
 				'modules' => array(
 					'jquery',
+					'iscroll',
 					//'bootstrap',
 					//"Selecter",
 					//"Stepper",

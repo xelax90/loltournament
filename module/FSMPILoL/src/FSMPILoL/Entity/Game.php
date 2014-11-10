@@ -77,42 +77,42 @@ class Game implements InputFilterAwareInterface, JsonSerializable
 	protected $pointsPurple;
  	
 	/**
-	 * @ORM\Column(type="string");
+	 * @ORM\Column(type="string", nullable=true);
 	 */
 	protected $meldungHome;
  	
 	/**
-	 * @ORM\Column(type="string");
+	 * @ORM\Column(type="string", nullable=true);
 	 */
 	protected $meldungGuest;
  	
 	/**
-	 * @ORM\Column(type="text");
+	 * @ORM\Column(type="text", nullable=true);
 	 */
 	protected $anmerkungHome;
  	
 	/**
-	 * @ORM\Column(type="text");
+	 * @ORM\Column(type="text", nullable=true);
 	 */
 	protected $anmerkungGuest;
  	
 	/**
-	 * @ORM\Column(type="text");
+	 * @ORM\Column(type="text", nullable=true);
 	 */
 	protected $screenHome;
  	
 	/**
-	 * @ORM\Column(type="text");
+	 * @ORM\Column(type="text", nullable=true);
 	 */
 	protected $screenGuest;
  	
 	/**
-	 * @ORM\Column(type="text");
+	 * @ORM\Column(type="text", nullable=true);
 	 */
 	protected $report;
  	
 	/**
-	 * @ORM\Column(type="text");
+	 * @ORM\Column(type="text", nullable=true);
 	 */
 	protected $streamLink;
  	
