@@ -4,7 +4,8 @@ namespace FSMPILoL;
 return array(
     'controllers' => array(
         'invokables' => array(
-            'index' => 'FSMPILoL\Controller\IndexController'
+            'index' => 'FSMPILoL\Controller\IndexController',
+            'tournament' => 'FSMPILoL\Controller\TournamentController'
         ),
     ),
     
@@ -12,7 +13,7 @@ return array(
     'router' => array(
         'routes' => array(
             'home' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
+                'type' => 'literal',
                 'options' => array(
                     'route'    => '/',
                     'defaults' => array(
@@ -21,6 +22,28 @@ return array(
                     ),
                 ),
             ),
+			'info' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route'    => '/info',
+                    'defaults' => array(
+                        'controller' => 'index',
+                        'action'     => 'info',
+						'tournament_id' => 3,
+                    ),
+                ),
+            ),
+			'ergebnisse' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route'    => '/ergebnisse',
+                    'defaults' => array(
+                        'controller' => 'Tournament',
+                        'action'     => 'ergebnisse',
+                    ),
+                ),
+            ),
+			
         ),
     ),
     
@@ -45,7 +68,7 @@ return array(
 				    'adapter' => array(
 						'name' => 'FSMPILoL\Cache\Storage\Adapter\Filesystem',
 						'options' => array(
-							'ttl' => 60,
+							'ttl' => 11200,
 							'namespace' => 'riotcache',
 							'cache_dir' => './data/cache/',
 						),
@@ -62,7 +85,7 @@ return array(
             },
 			'FSMPILoL\Options\Anmeldung' => function ($sm) {
                 $config = $sm->get('Config');
-                return new Options\APIOptions(isset($config['fsmpilol_anmeldung']) ? $config['fsmpilol_anmeldung'] : array());
+                return new Options\AnmeldungOptions(isset($config['fsmpilol_anmeldung']) ? $config['fsmpilol_anmeldung'] : array());
             },
 		),
     ),
@@ -98,8 +121,8 @@ return array(
 	'navigation' => array(
 		'default' => array(
 			array('label' => 'Home', 'route' => 'home'),
-			array('label' => 'Home', 'route' => 'home'),
-			array('label' => 'Home', 'route' => 'home'),
+			array('label' => 'Info', 'route' => 'info'),
+			array('label' => 'Tabelle', 'route' => 'ergebnisse'),
 			array('label' => 'Home', 'route' => 'home'),
 			array('label' => 'Home', 'route' => 'home'),
 		),

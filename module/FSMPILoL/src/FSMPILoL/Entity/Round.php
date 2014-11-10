@@ -92,7 +92,7 @@ class Round implements InputFilterAwareInterface, JsonSerializable, AlreadyPlaye
 	}
 
 	public function getNumber(){
-		return $this->team;
+		return $this->number;
 	}
 
 	public function setNumber($number){

@@ -13,7 +13,7 @@ use JsonSerializable;
  * A Player
  *
  * @ORM\Entity
- * @ORM\Table(name="match")
+ * @ORM\Table(name="matches")
  * @property int $id
  * @property Round $round
  * @property int $number

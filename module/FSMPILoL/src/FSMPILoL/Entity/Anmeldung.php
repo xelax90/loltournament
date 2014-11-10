@@ -93,7 +93,8 @@ class Anmeldung implements InputFilterAwareInterface, JsonSerializable
 	 */
 	protected $player;
 	
-
+	protected $summonerdata;
+	
 	public function getId(){
 		return $this->id;
 	}
@@ -184,6 +185,14 @@ class Anmeldung implements InputFilterAwareInterface, JsonSerializable
 	
 	public function getPlayer(){
 		return $this->player;
+	}
+
+	public function getSummonerdata(){
+		return $this->summonerdata;
+	}
+
+	public function setSummonerdata($summonerdata){
+		return $this->summonerdata = $summonerdata;
 	}
 	
 	/**

@@ -1,0 +1,64 @@
+<?php
+	define('DDRAGON_VERSION', '4.19.2');
+	define('DEBUG', false);
+	$tournament = $this->tournament;
+?>
+
+<div class="anmeldung ergebnisse">
+	<div class="content">
+		<ul class="results">
+			<?php
+			$groupCount = count($tournament->getGroups());
+			foreach($tournament->getGroups() as $group) :
+			?>
+			<li>
+				<?php if($groupCount > 1) : ?>
+				<div class="header">
+					<b>Gruppe <?= $group->getNumber() ?></b>
+				</div>
+				<?php endif; ?> 
+				
+				<div class="article">
+					<div class="standings">
+						<?php
+							$position = 0;
+							foreach($group->getTeams() as $team) :
+								//if(!$team->hasCaptain())
+								//	continue;
+							?>
+							<div class="standing <?= $position == 0 ? "first" : "" ?>">
+								<div class="position"><?= $position + 1 ?></div>
+								<div class="buchholz">Buchh <br> <?= $team->getData()->getBuchholz() ?></div>
+								<div class="score"><?= $team->getData()->getPoints() ?></div>
+								<div class="team" onclick="var elm = document.getElementById('players_<?= $team->getId() ?>'); if(elm.style.display == 'block'){ elm.style.display = 'none'} else {elm.style.display = 'block'}" style="background-image: url('<?= $this->basePath() ?>/img/summoner_icons/<?= $team->getIcon() ?>')">
+									<div class="teamname <?= $team->getIsBlocked() ? 'blocked' : '' ?>"><?= $team->getName() ?><?php if(DEBUG) : ?> (<?= $team->getScore() ?>/<?= count($team->getPlayers())?>) (Buchholz: <?= $team->getData()->getBuchholz() ?>)<?php endif; ?></div>
+									<div class="players" id="players_<?= $team->getId() ?>">
+								<?php
+								
+									foreach($team->getPlayers() as $player):
+										?>
+										<div class="player" style="margin: 0  0 10px 0; background-image: url('http://ddragon.leagueoflegends.com/cdn/<?= DDRAGON_VERSION ?>/img/profileicon/<?= $player->getAnmeldung()->getSummonerdata()->getProfileIconId(); ?>.png')">
+											<div class="player_summonername"><?= $player->getAnmeldung()->getSummonerName() ?></div>
+											<div class="player_rankedWins">Ranked: <?= $player->getAnmeldung()->getSummonerdata()->getRankedWins() ?> Siege</div>
+											<div class="player_level">Level <?= $player->getAnmeldung()->getSummonerdata()->getLevel() ?>, <?= $player->getAnmeldung()->getSummonerdata()->getTier() ?></div>
+											<div class="player_normalWins">Normal: <?= $player->getAnmeldung()->getSummonerdata()->getNormalWins() ?> Siege</div>
+										</div>
+										<?php 
+									endforeach;
+								?>
+									</div>
+								</div>
+							</div>
+							<?php
+								$position++;
+							endforeach;
+						?>
+					</div>
+				</div>
+			</li>
+			<?php
+			endforeach;
+			?>
+		</ul>
+	</div>
+</div>

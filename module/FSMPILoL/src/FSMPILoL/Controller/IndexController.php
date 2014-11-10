@@ -14,9 +14,12 @@ class IndexController extends AbstractActionController
 		return $this->em;
 	}
 	
-    public function indexAction()
-    {
-		$api = new RiotAPI($this->getServiceLocator());
-        return new ViewModel();
-    }
+	public function indexAction(){
+		//$api = new RiotAPI($this->getServiceLocator());
+		return new ViewModel();
+	}
+	
+	public function infoAction(){
+		return new ViewModel();
+	}
 }

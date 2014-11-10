@@ -40,6 +40,11 @@ class Tournament implements InputFilterAwareInterface, JsonSerializable, Already
 	 */
 	protected $anmeldungen;
 	
+	/**
+	 * @ORM\OneToMany(targetEntity="Group", mappedBy="tournament")
+	 */
+	protected $groups;
+	
 	protected $subs;
 	
 	/**
@@ -60,6 +65,10 @@ class Tournament implements InputFilterAwareInterface, JsonSerializable, Already
 	
 	public function getAnmeldungen(){
 		return $this->anmeldungen;
+	}
+	
+	public function getGroups(){
+		return $this->groups;
 	}
 	
 	/** 

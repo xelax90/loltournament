@@ -20,7 +20,10 @@ class Module
         $moduleRouteListener->attach($eventManager);
 
 		$this->extendUserRegistrationForm($eventManager);	
-
+		
+		// Add UTF8 handler to EntityManager
+	    $em = $sm->get('doctrine.entitymanager.orm_default');
+		$em->getEventManager()->addEventSubscriber( new \Doctrine\DBAL\Event\Listeners\MysqlSessionInit('utf8', 'utf8_unicode_ci') );
     }
 
     public function getConfig()

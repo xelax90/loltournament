@@ -1,3 +1,142 @@
-<div>
-	Hallo Welt!
+<?php
+	$files = scandir('./public/img/featured');
+	$featured = array();
+	foreach($files as $file){
+		if(pathinfo($file, PATHINFO_EXTENSION) == 'png'){
+			$featured[] = $this->basePath().'/img/featured/'.$file;
+		}
+	}
+	shuffle($featured);
+?>
+<script type="text/javascript">
+	// Image Swap //
+	var img1_is_visible = false;
+	var featuredImgs = ["<?= implode('", "', $featured) ?>"];
+	function swap(i) {
+		var img1 = document.getElementById("img1");
+		var img2 = document.getElementById("img2");
+		var imgold= img1_is_visible ? img1 : img2;
+		var imgnew= img1_is_visible ? img2 : img1;
+
+		imgnew.style.opacity = 1.0;
+		imgnew.src = featuredImgs[i];
+		imgold.style.opacity = 0.0;
+		img1_is_visible = !img1_is_visible;
+		setTimeout(function(){swap((i+1) % featuredImgs.length)},5000);
+	}
+	setTimeout(function(){swap(1)},5000);
+</script>
+<div class="featured">
+	<img id="img1" src="<?= $featured[0] ?>" alt="">
+	<img id="img2" src="<?= $featured[0] ?>" alt="">
 </div>
+
+<div class="section">
+	<div>
+		<h3>RWTH LoL Tournament WS 2014/15</h3>
+		<div>
+			<div style="float: right; border: none; padding: 0px 0 10px 10px;">
+				<span style="border-top: 1px solid #22272a;"><a href="anmeldung.html">Zur Anmeldung</a></span>
+				<span><a href="ausschreibungWS1415_2.pdf">Ausschreibung</a></span>
+			</div>
+			<p> Die RWTH Gaming Group und der LoL AK der Fachschaft I/1 verkünden freudig: <br><b>"Die Anmeldung für das RWTH LoL Tournament WS 2014/15 sei eröffnet!"</b>
+			<p>Das Turnier richtet sich in erster Linie an Studierende und Angehörige der RWTH und FH Aachen, aber auch Externe, die gerne mitspielen wollen, sind willkommen.</p>
+		</div>
+	</div>
+	<div>
+		<h3>Wer darf Teilnehmen?</h3>
+		<div>
+			<p>Alle Studierenden und Angestellten der RWTH und FH Aachen mit einem LoL Account auf Level 20 oder höher. Bei Teamanmeldungen (ab zwei Spielern) dürfen zusätzlich bis zu drei externe Spieler dabei sein. </p> 
+		</div>
+	</div>
+	<div>
+		<h3>Die Turnier-Orga</h3>
+		<div>
+			<p> Die RWTH Gaming Group und der LoL AK der Fachschaft I/1 organisieren und leiten das Turnier.
+			<p> Wir sind alles Studierende der RWTH und haben das gemeinsame Ziel an der RWTH eine Gaming-Community zu gründen. JederR der/die Interesse daran hat kann gerne bei uns mitarbeiten </p>
+		</div>
+	</div>
+	<div>
+		<h3>Ablauf</h3>
+		<div>
+			<p>Nach den ersten drei Matches in der Vorrunde startet die Hauptrunde mit sechs Runden im leicht modifizierten Schweizer System. Die besten 16 Teams nach der Hauptrunde qualifizieren sich für die Playoffs, die dann als K.O. Turnier ausgetragen werden. Alle Matches werden als Best of Three ausgetragen. Das Finale und Halbfinale sind LIVE am 31.01. und 01.02.2015 (Details dazu folgen noch).</p>
+		</div>
+	</div>
+	<div>
+		<h3>Anmeldung</h3>
+		<div>
+			<p>Anmeldeschluss ist Freitag der 10.10.2014 um 24:00 Uhr.</p>
+			<p>Ihr könnt euch einzeln oder in Gruppen von bis zu 5 Spielern anmelden. Die unvollständigen Teams werden dann durch Einzelanmeldungen oder andere Teams aufgefüllt.</p></p>
+		</div>
+	</div>
+	<div>
+		<h3>Ersatzspieler</h3>
+		<div>
+			<p>Bei der Anmeldung könnt ihr angeben, ob ihr Ersatzspieler sein oder einem Team zugelost werden wollt. Ein Ersatzspieler kann immer einspringen, wenn ein gleich starker oder stärkerer Spieler in einem Team ausfällt und kann dadurch ggf. auch mehr Spiele spielen, als reguläre Spieler.</p>
+		</div>
+	</div>
+	<div>
+		<h3>Streaming</h3>
+		<div>
+			<p>Wir versuchen, die meisten Spiele zu streamen und suchen immer Streamer dafür. Wer Lust hat, meldet sich einfach bei der Turnierleitung.</p>
+		</div>
+	</div>
+	<div>
+		<h3>Preise</h3>
+		<div>
+			<p>Sehr wahrscheinlich wird es auch wieder etwas zu gewinnen geben. Was genau hängt davon ab, ob und wie viele Sponsoren wir bekommen.</p>
+		</div>
+	</div>
+	<div>
+		<h3>Turnierregeln und weiter Details</h3>
+		<div>
+			<p>Alle Turnierregeln sowie näher Details zum Turnier stehen in der Turnierausschreibung </p>
+		</div>
+	</div>
+</div>
+
+
+<!-- <div class="section">
+	<div>
+		<h3>RWTH LoL Turnier SS2014</h3>
+		<div>
+			<p> Das Turnier hat mit einer unglaublichen Zahl von 34 Teams gestartet. Es wird über den Zeitraum vom 25.05.-20.07.2014 laufen und ist in acht Runden (pro Woche eine) unterteilt. Am Ende jeder Woche werden die Paarungen für die nächste Runde online gestellt. Wann die einzelnen Spiele stattfinden wird immer rechtzeitig vorher mit Tag und Uhrzeit unter <a href="paarungen.html">Paarungen</a> zu sehen sein. Solange sich jemand zum streamen findet, können die Spiele live in unserem <a href="http://www.twitch.tv/lol_fsmpi" target="_blank">Twitch-Channel</a> mitverfolgt werden und auch noch später angeschaut werden.</p> 
+			<p style="margin-top: 15px">Viele Informationen zu Ablauf und Regeln findet ihr weiterhin in der <a href="ausschreibung.pdf" target="_blank">Ausschreibung</a> zum Turnier.</p>
+			<p style="margin-top: 25px">Das Turnier ist ein Projekt des <a href="kontakt.html">LoL-AK</a> der <a href="https://www.fsmpi.rwth-aachen.de/" target="_blank">Fachschaft 1/I</a>.</p>
+		</div>
+	</div>
+	<div>
+		<h3>Streaming</h3>
+		<div>
+			<p>Wie oben schon erwähnt werden möglichst viele live in unserm <a href="http://www.twitch.tv/lol_fsmpi" target="_blank">Twitch-Channel</a> gestreamt und auch dort zum weiteren anschauen gespeichert. Zum stream kann sich jedeR melden man sollte nur ausreichend Rechnerleistung und Uploadgeschwindigkeit besitzen. Dabei ist es egal ob du am Turnier teilnimmst oder nicht.</p>
+			<p style="margin-top: 15px">Wenn du also Interesse am Streamen hast melde dich bei uns: <a href="mailto:leagueoflegends@lists.fsmpi.rwth-aachen.de">leagueoflegends@lists.fsmpi.rwth-aachen.de</a><br>
+			Oder trage dich direkt in unsere Streamer-Mailingliste ein: <a href="https://lists.fsmpi.rwth-aachen.de/listinfo/leagueoflegends-streaming" target="_blank">leagueoflegends-streaming</a></p>
+		</div>
+	</div>
+	<div>
+		<h3>Turnier-Kommunikation</h3>
+		<div>
+			<p>TeamSpeak-Server:</p>
+			<p>Wir kooperieren mit einer anderen Gruppe die auch ein Turnier veranstaltet und nutzen die Server gemeinsam, sie gehören allerdings nicht uns daher bitte anständig benehmen.</p>
+			<p>Wir haben einen Server für wenn ihr nur zum Spaß zocken wollt und einen für Matches und zum Trainieren.</p>
+		
+			<p style="margin-top: 15px">Facebook:</p>
+			<p>Es gibt auch eine Facebook Gruppe zu dem Turnier: <a href="https://www.facebook.com/groups/1451880545054274/" target="_blank">RWTH LoL Turnier SS2014</a></p>
+			<p>In der Facebook Gruppe kann ausgiebig diskutiert werden und dort werden auch viele Orga-Sachen die auch per mail rumgehen noch einmal gepostet.</p>
+
+			<p style="margin-top: 15px">Mailinglisten:</p>
+			<p>Es gibt auch mehrere Mailinglisten zur besseren Kommunikation und Verwaltung.</p>
+			<p> - Ihr braucht einen Ersatzspieleranfragen:<a href="mailto:leagueoflegends-ersatzspieler@lists.fsmpi.rwth-aachen.de">leagueoflegends-ersatzspieler@lists.fsmpi.rwth-aachen.de</a> </p>
+			<p> - Ihr sucht einen Streamer:<a href="mailto:leagueoflegends-streaming@lists.fsmpi.rwth-aachen.de">leagueoflegends-streaming@lists.fsmpi.rwth-aachen.de</a> </p>
+			<p> - Fragen, Kritik und Anregungen an:<a href="mailto:leagueoflegends@lists.fsmpi.rwth-aachen.de">leagueoflegends@lists.fsmpi.rwth-aachen.de</a> </p>
+		</div>
+	</div>
+	<div>
+		<h3>RWTH-Community</h3>
+		<div>
+			<p>Neben dem Turnier wollen wir an der RWTH eine Community für LoL und vielleicht auch andere Spiele gründen.
+			Diesen Plan verfolgen wir gemeinsam mit den Turnierleitern eines zweiten LoL-Turniers.</p>
+			<p>Die Community hat auch schon eine Facebook-Gruppe: <a href="https://www.facebook.com/groups/439327219510270/" target="_blank">League of Legends - RWTH Aachen</a></p>
+		</div>
+	</div>
+</div> -->

@@ -178,7 +178,7 @@ class RiotAPi {
 		$cacheKey = self::getCacheKey($request);
 		$contents = null;
 		if($cache->hasItem($cacheKey)){
-			echo 'cached';
+			//echo 'cached';
 			$contents = $cache->getItem($cacheKey);
 		}
 		
@@ -220,7 +220,7 @@ class RiotAPi {
 		    }
 			
 			if($status_code == 200){
-				echo 'not cached';
+				//echo 'not cached';
 				$cache->addItem($cacheKey, $requestContent);
 				$contents = $requestContent;
 				self::$requestCount++;

@@ -16,7 +16,7 @@ use JsonSerializable;
  * A Group
  *
  * @ORM\Entity
- * @ORM\Table(name="group")
+ * @ORM\Table(name="groups")
  * @property int $id
  * @property Tournament $tournament
  * @property int $number
@@ -35,7 +35,7 @@ class Group implements InputFilterAwareInterface, JsonSerializable, AlreadyPlaye
 	protected $id;
  	
 	/**
-     * @ORM\ManyToOne(targetEntity="Tournament")
+     * @ORM\ManyToOne(targetEntity="Tournament", inversedBy="groups")
 	 * @ORM\JoinColumn(name="tournament_id", referencedColumnName="id")
 	 */
 	protected $tournament;
@@ -97,16 +97,12 @@ class Group implements InputFilterAwareInterface, JsonSerializable, AlreadyPlaye
 	
 	public function setTeamdata(){
 		$data = $this->getTeamdataPerRound();
-		$rounds = $this->getRounds()->toArray();
-		usort($rounds, function($r1, $r2){return $r2->getNumber() - $r1->getNumber();});
-		$roundId = 0;
-		foreach($rounds as $r){
-			if($round->getIsHidden())
-				continue;
-			$roundId = $r->getId();
-			break;
+		$round = $this->getCurrentRound();
+		$id = 0;
+		if(!empty($round)){
+			$id = $round->getId();
 		}
-		foreach($data[$roundId] as $teamdata){
+		foreach($data[$id] as $teamdata){
 			$teamdata->getTeam()->setData($teamdata);
 		}
 	}
@@ -131,9 +127,19 @@ class Group implements InputFilterAwareInterface, JsonSerializable, AlreadyPlaye
 		$rounds = $this->getRounds()->toArray();
 		if(empty($rounds))
 			return null;
+		
 		// sort rounds by round number in descending order
 		usort($rounds, function($r1, $r2){return $r2->getNumber() - $r1->getNumber();});
-		return $rounds[0];
+		
+		$round = null;
+		foreach($rounds as $r){
+			if($r->getIsHidden())
+				continue;
+			$round = $r;
+			break;
+		}
+		
+		return $round;
 	}
 	
 	public function getTeamdataPerRound(){
@@ -155,46 +161,42 @@ class Group implements InputFilterAwareInterface, JsonSerializable, AlreadyPlaye
 		$opponents = array();
 		foreach($rounds as $round){
 			$roundData = array();
+			foreach($teams as $team){
+				$olddata = $previousRoundData[$team->getId()];
+				$roundData[$team->getId()] = new Teamdata($olddata);
+			}
+			
 			// points, buchholz, playedHome, playedGuest, previousGameHome, penultimateGameHome
 			foreach($round->getMatches() as $match){
 				$th = $match->getTeamHome();
 				$tg = $match->getTeamGuest();
 				
-				$opponents[$th->getId()][] = $tg;
-				$opponents[$tg->getId()][] = $th;
-				
-				if(empty($roundData[$th->getId()])){
-					$olddata = $previousRoundData[$th->getId()];
-					$roundData[$th->getId()] = new Teamdata($olddata);
+				if($th && $tg){
+					$opponents[$th->getId()][] = $tg;
+					$opponents[$tg->getId()][] = $th;
 				}
-				
-				if(empty($roundData[$tg->getId()])){
-					$olddata = $previousRoundData[$tg->getId()];
-					$roundData[$tg->getId()] = new Teamdata($olddata);
-				}
-				
+								
 				$pointsHome = 0;
 				$pointsGuest = 0;
 				$gamesWonHome = 0;
 				$gamesWonGuest = 0;
-				
 				foreach($match->getGames() as $game){
 					if($game->getTeamBlue() == $th){
-						$pointsHome += $game->getPointsBlue() * $round->getProperties()['pointsPerGame'];
+						$pointsHome += $game->getPointsBlue() * $round->getProperties()['pointsPerGamePoint'];
 						if($game->getPointsBlue() > $game->getPointsPurple())
 							$gamesWonHome++;
 					} elseif($game->getTeamPurple() == $th){
-						$pointsHome += $game->getPointsPurple() * $round->getProperties()['pointsPerGame'];
+						$pointsHome += $game->getPointsPurple() * $round->getProperties()['pointsPerGamePoint'];
 						if($game->getPointsPurple() > $game->getPointsBlue())
 							$gamesWonHome++;
 					}
 					
 					if($game->getTeamBlue() == $tg){
-						$pointsGuest += $game->getPointsBlue() * $round->getProperties()['pointsPerGame'];
+						$pointsGuest += $game->getPointsBlue() * $round->getProperties()['pointsPerGamePoint'];
 						if($game->getPointsBlue() > $game->getPointsPurple())
 							$gamesWonGuest++;
 					} elseif($game->getTeamPurple() == $tg){
-						$pointsGuest += $game->getPointsPurple() * $round->getProperties()['pointsPerGame'];
+						$pointsGuest += $game->getPointsPurple() * $round->getProperties()['pointsPerGamePoint'];
 						if($game->getPointsPurple() > $game->getPointsBlue())
 							$gamesWonGuest++;
 					}
@@ -214,24 +216,30 @@ class Group implements InputFilterAwareInterface, JsonSerializable, AlreadyPlaye
 					$pointsHome += $round->getProperties()['pointsPerMatchDraw'];
 				}
 				
-				$roundData[$th->getId()]->setPoints($roundData[$th->getId()]->getPoints() + $pointsHome);
-				$roundData[$tg->getId()]->setPoints($roundData[$tg->getId()]->getPoints() + $pointsGuest);
+				if($th)
+					$roundData[$th->getId()]->setPoints($roundData[$th->getId()]->getPoints() + $pointsHome);
+				if($tg)
+					$roundData[$tg->getId()]->setPoints($roundData[$tg->getId()]->getPoints() + $pointsGuest);
 				
 				if(!$round->getProperties()['ignoreColors']){
-					$roundData[$th->getId()]->setPlayedHome($roundData[$th->getId()]->getPlayedHome() + 1);
-					$roundData[$tg->getId()]->setPlayedGuest($roundData[$tg->getId()]->getPlayedGuest() + 1);
-
-					$roundData[$th->getId()]->setPenultimateGameHome($roundData[$th->getId()]->getPreviousGameHome());
-					$roundData[$th->getId()]->setPreviousGameHome(true);
-					$roundData[$tg->getId()]->setPenultimateGameHome($roundData[$tg->getId()]->getPreviousGameHome());
-					$roundData[$tg->getId()]->setPreviousGameHome(false);
+					if($th){
+						$roundData[$th->getId()]->setPlayedHome($roundData[$th->getId()]->getPlayedHome() + 1);
+						$roundData[$th->getId()]->setPenultimateGameHome($roundData[$th->getId()]->getPreviousGameHome());
+						$roundData[$th->getId()]->setPreviousGameHome(true);
+					}
+					
+					if($tg){
+						$roundData[$tg->getId()]->setPlayedGuest($roundData[$tg->getId()]->getPlayedGuest() + 1);
+						$roundData[$tg->getId()]->setPenultimateGameHome($roundData[$tg->getId()]->getPreviousGameHome());
+						$roundData[$tg->getId()]->setPreviousGameHome(false);
+					}
 				}
 			}
 			
 			foreach($opponents as $id => $opps){
 				$roundData[$id]->setBuchholz(0);
 				foreach($opps as $op){
-					$roundData[$id]->setBuchholz($roundData[$id]->getBuchholz() + $op->getPoints());
+					$roundData[$id]->setBuchholz($roundData[$id]->getBuchholz() + $roundData[$op->getId()]->getPoints());
 				}
 			}
 			
