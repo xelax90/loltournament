@@ -171,7 +171,7 @@ class Team implements InputFilterAwareInterface, JsonSerializable
 		$dataB = $b->getData();
 		if(empty($dataA) || empty($dataB))
 			return self::compare($b, $a);
-		if($dataB->getPoints() == $dataA()->getPoints() && $dataB->getBuchholz() == $dataA->getBuchholz())
+		if($dataB->getPoints() == $dataA->getPoints() && $dataB->getBuchholz() == $dataA->getBuchholz())
 			return self::compare($b, $a);
 		if($dataB->getPoints() == $dataA->getPoints())
 			return $dataB->getBuchholz() - $dataA->getBuchholz();

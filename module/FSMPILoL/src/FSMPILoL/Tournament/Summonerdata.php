@@ -44,7 +44,7 @@ class Summonerdata {
 		$this->normalWins = $normalWins;
 		$this->tier = $league;
 		$this->level = $summoner->summonerLevel;
-		$this->profileIconID = $summoner->profileIconId;
+		$this->profileIconId = $summoner->profileIconId;
 	}
 	
 	public function getAnmeldung(){

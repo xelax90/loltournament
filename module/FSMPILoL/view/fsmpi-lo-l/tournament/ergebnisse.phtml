@@ -22,7 +22,9 @@
 					<div class="standings">
 						<?php
 							$position = 0;
-							foreach($group->getTeams() as $team) :
+							$teams = $group->getTeams()->toArray();
+							usort($teams, array('FSMPILoL\Entity\Team', 'comparePoints'));
+							foreach($teams as $team) :
 								//if(!$team->hasCaptain())
 								//	continue;
 							?>
