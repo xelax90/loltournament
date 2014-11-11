@@ -5,6 +5,7 @@ use FSMPILoL\Riot\RiotAPI;
 
 class Summonerdata {
 	protected $anmeldung;
+	protected $anmeldung_id;
 	protected $rankedWins;
 	protected $normalWins;
 	protected $tier;
@@ -93,5 +94,9 @@ class Summonerdata {
 
 	public function setProfileIconId($profileIconId){
 		$this->profileIconId = $profileIconId;
+	}
+	
+	public function __sleep(){
+		return array('anmeldung_id', 'rankedWins', 'normalWins', 'tier', 'level', 'profileIconId');
 	}
 }

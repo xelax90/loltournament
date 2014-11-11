@@ -49,6 +49,8 @@ class RiotAPi {
 	 * @param $anmeldungen Array of Anmeldung
 	 */
 	public function getSummoners($anmeldungen){
+		// TODO Benchmark!!
+		
 		// Split names in 40-element chunks
 		$nameChunks = array();
 		$idChunks = array();
@@ -74,7 +76,6 @@ class RiotAPi {
 		}
 		$nameChunks[] = $names;
 		$idChunks[] = $ids;
-		
 		// request all chunks
 		$results = array();
 		foreach($nameChunks as $names){
@@ -122,9 +123,9 @@ class RiotAPi {
 					$anmeldung->getPlayer()->setSummonerId($summoners[$name]->id);
 				else
 					$anmeldung->setSummonerName($summonersID[$id]->name);
-				$this->getEntityManager()->flush();
 			}
 		}
+		$this->getEntityManager()->flush();
 		
 		return $summoners;
 	}

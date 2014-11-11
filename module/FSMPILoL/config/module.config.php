@@ -32,6 +32,16 @@ return array(
                     ),
                 ),
             ),
+			'kontakt' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route'    => '/kontakt',
+                    'defaults' => array(
+                        'controller' => 'index',
+                        'action'     => 'kontakt',
+                    ),
+                ),
+            ),
 			'ergebnisse' => array(
                 'type' => 'literal',
                 'options' => array(
@@ -98,6 +108,40 @@ return array(
 				));
 				return $cache;
 			},
+			'FSMPILoL\TeamdataCache' => function (){
+
+				$cache = \Zend\Cache\StorageFactory::factory(array(
+				    'adapter' => array(
+						'name' => 'FSMPILoL\Cache\Storage\Adapter\Filesystem',
+						'options' => array(
+							'ttl' => 11200,
+							'namespace' => 'teamdata',
+							'cache_dir' => './data/cache/',
+						),
+					),
+				    'plugins' => array(
+				        'exception_handler' => array('throw_exceptions' => false),
+				    ),
+				));
+				return $cache;
+			},
+			'FSMPILoL\SummonerdataCache' => function (){
+
+				$cache = \Zend\Cache\StorageFactory::factory(array(
+				    'adapter' => array(
+						'name' => 'FSMPILoL\Cache\Storage\Adapter\Filesystem',
+						'options' => array(
+							'ttl' => 11200,
+							'namespace' => 'summonerdata',
+							'cache_dir' => './data/cache/',
+						),
+					),
+				    'plugins' => array(
+				        'exception_handler' => array('throw_exceptions' => false),
+				    ),
+				));
+				return $cache;
+			},
 			'FSMPILoL\Options\API' => function ($sm) {
                 $config = $sm->get('Config');
                 return new Options\APIOptions(isset($config['fsmpilol_api']) ? $config['fsmpilol_api'] : array());
@@ -139,11 +183,12 @@ return array(
     
 	'navigation' => array(
 		'default' => array(
-			array('label' => 'Home', 'route' => 'home'),
+			//array('label' => 'Home', 'route' => 'home'),
 			array('label' => 'Info', 'route' => 'info'),
 			array('label' => 'Tabelle', 'route' => 'ergebnisse'),
 			array('label' => 'Paarungen', 'route' => 'paarungen'),
 			array('label' => 'Teilnehmer', 'route' => 'teams'),
+			array('label' => 'Kontakt', 'route' => 'kontakt'),
 		),
 	),
     

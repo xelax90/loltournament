@@ -2,6 +2,7 @@
 namespace FSMPILoL\Tournament\RoundCreator;
 
 use Doctrine\Collection\ArrayCollection;
+use FSMPILoL\Tournament\Group;
 
 abstract class AbstractRoundCreator {
 	
@@ -18,13 +19,13 @@ abstract class AbstractRoundCreator {
 		'ignoreColors' => false
 	)
 	
-	public function __construct($group){
+	public function __construct(Group $group){
 		$this->group = $group
 	}
 	
 	public function getTournament(){
 		if(null === $this->tournament){
-			$this->tournament = $group->getTournament();
+			$this->tournament = $group->getGroup()->getTournament();
 		}
 		return $this->tournament;
 	}

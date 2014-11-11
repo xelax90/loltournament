@@ -5,6 +5,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use FSMPILoL\Riot\RiotAPI;
 use FSMPILoL\Tournament\Summonerdata;
+use FSMPILoL\Tournament\Group;
 
 class TournamentController extends AbstractActionController
 {
@@ -50,14 +51,34 @@ class TournamentController extends AbstractActionController
 	}
 	
 	protected function setAPIData(){
+		$start = time();
 		$tournament = $this->getTournament();
-		$summoners = $this->getSummoners();
 		$api = $this->getAPI();
 		$anmeldungen = $tournament->getAnmeldungen();
+		
+		$summonerdata = array();
+		
+		$cache = $this->getServiceLocator()->get('FSMPILoL\SummonerdataCache');
+		$maxAnmeldungId = 0;
 		foreach($anmeldungen as $anmeldung){
-			$standardname = RiotAPI::getStandardName($anmeldung->getSummonerName());
-			$summoner = $summoners[$standardname];
-			$anmeldung->setSummonerdata(new Summonerdata($api, $anmeldung, $summoner));
+			$maxAnmeldungId = max($maxAnmeldungId, $anmeldung->getId());
+		}
+		
+		if($cache->hasItem($maxAnmeldungId) && !$cache->itemHasExpired($maxAnmeldungId)){
+			$summonerdata = unserialize($cache->getItem($maxAnmeldungId));
+		} else {
+			$summoners = $this->getSummoners();
+			foreach($anmeldungen as $anmeldung){
+				$standardname = RiotAPI::getStandardName($anmeldung->getSummonerName());
+				$summoner = $summoners[$standardname];
+				$summonerdata[$anmeldung->getId()] = new Summonerdata($api, $anmeldung, $summoner);
+			}
+			$cache->addItem($maxAnmeldungId, serialize($summonerdata));
+		}
+		
+		foreach($anmeldungen as $anmeldung){
+			$summonerdata[$anmeldung->getId()]->setAnmeldung($anmeldung);
+			$anmeldung->setSummonerdata($summonerdata[$anmeldung->getId()]);
 		}
 	}
 	
@@ -71,7 +92,8 @@ class TournamentController extends AbstractActionController
 			return new ViewModel();
 		
 		foreach($tournament->getGroups() as $group){
-			$group->setTeamdata();
+			$gGroup = new Group($group, $this->getServiceLocator());
+			$gGroup->setTeamdata();
 		}
 		
 		$this->setAPIData();
@@ -97,7 +119,8 @@ class TournamentController extends AbstractActionController
 			return new ViewModel();
 		
 		foreach($tournament->getGroups() as $group){
-			$group->setTeamdata();
+			$gGroup = new Group($group, $this->getServiceLocator());
+			$gGroup->setTeamdata();
 		}
 		
 		$this->setAPIData();

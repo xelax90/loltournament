@@ -20,7 +20,7 @@ class SwissRoundCreator extends AbstractRoundCreator {
 		
 		$round = new Round();
 		$round->setNumber($group->getMaxRoundNumber() + 1);
-		$round->setGroup($this->getGroup());
+		$round->setGroup($this->getGroup()->getGroup());
 		$round->setProperties($properties);
 		$round->setStartDate($startDate);
 		$round->setDuration($duration);
@@ -29,7 +29,7 @@ class SwissRoundCreator extends AbstractRoundCreator {
 		
 		$em = $this->getEntityManager();
 		
-		$teams = $this->getGroup()->getTeams();
+		$teams = $this->getGroup()->getGroup()->getTeams();
 		
 		// get round results
 		$roundData = $this->getRoundData();
@@ -170,7 +170,7 @@ class SwissRoundCreator extends AbstractRoundCreator {
 		$em->persist($round);
 		$em->flush();
 		
-		$em->refresh($this->getGroup());
+		$em->refresh($this->getGroup()->getGroup());
 		$this->getGroup()->setTeamdata();
 	}
 	

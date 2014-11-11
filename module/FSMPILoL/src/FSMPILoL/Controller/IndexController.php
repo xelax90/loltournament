@@ -22,4 +22,8 @@ class IndexController extends AbstractActionController
 	public function infoAction(){
 		return new ViewModel();
 	}
+	
+	public function kontaktAction(){
+		return new ViewModel();
+	}
 }

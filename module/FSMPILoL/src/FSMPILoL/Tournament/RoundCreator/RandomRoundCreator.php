@@ -16,8 +16,8 @@ class RandomRoundCreator extends AbstractRoundCreator {
 		$properties = $properties + $defaultProperties + $this->globalDefaults;
 		
 		$round = new Round();
-		$round->setNumber($group->getMaxRoundNumber() + 1);
-		$round->setGroup($this->getGroup());
+		$round->setNumber($this->getGroup()->getMaxRoundNumber() + 1);
+		$round->setGroup($this->getGroup()->getGroup());
 		$round->setProperties($properties);
 		$round->setStartDate($startDate);
 		$round->setDuration($duration);
@@ -26,7 +26,7 @@ class RandomRoundCreator extends AbstractRoundCreator {
 		
 		$em = $this->getEntityManager();
 		
-		$teams = $this->getGroup()->getTeams();
+		$teams = $this->getGroup()->getGroup()->getTeams();
 		if(count($teams) % 2 != 0)
 			$teams[] = null;
 		

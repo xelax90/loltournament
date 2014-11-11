@@ -1,8 +1,10 @@
 <?php
 namespace FSMPILoL\Tournament;
+use JsonSerializable;
 
 class Teamdata{
 	protected $team;
+	protected $teamid;
 	protected $points;
 	protected $buchholz;
 	protected $playedHome;
@@ -13,6 +15,7 @@ class Teamdata{
 	public function __construct(Teamdata $data = null){
 		if(!empty($data)){
 			$this->team = $data->getTeam();
+			$this->teamId = $data->getTeam()->getId();
 			$this->points = $data->getPoints();
 			$this->buchholz = $data->getBuchholz();
 			$this->playedHome = $data->getPlayedHome();
@@ -27,7 +30,12 @@ class Teamdata{
 	}
 	
 	public function setTeam($team){
+		$this->teamId = $team->getId();
 		return $this->team = $team;
+	}
+	
+	public function getTeamId(){
+		return $this->teamId;
 	}
 	
 	public function getPoints(){
@@ -126,5 +134,7 @@ class Teamdata{
 		return "o";
 	}
 	
-	
+	public function __sleep(){
+		return array('teamid', 'points', 'buchholz', 'playedHome', 'playedGuest', 'previousGameHome', 'penultimateGameHome');
+	}
 }
