@@ -79,4 +79,30 @@ class TournamentController extends AbstractActionController
 		//$api = new RiotAPI($this->getServiceLocator());
 		return new ViewModel(array('tournament' => $tournament));
 	}
+	
+	public function teamsAction(){
+		$tournament = $this->getTournament();
+		if(!$tournament)
+			return new ViewModel();
+		
+		$this->setAPIData();
+		
+		//$api = new RiotAPI($this->getServiceLocator());
+		return new ViewModel(array('tournament' => $tournament));
+	}
+	
+	public function paarungenAction(){
+		$tournament = $this->getTournament();
+		if(!$tournament)
+			return new ViewModel();
+		
+		foreach($tournament->getGroups() as $group){
+			$group->setTeamdata();
+		}
+		
+		$this->setAPIData();
+		
+		//$api = new RiotAPI($this->getServiceLocator());
+		return new ViewModel(array('tournament' => $tournament));
+	}
 }

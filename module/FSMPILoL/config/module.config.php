@@ -29,7 +29,6 @@ return array(
                     'defaults' => array(
                         'controller' => 'index',
                         'action'     => 'info',
-						'tournament_id' => 3,
                     ),
                 ),
             ),
@@ -40,6 +39,26 @@ return array(
                     'defaults' => array(
                         'controller' => 'Tournament',
                         'action'     => 'ergebnisse',
+                    ),
+                ),
+            ),
+			'paarungen' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route'    => '/paarungen',
+                    'defaults' => array(
+                        'controller' => 'Tournament',
+                        'action'     => 'paarungen',
+                    ),
+                ),
+            ),
+			'teams' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route'    => '/teams',
+                    'defaults' => array(
+                        'controller' => 'Tournament',
+                        'action'     => 'teams',
                     ),
                 ),
             ),
@@ -123,8 +142,8 @@ return array(
 			array('label' => 'Home', 'route' => 'home'),
 			array('label' => 'Info', 'route' => 'info'),
 			array('label' => 'Tabelle', 'route' => 'ergebnisse'),
-			array('label' => 'Home', 'route' => 'home'),
-			array('label' => 'Home', 'route' => 'home'),
+			array('label' => 'Paarungen', 'route' => 'paarungen'),
+			array('label' => 'Teilnehmer', 'route' => 'teams'),
 		),
 	),
     

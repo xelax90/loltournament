@@ -1,0 +1,358 @@
+<?php
+define('DEBUG', false);
+define('ADMIN', false);
+define('DDRAGON_VERSION', '4.19.2');
+
+		$tournament = $this->tournament;
+		
+		$idAnmeldung = null;
+		if(!empty($_GET['id']))
+			$idAnmeldung = $_GET['id'];
+		
+		if(empty($idAnmeldung)) : 
+		?>
+		<div class="anmeldung ergebnisse">
+			<div class="content">
+				<ul class="paarungen">
+					<li>
+						<div class="header">
+							<b>Login</b>
+						</div>
+						<div class="article">
+							<form action="paarungen.html" method="GET">
+								<input type="text" placeholder="Code" name="id" style="float: left;">
+								<input type="submit" value="Login" style="height: 21px; margin: 2px 0;">
+								<?php if(DEBUG) : ?>
+								<input type="hidden" name="test" value="">
+								<?php endif;?>
+							</form>
+						</div>
+					</li>
+					<?php
+					$groupCount = count($tournament->getGroups());
+					foreach($tournament->getGroups() as $group) :
+						$rounds = $group->getRounds()->toArray();
+						usort($rounds, function($a, $b){return $b->getNumber() - $a->getNumber();});
+						foreach($rounds as $round) : 
+						?>
+						<li>
+							<div class="header">
+								<b>Runde <?= $round->getNumber() ?></b>
+							</div>
+
+							<div class="article">
+								<div class="matches">
+									<?php
+										$position = 0;
+										foreach($round->getMatches() as $match) :
+											$result = "";
+											$pointsHome = "";
+											$pointsGuest = "";
+											$g = 0;
+											foreach($match->getGames() as $game){
+												if($game->getPointsBlue() !== null && $game->getPointsPurple() !== null){
+													$pointsHome += $g % 2 == 0 ? $game->getPointsBlue() : $game->getPointsPurple();
+													$pointsGuest += $g % 2 == 0 ? $game->getPointsPurple() : $game->getPointsBlue();
+												}
+												$g++;
+											}
+											$result .= $match->getPointsHome() === null ? $pointsHome : $match->getPointsHome();
+											$result .= " - ";
+											$result .= $match->getPointsGuest() === null ? $pointsGuest : $match->getPointsGuest();
+											
+											//if($result != " - ")
+											//	$result = '<a href="gameinfo.html?gameid='.$game->gameID.'">'.$result.'</a>';
+										?>
+										<div class="match <?= $position == 0 ? "first" : "" ?>">
+											<div class="position"><?= $match->getNumber() ?></div>
+											<?php
+												try{
+													$gamedate = new DateTime($match->getTime()); 
+												} catch (Exception $e) {
+													$gamedate = null;
+												}
+											?>
+											<div class="gamedate"><?= !empty($gamedate) && $gamedate->format('Y') > 0 ? $gamedate->format('d.m<\b\r>H:i') : '' ?></div>
+											<div class="result"><?= $result ?></div>
+											<?php 
+												$team = $match->getTeamHome(); 
+												if($team != null) :
+													$containerIds = array();
+													if($match->getTeamHome())
+														$containerIds[] = "#players_".$round->getNumber()."_".$match->getTeamHome()->getId();
+													if($match->getTeamGuest())
+														$containerIds[] = "#players_".$round->getNumber()."_".$match->getTeamGuest()->getId();
+												?>
+												<div class="team home" onclick="var elms = $('<?= implode(", ", $containerIds) ?> '); if(elms.css('display') == 'block'){elms.css('display', 'none')} else {elms.css('display', 'block')}" style="background-image: url('<?= $this->basePath() ?>/img/summoner_icons/<?= $team->getIcon() ?>')">
+													<div class="teamname"><?= $team->getName() ?> (<?= $team->getData()->getPoints() ?>) <?= DEBUG ? $team->getData()->getFarberwartung() : '' ?></div>
+													<div class="players" id="players_<?= $round->getNumber() ?>_<?= $team->getId() ?>">
+												<?php
+													foreach($team->getPlayers() as $player):
+														?>
+														<div class="player" style="margin: 0  0 10px 0; background-image: url('http://ddragon.leagueoflegends.com/cdn/<?= DDRAGON_VERSION ?>/img/profileicon/<?= $player->getAnmeldung()->getSummonerdata()->getProfileIconId() ?>.png')">
+															<div class="player_summonername <?= $player->getIsCaptain() ? 'captain' : '' ?>"><?= $player->getAnmeldung()->getSummonerName() ?></div>
+															<div class="player_level">Level <?= $player->getAnmeldung()->getSummonerdata()->getLevel() ?>, <?= $player->getAnmeldung()->getSummonerdata()->getTier() ?></div>
+															<?php if($player->getIsCaptain()) : ?>
+															<div class="player_subborder"></div>
+															<?php endif; ?>
+														</div>
+														<?php 
+													endforeach;
+												?>
+													</div>
+												</div>
+											<?php else : ?>
+												<div class="team home">
+													<div class="teamname">Spielfrei</div>
+												</div>
+											<?php endif; ?>
+										
+											<?php 
+												$team = $match->getTeamGuest(); 
+												if($team != null) :
+													$containerIds = array();
+													if($match->getTeamHome())
+														$containerIds[] = "#players_".$round->getNumber()."_".$match->getTeamHome()->getId();
+													if($match->getTeamGuest())
+														$containerIds[] = "#players_".$round->getNumber()."_".$match->getTeamGuest()->getId();
+												?>
+												<div class="team guest" onclick="var elms = $('<?= implode(", ", $containerIds) ?> '); if(elms.css('display') == 'block'){elms.css('display', 'none')} else {elms.css('display', 'block')}" style="background-image: url('<?= $this->basePath() ?>/img/summoner_icons/<?= $team->getIcon() ?>')">
+													<div class="teamname"><?= $team->getName() ?> (<?= $team->getData()->getPoints() ?>) <?= DEBUG ? $team->getData()->getFarberwartung() : '' ?></div>
+													<div class="players" id="players_<?= $round->getNumber() ?>_<?= $team->getId() ?>">
+												<?php
+													foreach($team->getPlayers() as $player):
+														?>
+														<div class="player" style="margin: 0  0 10px 0; background-image: url('http://ddragon.leagueoflegends.com/cdn/<?= DDRAGON_VERSION ?>/img/profileicon/<?= $player->getAnmeldung()->getSummonerdata()->getProfileIconId() ?>.png')">
+															<div class="player_summonername <?= $player->getIsCaptain() ? 'captain' : '' ?>"><?= $player->getAnmeldung()->getSummonerName() ?></div>
+															<div class="player_level">Level <?= $player->getAnmeldung()->getSummonerdata()->getLevel() ?>, <?= $player->getAnmeldung()->getSummonerdata()->getTier() ?></div>
+															<?php if($player->getIsCaptain()) : ?>
+															<div class="player_subborder"></div>
+															<?php endif; ?>
+														</div>
+														<?php 
+													endforeach;
+												?>
+													</div>
+												</div>
+											<?php else : ?>
+												<div class="team guest">
+													<div class="teamname">Spielfrei</div>
+												</div>
+											<?php endif; ?>
+										</div>
+										<?php
+											$position++;
+										endforeach;
+									?>
+								</div>
+							</div>
+						</li>
+						<?php
+						endforeach;
+					endforeach;
+					?>
+				</ul>
+			</div>
+		</div>
+	<?php 
+		else : 
+			$pPlayer = $tournament->getPlayerByURLID($idAnmeldung);
+			$tTeam = $tournament->getTeamByURLID($idAnmeldung);
+			$group = $tournament->getGroupByURLID($idAnmeldung);
+			$idCorrect = true;
+			if(empty($group) || empty($tTeam) || empty($pPlayer) || $group->isSubGroup)
+				$idCorrect = false;
+				
+	?>
+		<div class="anmeldung ergebnisse personal">
+			<div class="content">
+				<ul class="paarungen">
+					<?php if(!$idCorrect) : ?>
+						<li>
+							<div class="header"><b>Der Code ist nicht korrekt oder du hast keine Berechtigung.</b></div>
+							<div class="article"><p></p></div>
+						</li>
+					<?php else : ?>
+						
+						<?php for($i = count($group->rounds) - 1 - (DEBUG ? 0 : ROUNDS_SKIP_DISPLAY); $i >= 0; $i--) : $round = $group->rounds[$i];?>
+						<li>
+							<div class="header">
+								<b>Runde <?= $round->number ?></b>
+							</div>
+
+							<div class="article">
+								<div class="matches">
+									<?php
+										$gGame = null;
+										foreach($round->games as $game) :
+											if($game->teamHome != $tTeam && $game->teamGuest != $tTeam)
+												continue;
+											$gGame = $game;
+											break;
+										endforeach;
+										$gGame->generateTournamentCodes();
+										
+										$reportResult = null;
+										if(!empty($_POST['ergebnis']) && $_POST['ergebnis']['gameid'] == $gGame->gameID){
+											$reportResult = $tournament->reportResults();
+										} 
+
+										$timeReportResult = null;
+										if(!empty($_POST['termin']) && $_POST['termin']['gameid'] == $gGame->gameID){
+											$timeReportResult = $tournament->reportTime();
+										} 
+										
+										$result = "";
+										if($gGame->pointsHome != -1)
+											$result .= $gGame->pointsHome;
+										$result .= " - ";
+										if($gGame->pointsGuest != -1)
+											$result .= $gGame->pointsGuest;
+										
+									?>
+									<div class="match first">
+										<div class="position"><?= $gGame->number ?></div>
+										<div class="result"><?= $result ?></div>
+										<?php $team = $gGame->teamHome; ?>
+										<div class="team home" onclick="var elm = document.getElementById('players_<?= $round->number ?>_<?= $gGame->teamHome->teamID ?>'); var elm2 = document.getElementById('players_<?= $round->number ?>_<?= $gGame->teamGuest->teamID ?>'); if(elm.style.display == 'block'){ elm.style.display = 'none'; elm2.style.display = 'none'} else {elm.style.display = 'block'; elm2.style.display = 'block'};" style="background-image: url('images/summoner_icons/<?= $team->icon ?>')">
+											<div class="teamname"><?= $team->teamname ?> (<?= $team->points ?>)</div>
+											<div class="players" id="players_<?= $round->number ?>_<?= $team->teamID ?>">
+										<?php
+											foreach($team->players as $player):
+												?>
+												<div class="player" style="margin: 0  0 10px 0; background-image: url('http://ddragon.leagueoflegends.com/cdn/<?= DDRAGON_VERSION ?>/img/profileicon/<?= $player->profileIconID ?>.png')">
+													<div class="player_summonername <?= $player->isCaptain ? 'captain' : '' ?>"><?= $player->summonername ?></div>
+													<?php if($player->isCaptain) : ?>
+													<div class="player_summonername"><?= $player->name ?></div>
+													<div class="player_level"><?= $player->mail ?></div>
+													<?php endif; ?>
+													<div class="player_level">Level <?= $player->level ?>, <?= $player->tier ?></div>
+													<?php if($player->isCaptain) : ?>
+													<div class="player_subborder"></div>
+													<?php endif; ?>
+												</div>
+												<?php 
+											endforeach;
+										?>
+											</div>
+										</div>
+									
+										<?php 
+											$team = $gGame->teamGuest; 
+											if($team != null) :
+											?>
+											<div class="team guest" onclick="var elm = document.getElementById('players_<?= $round->number ?>_<?= $gGame->teamHome->teamID ?>'); var elm2 = document.getElementById('players_<?= $round->number ?>_<?= $gGame->teamGuest->teamID ?>'); if(elm.style.display == 'block'){ elm.style.display = 'none'; elm2.style.display = 'none'} else {elm.style.display = 'block'; elm2.style.display = 'block'}; " style="background-image: url('images/summoner_icons/<?= $team->icon ?>')">
+												<div class="teamname"><?= $team->teamname ?> (<?= $team->points ?>)</div>
+												<div class="players" id="players_<?= $round->number ?>_<?= $team->teamID ?>">
+											<?php
+												foreach($team->players as $player):
+													?>
+													<div class="player" style="margin: 0  0 10px 0; background-image: url('http://ddragon.leagueoflegends.com/cdn/<?= DDRAGON_VERSION ?>/img/profileicon/<?= $player->profileIconID ?>.png')">
+														<div class="player_summonername <?= $player->isCaptain ? 'captain' : '' ?>"><?= $player->summonername ?></div>
+														<?php if($player->isCaptain) : ?>
+														<div class="player_summonername"><?= $player->name ?></div>
+														<div class="player_level"><?= $player->mail ?></div>
+														<?php endif; ?>
+														<div class="player_level">Level <?= $player->level ?>, <?= $player->tier ?></div>
+														<?php if($player->isCaptain) : ?>
+														<div class="player_subborder"></div>
+														<?php endif; ?>
+													</div>
+													<?php 
+												endforeach;
+											?>
+												</div>
+											</div>
+										<?php else : ?>
+											<div class="team guest">
+												<div class="teamname">Spielfrei</div>
+											</div>
+										<?php endif; ?>
+									</div>
+								</div>
+								<?php if(!$gGame->isBlocked) : ?>
+								<div class="tournament_codes">
+									<div class="heading">Tournament Codes</div>
+									<div class="tournament_code">Spiel 1: <a href="<?= $gGame->tournamentCode1 ?>">Rechtsklick -> Link kopieren</a></div>
+									<div class="tournament_code">Spiel 2: <a href="<?= $gGame->tournamentCode2 ?>">Rechtsklick -> Link kopieren</a></div>
+									<div class="tournament_code">Spiel 3: <a href="<?= $gGame->tournamentCode3 ?>">Rechtsklick -> Link kopieren</a></div>
+								</div>
+								
+								<div class="tournament_codes">
+									<div class="heading">Foodle Umfrage zur Terminfindung</div>
+									<div class="tournament_code"><a href="<?= $gGame->foodleURL ?>" target="_blank"><?= $gGame->foodleURL ?></a></div>
+								</div>
+								
+								<div class="ergebnismeldung">
+									<div class="heading">Offizieller Spieltermin</div>
+									<?php 
+										if($timeReportResult !== null){
+											if(!empty($timeReportResult))
+												echo('<div class="reportresult error">'.$timeReportResult.'</div>');
+											else
+												echo('<div class="reportresult">Zeit erfolgreich gespeichert</div>');
+										} 
+									?>
+									<form action="paarungen.html?id=<?= $idAnmeldung ?><?= DEBUG ? '&test' : '' ?>" method="POST">
+										<label for="termin_termin">Termin<sup>*</sup></label>
+										<?php 
+											try{
+												$gamedate = new DateTime($gGame->gameTime); 
+											} catch (Exception $e) {
+												$gamedate = null;
+											}
+										?>
+										<input type="datetime-local" name="termin[termin]" id="termin_termin" placeholder="YYYY-MM-DD HH:MM" value="<?= !empty($gamedate) && $gamedate->format('Y') > 0  ? $gamedate->format('Y-m-d\TH:i:s') : ''; ?>">
+										<input type="hidden" name="termin[gameid]" value="<?= $gGame->gameID ?>">
+										<input type="submit" value="Offiziellen Spieltermin melden" style="float: left; clear: both">
+									</form>
+								</div>
+								<div class="ergebnismeldung">
+									<div class="heading">Ergebnismeldung</div>
+									<?php 
+										if($reportResult !== null){
+											if(!empty($reportResult))
+												echo('<div class="reportresult error">'.$reportResult.'</div>');
+											else
+												echo('<div class="reportresult">Ergebnis erfolgreich gespeichert</div>');
+										}
+									?>
+									<form action="paarungen.html?id=<?= $idAnmeldung ?><?= DEBUG ? '&test' : '' ?>" method="POST" enctype="multipart/form-data">
+										<label for="ergebnis_ergebnis">Ergebnis<sup>*</sup></label>
+										<?php 
+											if($gGame->teamHome == $tTeam){
+												$meldung = $gGame->meldungHome;
+												$anmerkung = $gGame->anmerkungHome;
+											} else {
+												$meldung = $gGame->meldungGuest;
+												$anmerkung = $gGame->anmerkungGuest;
+											}
+										?>
+										<select name="ergebnis[ergebnis]" id="ergebnis_ergebnis">
+											<option value=""> - Bitte W&auml;hlen - </option>
+											<option value="2-0" <?= $meldung == '2-0' ? 'selected="selected"' : '' ?>> 2 - 0 </option>
+											<option value="2-1" <?= $meldung == '2-1' ? 'selected="selected"' : '' ?>> 2 - 1 </option>
+											<option value="1-2" <?= $meldung == '1-2' ? 'selected="selected"' : '' ?>> 1 - 2 </option>
+											<option value="0-2" <?= $meldung == '0-2' ? 'selected="selected"' : '' ?>> 0 - 2 </option>
+										</select>
+										<label for="ergebnis_anmerkung">Anmerkung:</label>
+										<textarea name="ergebnis[anmerkung]" id="ergebnis_anmerkung"><?= $anmerkung ?></textarea>
+										<label for="ergebnis_screen1">Screen von Spiel 1</label>
+										<input type="file" name="ergebnis[screen1]" id="ergebnis_screen1" accept="image/*">
+										<label for="ergebnis_screen2">Screen von Spiel 2</label>
+										<input type="file" name="ergebnis[screen2]" id="ergebnis_screen2" accept="image/*">
+										<label for="ergebnis_screen3">Screen von Spiel 3</label>
+										<input type="file" name="ergebnis[screen3]" id="ergebnis_screen3" accept="image/*">
+										<input type="hidden" name="ergebnis[gameid]" value="<?= $gGame->gameID ?>">
+										<input type="submit" value="Ergebnis melden" style="float: left">
+									</form>
+								</div>
+								<?php endif; ?>
+							</div>
+						</li>
+						<?php endfor; ?>
+					<?php endif; ?>
+				</ul>
+			</div>
+		</div>
+	<?php endif; ?>
