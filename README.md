@@ -34,6 +34,6 @@ Dont forget to enable `mod_rewrite`
 2. Navigate to your cloned repository
 3. run `bower install`
 4. run `php composer.phar install`
-5. run `php vendor/bin/doctrine-module orm:schema-tool:install`
+5. run `php vendor/bin/doctrine-module orm:schema-tool:create`
 6. rename `bower_components/iscroll/package.json` to `bower_components/iscroll/bower.json` (Yes, this is a bad fix until my pull request to bower-module is accepted)
-7. run `php public/index.php bower perpare-packs`
+7. run `php public/index.php bower prepare-packs`
