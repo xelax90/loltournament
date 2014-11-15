@@ -8,6 +8,7 @@ use FSMPILoL\Tournament\Summonerdata;
 use FSMPILoL\Tournament\Group;
 use FSMPILoL\Form\ZeitmeldungForm;
 use FSMPILoL\Form\ErgebnismeldungForm;
+use FSMPILoL\Entity\User;
 
 use ZfcUser\Form\Login as LoginForm;
 
@@ -15,9 +16,16 @@ use DateTime;
 
 class TournamentController extends AbstractActionController
 {
+	/** @var array */
 	protected $summoners;
+	
+	/** @var Tournament */
 	protected $tournament;
+
+	/** @var RiotAPI */
 	protected $api;
+
+	/** @var Doctrine\ORM\EntityManager */
 	protected $em;
 	
 	public function getEntityManager(){
@@ -219,7 +227,7 @@ class TournamentController extends AbstractActionController
 				} else {
 					if($this->validateErgebnisreport($formIndex['ergebnis'], $data)){
 						$data = $formIndex['ergebnis']->getData();
-						$uploaddir = './data/uploads/';
+						$uploaddir = './public/img/uploads/';
 						$match = $em->getRepository('FSMPILoL\Entity\Match')->find((int)$data['match_id']);
 						$isHome = $team == $match->getTeamHome();
 						foreach($match->getGames() as $game){
@@ -252,7 +260,8 @@ class TournamentController extends AbstractActionController
 							$screen = $data['screen_'.$game->getId()];
 							if(!empty($screen['tmp_name'])){
 								$ext = pathinfo($screen['name'], PATHINFO_EXTENSION);
-								$uploadfile = $uploaddir . 'turn'.$tournament->getId() . '_grp'.$group->getNumber().'_ma'.$match->getId().'_sp'.$game->getNumber().($isHome ? 'H' : 'G').'.'.$ext;
+								$filename = 'turn'.$tournament->getId() . '_grp'.$group->getNumber().'_ma'.$match->getId().'_sp'.$game->getNumber().($isHome ? 'H' : 'G').'.'.$ext;
+								$uploadfile = $uploaddir . $filename;
 								if(!is_dir($uploaddir)){
 									mkdir($uploaddir, 0770, true);
 								}
@@ -260,9 +269,9 @@ class TournamentController extends AbstractActionController
 									echo "Fehler beim Upload von ".$game->getNumber();
 								
 								if($isHome){
-									$game->setScreenHome(realpath($uploadfile));
+									$game->setScreenHome('/img/uploads/'.$filename);
 								} else {
-									$game->setScreenGuest(realpath($uploadfile));
+									$game->setScreenHome('/img/uploads/'.$filename);
 								}
 							}
 						}
@@ -439,6 +448,25 @@ class TournamentController extends AbstractActionController
 		return new ViewModel(array('tournament' => $tournament, 'team' => $team));
 	}
 	
+	public function paarungenAdminAction(){
+		$this->authenticate();
+		
+		if(!$this->zfcUserAuthentication()->hasIdentity())
+			return $this->redirect()->toRoute('admin');
+		
+		$identity = $this->zfcUserAuthentication()->getIdentity();
+		if($identity->getRole() > User::ROLE_MODERATOR)
+			return $this->redirect()->toRoute('home');
+		
+		$tournament = $this->getTournament();
+		if(!$tournament)
+			return new ViewModel();
+		
+		$this->setTeamdata();
+		$this->setAPIData();
+		
+		return new ViewModel(array('tournament' => $tournament));
+	}
 	
 	protected function authenticate(){
 		if($this->zfcUserAuthentication()->hasIdentity()){

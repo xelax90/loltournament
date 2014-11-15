@@ -92,6 +92,20 @@ return array(
                     ),
                 ),
             ),
+			'zfcadmin' => array(
+				'child_routes' => array(
+					'paarungen' => array(
+		                'type' => 'literal',
+		                'options' => array(
+		                    'route'    => '/paarungen',
+		                    'defaults' => array(
+		                        'controller' => 'Tournament',
+		                        'action'     => 'paarungenAdmin',
+		                    ),
+		                ),
+		            ),
+				),
+			),
         ),
     ),
     
@@ -214,6 +228,10 @@ return array(
 			array('label' => 'Teilnehmer', 'route' => 'teams'),
 			array('label' => 'Kontakt', 'route' => 'kontakt'),
 		),
+		'admin' => array(
+			array('label' => 'Paarungen', 'route' => 'zfcadmin/paarungen'),
+		),
+		
 	),
     
     

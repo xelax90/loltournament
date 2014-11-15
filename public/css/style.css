@@ -1,3 +1,7 @@
 body {
 	
 }
+
+.table>tbody>tr>td.matchGame-table-container{
+	padding-left: 30px;
+}

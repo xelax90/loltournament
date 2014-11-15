@@ -37,13 +37,11 @@ else
 										foreach($round->getMatches() as $match) :
 											$pointsHome = "";
 											$pointsGuest = "";
-											$g = 0;
 											foreach($match->getGames() as $game){
 												if($game->getPointsBlue() !== null && $game->getPointsPurple() !== null){
-													$pointsHome  += $g % 2 == 0 ? $game->getPointsBlue()   : $game->getPointsPurple();
-													$pointsGuest += $g % 2 == 0 ? $game->getPointsPurple() : $game->getPointsBlue();
+													$pointsHome  += $match->getTeamHome()  == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
+													$pointsGuest += $match->getTeamGuest() == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
 												}
-												$g++;
 											}
 											
 											$result = "";

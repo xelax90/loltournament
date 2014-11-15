@@ -26,6 +26,18 @@ return array(
 					//"bootstrap-switch"
 				)
 			),
+			'admin' => array(
+				'token' => 'aababa',
+				'modules' => array(
+					'jquery',
+					'iscroll',
+					'bootstrap',
+					"Selecter",
+					"Stepper",
+					"iCheck",
+					"bootstrap-switch"
+				)
+			),
 			'ieLT9' => array(
 				'token' => 'bababab',
 				'modules' => array(

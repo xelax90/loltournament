@@ -1,0 +1,100 @@
+<?php foreach($this->tournament->getGroups() as $group) :  ?>
+	<h1>Gruppe <?= $group->getNumber() ?></h1>
+	<?php foreach($group->getRounds() as $round): ?>
+		<h2>Runde <?= $round->getNumber() ?> (<?= $round->getType() ?>)</h2>
+		
+		<table class="table">
+		    <thead>
+		        <tr>
+					<th>Id</th>
+					<th>Nr</th>
+					<th>Zeit</th>
+					<th>Team Heim</th>
+					<th>Team Gast</th>
+					<th>Ergebnis</th>
+					<th>Anmerkung</th>
+		            <th>&nbsp;</th>
+		        </tr>
+		    </thead>
+		    <tbody>
+		    <?php foreach ($round->getMatches() as $match): ?>
+		        <tr>
+					<td class="cell cell-id"><?= $match->getId() ?></td>
+					<td class="cell cell-nr"><?= $match->getNumber() ?></td>
+					<td class="cell cell-zeit"><?= $match->getTime()->format('Y-m-d H:i') ?></td>
+					<td class="cell cell-heim"><?= $match->getTeamHome() ? $match->getTeamHome()->getName() : 'Spielfrei' ?></td>
+					<td class="cell cell-gast"><?= $match->getTeamGuest() ? $match->getTeamGuest()->getName() : 'Spielfrei' ?></td>
+					<td class="cell cell-ergebnis"><?= $match->getPointsHome() . ' - ' . $match->getPointsGuest() ?></td>
+					<td class="cell cell-anmerkung"><?= $match->getAnmerkung() ?></td>
+		            <td class="cell cell-ctrls">
+						<?php
+							$buttons = array(
+								'block' => array(
+									'title' => 'Blockieren',
+									'route' => 'zfcadmin/paarungen',
+									'params' => array(
+										'match_id' => $match->getId()
+									),
+								),
+								'setresult' => array(
+									'title' => 'Ergebnis setzen',
+									'route' => 'zfcadmin/paarungen',
+									'params' => array(
+										'match_id' => $match->getId()
+									),
+								),
+							);
+						?>
+						<?php $c = 0;?>
+						<?php foreach($buttons as $button): ?>
+							<?= $c == 0 ? '' : '|'  ?>
+							<a href="<?php echo $this->url($button['route'], $button['params']); ?>" <?= empty($button['warning']) ? '' : 'onclick=" return confirm(\''.$button['warning'].'\')"' ?> >
+								<?php echo $this->translate($button['title']) ?>
+							</a>
+							<?php $c++; ?>
+						<?php endforeach; ?>
+		            </td>
+		        </tr>
+				<tr><td colspan="8" class="matchGame-table-container"><table class="table table-hover">
+				    <thead>
+				        <tr>
+							<th>Id</th>
+							<th>Nr</th>
+							<th>Ergebnis</th>
+							<th><abbr title="Meldung Heim">MeldH</abbr></th>
+							<th><abbr title="Screen Heim">ScrH</abbr></th>
+							<th><abbr title="Anmerkung Heim">AnmH</abbr></th>
+							<th><abbr title="Meldung Gast">MeldG</abbr></th>
+							<th><abbr title="Screen Gast">ScrG</abbr></th>
+							<th><abbr title="Anmerkung Gast">AnmG</abbr></th>
+				            <th>&nbsp;</th>
+				        </tr>
+				    </thead>
+					
+					<tbody>
+						<?php foreach($match->getGames() as $game) : ?>
+							<?php
+								$ergebnis  = $match->getTeamHome()  == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
+								$ergebnis .= ' - ';
+								$ergebnis .= $match->getTeamGuest() == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
+							?>
+							<tr>
+								<td class="cell cell-id"><?= $game->getId() ?></td>
+								<td class="cell cell-nr"><?= $game->getNumber() ?></td>
+								<td class="cell cell-ergebnis"><?= $ergebnis ?></td>
+								<td class="cell cell-meldung-heim"><?= $game->getMeldungHome() ?></td>
+								<td class="cell cell-screen-heim"><?php if($game->getScreenHome()): ?><a href="<?= $this->basePath() . $game->getScreenHome() ?>" target="_blank">Screen</a><?php endif; ?></td>
+								<td class="cell cell-anmerkung-heim"><?= $game->getAnmerkungHome() ?></td>
+								<td class="cell cell-meldung-gast"><?= $game->getMeldungGuest() ?></td>
+								<td class="cell cell-screen-gast"><?php if($game->getScreenGuest()): ?><a href="<?= $this->basePath() . $game->getScreenGuest() ?>" target="_blank">Screen</a><?php endif; ?></td>
+								<td class="cell cell-anmerkung-gast"><?= $game->getAnmerkungGuest() ?></td>
+								<td class="cell cell-ctrls"></td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table></td></tr>
+		    <?php endforeach; ?>
+		    </tbody>
+		</table>
+	<?php endforeach; ?>
+<?php endforeach; ?>
