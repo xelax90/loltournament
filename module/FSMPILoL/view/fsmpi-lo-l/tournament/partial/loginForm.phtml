@@ -1,27 +1,37 @@
 <li class="login">
-	<div class="header">
-		<b>Login</b>
-	</div>
-	<div class="article">
-		<?php
-		$form = $this->loginForm;
-		$form->prepare();
-		$form->setAttribute('action', $this->formAction);
-		$form->setAttribute('method', 'post');
+	<?php  $identity = $this->zfcUserIdentity(); ?>
+	<?php if(!$identity): ?>
+		<div class="header">
+			<b>Login</b>
+		</div>
+		<div class="article">
+			<?php
+			$form = $this->loginForm;
+			$form->prepare();
+			$form->setAttribute('action', $this->formAction);
+			$form->setAttribute('method', 'post');
 		
-		$form->get('identity')->setAttribute('placeholder', 'Email');
-		$form->get('identity')->setAttribute('style', 'float: left; width: 42%; margin-right: 15px;');
-		$form->get('credential')->setAttribute('placeholder', 'Code');
-		$form->get('credential')->setAttribute('style', 'float: left; width: 42%;');
-		$form->get('submit')->setAttribute('value', 'Login');
-		$form->get('submit')->setAttribute('style', 'height: 21px; margin: 2px 0;');
+			$form->get('identity')->setAttribute('placeholder', 'Email');
+			$form->get('identity')->setAttribute('style', 'float: left; width: 42%; margin-right: 15px;');
+			$form->get('credential')->setAttribute('placeholder', 'Code');
+			$form->get('credential')->setAttribute('style', 'float: left; width: 42%;');
+			$form->get('submit')->setAttribute('value', 'Login');
+			$form->get('submit')->setAttribute('style', 'height: 21px; margin: 2px 0;');
 		
-		?>
-		<?php echo $this->form()->openTag($form) ?>
-        <?php echo $this->formElementErrors($form->get('identity')) ?>
-		<?php echo $this->formInput($form->get('identity')) ?>
-		<?php echo $this->formInput($form->get('credential')) ?>
-		<?php echo $this->formSubmit($form->get('submit')) ?>
-		<?php echo $this->form()->closeTag() ?>
-	</div>
+			?>
+			<?php echo $this->form()->openTag($form) ?>
+	        <?php echo $this->formElementErrors($form->get('identity')) ?>
+			<?php echo $this->formInput($form->get('identity')) ?>
+			<?php echo $this->formInput($form->get('credential')) ?>
+			<?php echo $this->formSubmit($form->get('submit')) ?>
+			<?php echo $this->form()->closeTag() ?>
+		</div>
+	<?php else: ?>
+		<div class="header">
+			<b>Hallo <?= $identity->getDisplayName() ?>, was möchtest du tun?</b>
+		</div>
+		<div class="article">
+			<a href="<?= $this->url('meldung') ?>">Ergebnis/Spieltermin melden</a>
+		</div>
+	<?php endif; ?>
 </li>

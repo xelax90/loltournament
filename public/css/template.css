@@ -1186,6 +1186,18 @@ body {
 #body .anmeldung .sidebar ul li span a:hover {
 	color: #fff;
 }
+
+#body ul li.login a,
+#body ul li.login a:hover,
+#body ul li.login a:visited{
+	text-decoration: none;
+	color: #727272;
+}
+
+#body ul li.login a:hover{
+	text-decoration: underline;
+}
+
 #body .ergebnisse ul li .article .standings{
 	
 }
