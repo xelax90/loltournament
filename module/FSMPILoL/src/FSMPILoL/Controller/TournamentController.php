@@ -411,6 +411,35 @@ class TournamentController extends AbstractActionController
 		return $form->isValid();
 	}
 	
+	public function myteamAction(){
+		$this->authenticate();
+		$request = $this->getRequest();
+		$em = $this->getEntitymanager();
+		$tournament = $this->getTournament();
+		if(!$tournament)
+			return $this->redirect()->toRoute('teams');
+		
+		if(!$this->zfcUserAuthentication()->hasIdentity())
+			return $this->redirect()->toRoute('teams');
+		
+		$identity = $this->zfcUserAuthentication()->getIdentity();
+		$player = $identity->getPlayer();
+		
+		if($player){
+			$team = $player->getTeam();
+			if($team)
+				$group = $team->getGroup();
+		}
+		
+		if(!$player | !$team | !$group)
+			return $this->redirect()->toRoute('teams');
+		
+		$this->setAPIData();
+		
+		return new ViewModel(array('tournament' => $tournament, 'team' => $team));
+	}
+	
+	
 	protected function authenticate(){
 		if($this->zfcUserAuthentication()->hasIdentity()){
 			return true;

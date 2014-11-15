@@ -68,7 +68,7 @@ class Player implements InputFilterAwareInterface, JsonSerializable
 	
 	protected $score;
 	
-	public function __construct($anmeldung = null, $team = null, $isCaptain = null, $summoner = null, $api = null){
+	public function __construct($anmeldung = null, $team = null, $isCaptain = null){
 		if($anmeldung !== null)
 			$this->anmeldung = $anmeldung;
 		
@@ -77,9 +77,6 @@ class Player implements InputFilterAwareInterface, JsonSerializable
 		
 		if($isCaptain !== null)
 			$this->isCaptain = $isCaptain;
-		
-		if($summoner !== null && $api !== null)
-			$this->setAPIData($summoner, $api);
 	}
 	
 	
@@ -123,26 +120,6 @@ class Player implements InputFilterAwareInterface, JsonSerializable
 		return $this->summonerId = $summonerId;
 	}
 	
-	public function getLevel(){
-		return $this->level;
-	}
-	
-	public function getTier(){
-		return $this->level;
-	}
-	
-	public function getNormalWins(){
-		return $this->level;
-	}
-	
-	public function getRankedWins(){
-		return $this->level;
-	}
-	
-	public function getProfileIconId(){
-		return $this->level;
-	}
-	
 	public function getUser(){
 		return $this->user;
 	}
@@ -151,74 +128,8 @@ class Player implements InputFilterAwareInterface, JsonSerializable
 		return $this->user = $user;
 	}
 	
-	public function setAPIData($summoner, $api){
-		$stats = $api->getStats($summoner->id);
-		
-		// get tier
-		$leagueEntries = $api->getLeagueEntry($summoner->id);
-		$leagueEntry = 404;
-		if(!is_numeric($leagueEntries)){
-			$leagueEntries = $leagueEntries->{$summoner->id};
-			foreach($leagueEntries as $entry){
-				//var_dump($entry);
-				if($entry->queue == "RANKED_SOLO_5x5" && !empty($entry->entries))
-					$leagueEntry = $entry;
-			}
-		}
-		$league = "Unranked";
-		if(!is_numeric($leagueEntry))
-			$league = ucfirst(strtolower($leagueEntry->tier))." ".$leagueEntry->entries[0]->division;
-		elseif($leagueEntry != 404)
-			$league = "?";
-		
-		// ranked/normal wins
-		$rankedWins = 0;
-		$normalWins = 0;
-		foreach($stats->playerStatSummaries as $summary){
-			if($summary->playerStatSummaryType == "RankedSolo5x5")
-				$rankedWins = $summary->wins;
-			elseif($summary->playerStatSummaryType == "Unranked")
-				$normalWins = $summary->wins;
-		}
-		
-		$this->level = $summoner->summonerLevel;
-		$this->tier = $league;
-		$this->normalWins = $normalWins;
-		$this->rankedWins = $rankedWins;
-		$this->profileIconId = $summoner->profileIconId;
-		
-		if(!$this->getSummonerId())
-			$this->setSummonerId($summoner->id);
-		
-		$this->getScore(true);
-	}
-	
 	public function getScore($refresh = false){
-		if(null == $this->score || $refresh){
-			$score = 0;
-			switch(strtolower(substr($this->tier, 0, 3))){
-				case "bro" : $score += 2; break;
-				case "sil" : $score += 3; break;
-				case "gol" : $score += 4; break;
-				case "pla" : $score += 5; break;
-				case "dia" : $score += 6; break;
-				case "mas" : $score += 7; break;
-				case "cha" : $score += 7; break;
-				default:
-					$score += 1; 
-					if($this->level < 30) 
-						break;
-					if($this->normalWins >= 300)
-						$score += 1;
-					if($this->normalWins >= 600)
-						$score += 1;
-					if($this->normalWins >= 1000)
-						$score += 1;
-					break;
-			}
-			$this->score = $score;
-		}
-		return $this->score;
+		return $this->getAnmeldung()->getSummonerdata()->getScore($refresh);
 	}
 	
 	/**

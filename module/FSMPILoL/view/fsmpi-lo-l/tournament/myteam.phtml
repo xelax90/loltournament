@@ -1,0 +1,55 @@
+<?php
+define('DEBUG', false);
+define('ADMIN', false);
+$identity = $this->zfcUserIdentity();
+$team = $this->team;
+?>
+<div class="anmeldung teams">
+	<div class="content">
+		<ul>
+			<li style="width: 920px; margin-right: 0px;">
+				<div class="header" <?= DEBUG && $hasCaptain ? 'style="border-color: green;"' : '' ?>>
+					<b><img style="width: 52px; vertical-align: middle; margin-right: 10px;" src="<?= $this->basePath() ?>/img/summoner_icons/<?= $team->getIcon() ?>"><?php echo $team->getName() ?></b>
+					<?= ADMIN ? '<div style="clear: left">'.$team->getAnsprechpartner().'</div>' : ''; ?>
+				</div>
+				<div class="article">
+					<div class="players">
+						<?php 
+							foreach($team->getPlayers() as $player){
+								echo $this->partial('fsmpi-lo-l/tournament/partial/player.phtml', array(
+									'player' => $player,
+									'addStyles' => '',
+									'showCaptain' => true,
+									'showCaptainContact' => true,
+									'showAllContacts' => true,
+									'showWins' => true,
+									'showEmailRight' => true
+								));
+							}; 
+						?>
+					</div>
+				</div>
+			</li>
+			<li style="width: 920px; margin-right: 0px;">
+				<div class="header">
+					<b>Ersatzspieler</b>
+				</div>
+				<div class="article">
+					<div class="players">
+						<?php foreach($this->tournament->getSubs() as $player) : 
+							echo $this->partial('fsmpi-lo-l/tournament/partial/player.phtml', array(
+								'player' => $player,
+								'addStyles' => 'margin: 0  0 10px 0; ',
+								'showCaptain' => false,
+								'showCaptainContact' => false,
+								'showAllContacts' => true,
+								'showWins' => true,
+								'showEmailRight' => true
+							));
+						endforeach; ?>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>

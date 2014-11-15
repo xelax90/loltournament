@@ -82,7 +82,16 @@ return array(
                     ),
                 ),
             ),
-			
+			'myteam' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route'    => '/myteam',
+                    'defaults' => array(
+                        'controller' => 'Tournament',
+                        'action'     => 'myteam',
+                    ),
+                ),
+            ),
         ),
     ),
     

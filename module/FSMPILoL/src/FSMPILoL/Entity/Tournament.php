@@ -97,6 +97,7 @@ class Tournament implements InputFilterAwareInterface, JsonSerializable, Already
 					}
 				}
 			}
+			usort($this->subs, function($a, $b){return $b->getScore(true) - $a->getScore(true);});
 		}
 		return $this->subs;
 	}

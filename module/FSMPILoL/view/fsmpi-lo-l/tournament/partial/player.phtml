@@ -1,8 +1,8 @@
 <?php $player = $this->player; ?>
 <div class="player" style="margin: 0  0 10px 0; background-image: url('<?= $this->fsmpiLoLDDragon()->profileIcon($player->getAnmeldung()->getSummonerdata()->getProfileIconId()) ?>'); <?= $this->addStyles ?: '' ?>">
 	<?php if(($player->getIsCaptain() && $this->showCaptainContact) || $this->showAllContacts) : ?>
-	<div class="player_summonername"><?= $player->getAnmeldung()->getName() ?></div>
-	<div class="player_level"><?= $player->getAnmeldung()->getEmail() ?></div>
+	<div class="player_summonername <?= $player->getIsCaptain() && $this->showCaptain ? 'captain' : '' ?>"><?= $player->getAnmeldung()->getName() ?></div>
+	<div class="<?= $this->showEmailRight ? 'player_rankedWins' : 'player_level' ?>"><?= $player->getAnmeldung()->getEmail() ?></div>
 	<?php endif; ?>
 	<div class="player_summonername <?= $player->getIsCaptain() && $this->showCaptain ? 'captain' : '' ?>"><?= $player->getAnmeldung()->getSummonerName() ?></div>
 	

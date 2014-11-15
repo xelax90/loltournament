@@ -11,6 +11,7 @@ class Summonerdata {
 	protected $tier;
 	protected $level;
 	protected $profileIconId;
+	protected $score;
 	
 	public function __construct(RiotAPI $api, $anmeldung, $summoner){
 		$stats = $api->getStats($summoner->id);
@@ -46,6 +47,7 @@ class Summonerdata {
 		$this->tier = $league;
 		$this->level = $summoner->summonerLevel;
 		$this->profileIconId = $summoner->profileIconId;
+		$this->getScore(true);
 	}
 	
 	public function getAnmeldung(){
@@ -94,6 +96,34 @@ class Summonerdata {
 
 	public function setProfileIconId($profileIconId){
 		$this->profileIconId = $profileIconId;
+	}
+	
+	public function getScore($refresh = false){
+		if(null == $this->score || $refresh){
+			$score = 0;
+			switch(strtolower(substr($this->getTier(), 0, 3))){
+				case "bro" : $score += 2; break;
+				case "sil" : $score += 3; break;
+				case "gol" : $score += 4; break;
+				case "pla" : $score += 5; break;
+				case "dia" : $score += 6; break;
+				case "mas" : $score += 7; break;
+				case "cha" : $score += 7; break;
+				default:
+					$score += 1; 
+					if($this->level < 30) 
+						break;
+					if($this->normalWins >= 300)
+						$score += 1;
+					if($this->normalWins >= 600)
+						$score += 1;
+					if($this->normalWins >= 1000)
+						$score += 1;
+					break;
+			}
+			$this->score = $score;
+		}
+		return $this->score;
 	}
 	
 	public function __sleep(){

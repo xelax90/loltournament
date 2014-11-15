@@ -1,31 +1,19 @@
 <?php
-define('DEBUG', false);
-define('ADMIN', false);
-define('DDRAGON_VERSION', '4.19.2');
-// TODO Login
-/*
-$idAnmeldung = null;
-if(!empty($_GET['id']))
-	$idAnmeldung = LoLDB::escape($_GET['id']);
-*/
+use FSMPILoL\Entity\User;
+
+$identity = $this->zfcUserIdentity();
+
+$isAdmin = false;
+$isModerator = false;
+if(!empty($identity)){
+	$isAdmin = $identity->getRole() <= User::ROLE_ADMIN;
+	$isModerator = $identity->getRole() <= User::ROLE_MODERATOR;
+}
 ?>
 <div class="anmeldung teams">
 	<div class="content">
 		<ul>
-			<li style="width: 100%; float: none;">
-				<div class="header">
-					<b>Login</b>
-				</div>
-				<div class="article">
-					<form action="teams.html" method="GET">
-						<input type="text" placeholder="Code" name="id" style="float: left;">
-						<input type="submit" value="Login" style="height: 21px; margin: 2px 0;">
-						<?php if(DEBUG) : ?>
-						<input type="hidden" name="test" value="">
-						<?php endif;?>
-					</form>
-				</div>
-			</li>
+			<?php echo $this->partial('fsmpi-lo-l/tournament/partial/loginForm.phtml', array('loginForm' => $this->loginForm, 'formAction' => $this->url('meldung'))) ?>
 			<?php
 				$tournament = $this->tournament;
 				foreach($tournament->getGroups() as $group) : 
@@ -43,19 +31,13 @@ if(!empty($_GET['id']))
 								}
 							}
 						}
-						if(substr($team->teamname, 0, 4) == "Sub_")
-							continue;
 						*/
-						$hasCaptain = false;
-						foreach($team->getPlayers() as $player){
-							if($player->getIsCaptain())
-								$hasCaptain = true;
-						}
+						
 				?>
-				<li style="margin-right: <?= (1 - $c % 2) * 20 ?>px; <?= empty($idAnmeldung) || ADMIN ? '' : "width: 920px; margin-right: 0px;" ?> ">
-					<div class="header" <?= DEBUG && $hasCaptain ? 'style="border-color: green;"' : '' ?>>
+				<li style="margin-right: <?= (1 - $c % 2) * 20 ?>px; <?= empty($identity) || $isAdmin ? '' : "width: 920px; margin-right: 0px;" ?> ">
+					<div class="header" <?= $isModerator && $team->hasCaptain() ? 'style="border-color: green;"' : '' ?>>
 						<b><img style="width: 52px; vertical-align: middle; margin-right: 10px;" src="<?= $this->basePath() ?>/img/summoner_icons/<?= $team->getIcon() ?>"><?php echo $team->getName() ?></b>
-						<?= ADMIN ? '<div style="clear: left">'.$team->getAnsprechpartner().'</div>' : ''; ?>
+						<?= $isAdmin ? '<div style="clear: left">'.$team->getAnsprechpartner().'</div>' : ''; ?>
 					</div>
 					<div class="article">
 						<div class="players">
@@ -65,11 +47,12 @@ if(!empty($_GET['id']))
 								foreach($players as $player){
 									echo $this->partial('fsmpi-lo-l/tournament/partial/player.phtml', array(
 										'player' => $player,
-										'addStyles' => empty($idAnmeldung) ? '' : "min-height: 57px; padding-top: 0px;",
+										'addStyles' => empty($identity) ? '' : "min-height: 57px; padding-top: 0px;",
 										'showCaptain' => true,
-										'showCaptainContact' => false,
-										'showAllContacts' => false,
-										'showWins' => true
+										'showCaptainContact' => !empty($identity),
+										'showAllContacts' => $isAdmin,
+										'showWins' => true,
+										'showEmailRight' => true
 									));
 								}; 
 							?>
@@ -91,10 +74,11 @@ if(!empty($_GET['id']))
 							echo $this->partial('fsmpi-lo-l/tournament/partial/player.phtml', array(
 								'player' => $player,
 								'addStyles' => 'margin: 0  0 10px 0; ',
-								'showCaptain' => true,
+								'showCaptain' => false,
 								'showCaptainContact' => false,
-								'showAllContacts' => false,
-								'showWins' => true
+								'showAllContacts' => !empty($identity),
+								'showWins' => true,
+								'showEmailRight' => true
 							));
 						endforeach; ?>
 					</div>

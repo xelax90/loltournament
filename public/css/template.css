@@ -1198,6 +1198,11 @@ body {
 	text-decoration: underline;
 }
 
+#body .teams ul li.login{
+	width: 100%;
+	float: 0;
+}
+
 #body .ergebnisse ul li .article .standings{
 	
 }
