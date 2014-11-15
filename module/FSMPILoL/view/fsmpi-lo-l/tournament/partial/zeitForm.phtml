@@ -1,0 +1,12 @@
+<?php
+$form = $this->zeitForm;
+$form->prepare();
+$form->setAttribute('action', $this->formAction);
+$form->setAttribute('method', 'post');
+?>
+<?= $this->form()->openTag($form) ?>
+<?= $this->formHidden($form->get('match_id')) ?>
+<?= $this->formLabel($form->get('time')) ?>
+<?= $this->formDateTimeLocal($form->get('time')) ?> <?= $this->formElementErrors($form->get('time'))?>
+<?= $this->formSubmit($form->get('submit')) ?>
+<?= $this->form()->closeTag() ?>

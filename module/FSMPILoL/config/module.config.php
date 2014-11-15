@@ -62,6 +62,16 @@ return array(
                     ),
                 ),
             ),
+			'meldung' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route'    => '/meldung',
+                    'defaults' => array(
+                        'controller' => 'Tournament',
+                        'action'     => 'meldung',
+                    ),
+                ),
+            ),
 			'teams' => array(
                 'type' => 'literal',
                 'options' => array(
@@ -180,7 +190,12 @@ return array(
             __DIR__ . '/../view',
         ),
     ),
-    
+
+	'view_helpers' => array(
+		'invokables'=> array(
+			'fsmpiLoLDDragon' => 'FSMPILoL\View\Helper\DDragonHelper'
+		)
+	),
 	'navigation' => array(
 		'default' => array(
 			//array('label' => 'Home', 'route' => 'home'),

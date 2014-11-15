@@ -53,6 +53,12 @@ class Player implements InputFilterAwareInterface, JsonSerializable
 	 */
 	protected $summonerId;
 	
+	/**
+	 * @ORM\OneToOne(targetEntity="User",inversedBy="player")
+	 * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", onDelete="SET NULL")
+	 */
+	protected $user;
+	
 	// Data loaded by api
 	protected $level;
 	protected $tier;
@@ -114,7 +120,7 @@ class Player implements InputFilterAwareInterface, JsonSerializable
 	}
 
 	public function setSummonerId($summonerId){
-		$this->summonerId = $summonerId;
+		return $this->summonerId = $summonerId;
 	}
 	
 	public function getLevel(){
@@ -135,6 +141,14 @@ class Player implements InputFilterAwareInterface, JsonSerializable
 	
 	public function getProfileIconId(){
 		return $this->level;
+	}
+	
+	public function getUser(){
+		return $this->user;
+	}
+	
+	public function setUser($user){
+		return $this->user = $user;
 	}
 	
 	public function setAPIData($summoner, $api){

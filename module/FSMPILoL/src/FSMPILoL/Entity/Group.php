@@ -52,6 +52,7 @@ class Group implements InputFilterAwareInterface, JsonSerializable, AlreadyPlaye
  	
 	/**
 	 * @ORM\OneToMany(targetEntity="Round", mappedBy="group")
+ 	 * @ORM\OrderBy({"number" = "DESC"})
 	 */
 	protected $rounds;
 	

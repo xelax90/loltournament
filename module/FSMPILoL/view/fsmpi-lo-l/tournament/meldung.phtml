@@ -1,0 +1,126 @@
+<?php
+		$player = $this->zfcUserIdentity()->getPlayer();
+		if($player){
+			$team = $player->getTeam();
+			if($team)
+				$group = $team->getGroup();
+		}
+		$idCorrect = true;
+		if(!$player || !$team || !$group)
+			$idCorrect = false;
+?>
+<div class="anmeldung ergebnisse personal">
+	<div class="content">
+		<ul class="paarungen">
+			<?php if(!$idCorrect) : ?>
+				<li>
+					<div class="header"><b>Der Code ist nicht korrekt oder du hast keine Berechtigung.</b></div>
+					<div class="article"><p></p></div>
+				</li>
+			<?php else : ?>
+				<?php
+				$rounds = $group->getRounds()->toArray();
+				usort($rounds, function($a, $b){return $b->getNumber() - $a->getNumber();});
+				foreach($rounds as $round) : ?>
+				<li>
+					<div class="header">
+						<b>Runde <?= $round->getNumber() ?></b>
+					</div>
+
+					<div class="article">
+						<div class="matches">
+							<?php
+								$match = null;
+								foreach($round->getMatches() as $m) :
+									if($m->getTeamHome() != $team && $m->getTeamGuest() != $team)
+										continue;
+									$match = $m;
+									break;
+								endforeach;
+							
+								/*
+								$reportResult = null;
+								if(!empty($_POST['ergebnis']) && $_POST['ergebnis']['gameid'] == $gGame->gameID){
+									$reportResult = $tournament->reportResults();
+								} 
+
+								$timeReportResult = null;
+								if(!empty($_POST['termin']) && $_POST['termin']['gameid'] == $gGame->gameID){
+									$timeReportResult = $tournament->reportTime();
+								} 
+								*/
+							
+								$result = "";
+								$pointsHome = "";
+								$pointsGuest = "";
+								$g = 0;
+								foreach($match->getGames() as $game){
+									if($game->getPointsBlue() !== null && $game->getPointsPurple() !== null){
+										$pointsHome += $g % 2 == 0 ? $game->getPointsBlue() : $game->getPointsPurple();
+										$pointsGuest += $g % 2 == 0 ? $game->getPointsPurple() : $game->getPointsBlue();
+									}
+									$g++;
+								}
+								$result .= $match->getPointsHome() === null ? $pointsHome : $match->getPointsHome();
+								$result .= " - ";
+								$result .= $match->getPointsGuest() === null ? $pointsGuest : $match->getPointsGuest();
+
+								echo $this->partial('fsmpi-lo-l/tournament/partial/paarung.phtml', array(
+									'match' => $match,
+									'position' => 0,
+									'result' => $result,
+									'showGamedate' => false,
+									'teamOptions' => array(
+										'showFarberwartung' => false,
+										'playerOptions' => array(
+											'addStyles' => '',
+											'showCaptain' => true,
+											'showCaptainContact' => true,
+											'showAllContacts' => false,
+											'showWins' => false
+										)
+									)
+								));
+
+							?>
+						</div>
+						<?php if(!$match->getIsBlocked()) : ?>
+						<div class="tournament_codes">
+							<div class="heading">Tournament Codes</div>
+							<?php $i = 0; foreach($match->getGames() as $game): $i++; ?>
+								<div class="tournament_code">Spiel <?= $i ?>: <a href="<?= $game->getTournamentCode() ?>">Rechtsklick -> Link kopieren</a></div>
+							<?php endforeach; ?>
+						</div>
+					
+						<div class="tournament_codes">
+							<div class="heading">Foodle Umfrage zur Terminfindung</div>
+							<div class="tournament_code"><a href="<?= $match->getFoodleURL() ?>" target="_blank"><?= $match->getFoodleURL() ?></a></div>
+						</div>
+					
+						<div class="ergebnismeldung">
+							<div class="heading">Offizieller Spieltermin</div>
+							<?php 
+								if(!empty($this->messages['zeitmeldung_success'])){
+									echo('<div class="reportresult">'.$this->messages['zeitmeldung_success'].'</div>');
+								}
+								echo $this->partial('fsmpi-lo-l/tournament/partial/zeitForm.phtml', array('zeitForm' => $this->forms[$round->getId()]['zeit'], 'formAction' => $this->url('meldung'))); 
+							?>
+						</div>
+						
+						<div class="ergebnismeldung">
+							<div class="heading">Ergebnismeldung</div>
+							<?php 
+								if(!empty($this->messages['ergebnismeldung_success'])){
+									echo('<div class="reportresult">'.$this->messages['ergebnismeldung_success'].'</div>');
+								}
+								echo $this->partial('fsmpi-lo-l/tournament/partial/ergebnisForm.phtml', array('ergebnisForm' => $this->forms[$round->getId()]['ergebnis'], 'formAction' => $this->url('meldung')));
+							?>
+						</div>
+						<?php endif; ?>
+					</div>
+				</li>
+				<?php endforeach; ?>
+			<?php endif; ?>
+		</ul>
+	</div>
+</div>

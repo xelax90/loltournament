@@ -61,21 +61,18 @@ if(!empty($_GET['id']))
 						<div class="players">
 							<?php $players = $team->getPlayers()->toArray(); ?>
 							<?php usort($players, function($a, $b){return !$a->getIsCaptain() && !$b->getIsCaptain() ? 0 : ($a->getIsCaptain() ? -1 : 1); }) ?>
-							<?php foreach($players as $player): ?>
-								<div class="player" style="margin: 0  0 10px 0; background-image: url('http://ddragon.leagueoflegends.com/cdn/<?= DDRAGON_VERSION ?>/img/profileicon/<?= $player->getAnmeldung()->getSummonerdata()->getProfileIconId() ?>.png'); <?= empty($idAnmeldung) ? '' : "min-height: 57px; padding-top: 0px;" ?>">
-									<?php if($isIDAnmeldungTeam || ADMIN || (!empty($idAnmeldung) && $player->getIsCaptain())) : ?>
-									<div class="player_summonername <?= $player->getIsCaptain() ? 'captain' : '' ?>"><?= $player->getAnmeldung()->getName() ?></div>
-									<div class="player_rankedWins"><?= $player->getAnmeldung()->getEmail() ?></div>
-									<?php endif; ?>
-									<div class="player_summonername <?= $player->getIsCaptain() ? 'captain' : '' ?>"><?= $player->getAnmeldung()->getSummonerName() ?></div>
-									<div class="player_rankedWins">Ranked: <?= $player->getAnmeldung()->getSummonerdata()->getRankedWins() ?> Siege</div>
-									<div class="player_level">Level <?= $player->getAnmeldung()->getSummonerdata()->getLevel() ?>, <?= $player->getAnmeldung()->getSummonerdata()->getTier() ?></div>
-									<div class="player_normalWins">Normal: <?= $player->getAnmeldung()->getSummonerdata()->getNormalWins() ?> Siege</div>
-									<?php if($player->getIsCaptain()) : ?>
-									<div class="player_subborder"></div>
-									<?php endif; ?>
-								</div>
-							<?php endforeach; ?>
+							<?php 
+								foreach($players as $player){
+									echo $this->partial('fsmpi-lo-l/tournament/partial/player.phtml', array(
+										'player' => $player,
+										'addStyles' => empty($idAnmeldung) ? '' : "min-height: 57px; padding-top: 0px;",
+										'showCaptain' => true,
+										'showCaptainContact' => false,
+										'showAllContacts' => false,
+										'showWins' => true
+									));
+								}; 
+							?>
 						</div>
 					</div>
 				</li>
@@ -84,32 +81,25 @@ if(!empty($_GET['id']))
 					endforeach;
 				endforeach;
 			?>
-			<?php if(empty($idAnmeldung) && false) : ?>
 			<li style="width: 920px; margin-right: 0px;">
 				<div class="header">
 					<b>Ersatzspieler</b>
 				</div>
 				<div class="article">
 					<div class="players">
-						<?php foreach($tournament->groups[count($tournament->groups) - 1]->teams as $team) : ?>
-							<?php if(substr($team->teamname, 0, 4) != "Sub_") continue; ?>
-							<?php foreach($team->players as $player): ?>
-								<div class="player" style="margin: 0  0 10px 0; background-image: url('http://ddragon.leagueoflegends.com/cdn/<?= DDRAGON_VERSION ?>/img/profileicon/<?= $player->profileIconID ?>.png')">
-									<?php if(!empty($idAnmeldung) || ADMIN) : ?>
-									<div class="player_summonername"><?= $player->name ?></div>
-									<div class="player_rankedWins"><?= $player->mail ?></div>
-									<?php endif; ?>
-									<div class="player_summonername"><?= $player->summonername ?></div>
-									<div class="player_rankedWins">Ranked: <?= $player->rankedWins ?> Siege</div>
-									<div class="player_level">Level <?= $player->level ?>, <?= $player->tier ?></div>
-									<div class="player_normalWins">Normal: <?= $player->normalWins ?> Siege</div>
-								</div>
-							<?php endforeach; ?>
-						<?php endforeach; ?>
+						<?php foreach($tournament->getSubs() as $player) : 
+							echo $this->partial('fsmpi-lo-l/tournament/partial/player.phtml', array(
+								'player' => $player,
+								'addStyles' => 'margin: 0  0 10px 0; ',
+								'showCaptain' => true,
+								'showCaptainContact' => false,
+								'showAllContacts' => false,
+								'showWins' => true
+							));
+						endforeach; ?>
 					</div>
 				</div>
 			</li>
-			<?php endif; ?>
 		</ul>
 	</div>
 </div>

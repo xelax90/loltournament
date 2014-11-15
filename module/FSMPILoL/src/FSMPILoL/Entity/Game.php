@@ -116,6 +116,11 @@ class Game implements InputFilterAwareInterface, JsonSerializable
 	 */
 	protected $streamLink;
  	
+	/**
+	 * @ORM\Column(type="text", nullable=true);
+	 */
+	protected $tournamentCode;
+ 	
 
 	public function getId(){
 		return $this->id;
@@ -227,6 +232,14 @@ class Game implements InputFilterAwareInterface, JsonSerializable
 
 	public function setReport($report){
 		$this->report = $report;
+	}
+	
+	public function getTournamentCode(){
+		return $this->tournamentCode;
+	}
+
+	public function setTournamentCode($tournamentCode){
+		$this->tournamentCode = $tournamentCode;
 	}
 
 	public function getStreamLink(){

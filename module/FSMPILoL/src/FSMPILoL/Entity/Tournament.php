@@ -88,7 +88,7 @@ class Tournament implements InputFilterAwareInterface, JsonSerializable, Already
 	}
 	
 	public function getSubs(){
-		if(null !== $this->subs){
+		if(null === $this->subs){
 			$this->subs = array();
 			foreach($this->getAnmeldungen() as $anmeldung){
 				if($player = $anmeldung->getPlayer()){

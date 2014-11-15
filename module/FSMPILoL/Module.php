@@ -152,7 +152,7 @@ class Module
 				// Custom field company
 				$filter->add(array(
 					'name'       => 'jabber',
-					'required'   => true,
+					'required'   => false,
 					'filters'  => array(
 						array('name' => 'StripTags'),
 						array('name' => 'StringTrim'),
@@ -171,7 +171,7 @@ class Module
 				// Custom field company
 				$filter->add(array(
 					'name'       => 'phone',
-					'required'   => true,
+					'required'   => false,
 					'filters'  => array(
 						array('name' => 'StripTags'),
 						array('name' => 'StringTrim'),

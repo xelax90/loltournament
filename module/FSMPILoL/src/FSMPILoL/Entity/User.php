@@ -42,7 +42,12 @@ class User extends ZfcUserEntity implements JsonSerializable
 	 * @ORM\Column(type="string")
 	 */
 	public $phone;
-
+	
+	/**
+	 * @ORM\OneToOne(targetEntity="Player", mappedBy="user")
+	 */
+	protected $player;
+	
     /**
      * Get role.
      *
@@ -98,7 +103,11 @@ class User extends ZfcUserEntity implements JsonSerializable
      * @return UserInterface
      */
 	public function setPhone($phone){ $this->phone = $phone; return $this; }
-
+	
+	public function getPlayer(){
+		return $this->player;
+	}
+	
 	public function getArrayCopy(){
 		return $this->jsonSerialize();
 	}

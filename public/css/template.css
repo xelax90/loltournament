@@ -760,19 +760,19 @@ body {
 	margin-right: 6px;
 }
 
-.report_player .report_spells .report_spell.s_1{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerBoost.png'); }
-.report_player .report_spells .report_spell.s_2{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerClairvoyance.png'); }
-.report_player .report_spells .report_spell.s_3{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerExhaust.png'); }
-.report_player .report_spells .report_spell.s_4{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerFlash.png'); }
-.report_player .report_spells .report_spell.s_6{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerHaste.png'); }
-.report_player .report_spells .report_spell.s_7{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerHeal.png'); }
-.report_player .report_spells .report_spell.s_10{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerRevive.png'); }
-.report_player .report_spells .report_spell.s_11{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerSmite.png'); }
-.report_player .report_spells .report_spell.s_12{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerTeleport.png'); }
-.report_player .report_spells .report_spell.s_13{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerMana.png'); }
-.report_player .report_spells .report_spell.s_14{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerDot.png'); }
-.report_player .report_spells .report_spell.s_17{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerOdinGarrison.png'); }
-.report_player .report_spells .report_spell.s_21{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.7.16/img/spell/SummonerBarrier.png'); }
+.report_player .report_spells .report_spell.s_1{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerBoost.png'); }
+.report_player .report_spells .report_spell.s_2{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerClairvoyance.png'); }
+.report_player .report_spells .report_spell.s_3{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerExhaust.png'); }
+.report_player .report_spells .report_spell.s_4{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerFlash.png'); }
+.report_player .report_spells .report_spell.s_6{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerHaste.png'); }
+.report_player .report_spells .report_spell.s_7{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerHeal.png'); }
+.report_player .report_spells .report_spell.s_10{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerRevive.png'); }
+.report_player .report_spells .report_spell.s_11{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerSmite.png'); }
+.report_player .report_spells .report_spell.s_12{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerTeleport.png'); }
+.report_player .report_spells .report_spell.s_13{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerMana.png'); }
+.report_player .report_spells .report_spell.s_14{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerDot.png'); }
+.report_player .report_spells .report_spell.s_17{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerOdinGarrison.png'); }
+.report_player .report_spells .report_spell.s_21{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerBarrier.png'); }
 
 .report_player .report_items {
 	overflow: auto;
@@ -1007,6 +1007,7 @@ body {
 }
 
 #body .anmeldung .content input[type=text],
+#body .anmeldung .content input[type=password],
 #body .anmeldung .content input[type=email],
 #body .anmeldung .content input[type=file],
 #body .anmeldung .content input[type=datetime-local],
@@ -1386,10 +1387,21 @@ body {
 #body .ergebnisse ul li .article .ergebnismeldung .reportresult{
 	margin: 10px 0;
 	border: 1px solid green;
+	padding: 10px;
 }
 
 #body .ergebnisse ul li .article .ergebnismeldung .reportresult.error{
 	border-color: red;
+}
+
+#body .ergebnisse ul li .article .ergebnismeldung .reportresult.error ul{
+	padding: 0;
+	margin: 0;
+}
+
+#body .ergebnisse ul li .article .ergebnismeldung .reportresult.error ul li{
+	margin: 0;
+	padding: 0;
 }
 
 #footer {

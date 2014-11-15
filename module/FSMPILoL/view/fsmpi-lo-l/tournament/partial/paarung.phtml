@@ -1,0 +1,22 @@
+<?php
+	$match = $this->match;
+	$position = $this->position;
+?>
+<div class="match <?= $position == 0 ? "first" : "" ?>">
+	<div class="position"><?= $match->getNumber() ?></div>
+	<?php
+		try{
+			$gamedate = new DateTime($match->getTime()); 
+		} catch (Exception $e) {
+			$gamedate = null;
+		}
+	?>
+	<?php if($this->showGamedate) : ?>
+	<div class="gamedate"><?= $gamedate && $gamedate->format('Y') > 0 ? $gamedate->format('d.m<\b\r>H:i') : '' ?></div>
+	<?php endif; ?>
+	<div class="result"><?= $this->result ?></div>
+	<?php 
+		echo $this->partial('fsmpi-lo-l/tournament/partial/team.phtml', array('team' => $match->getTeamHome(), 'match' => $match) + $this->teamOptions);
+		echo $this->partial('fsmpi-lo-l/tournament/partial/team.phtml', array('team' => $match->getTeamGuest(), 'match' => $match) + $this->teamOptions);
+	?>
+</div>

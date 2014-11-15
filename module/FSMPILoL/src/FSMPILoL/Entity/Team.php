@@ -67,6 +67,7 @@ class Team implements InputFilterAwareInterface, JsonSerializable
 	
 	/**
      * @ORM\OneToMany(targetEntity="Player", mappedBy="team", cascade={"persist"})
+ 	 * @ORM\OrderBy({"isCaptain" = "DESC"})
 	 */
 	protected $players;
 	
