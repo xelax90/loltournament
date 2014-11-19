@@ -33,6 +33,7 @@
 		"Stepper" : "*",
 		"iCheck" : "*",
 		"bootstrap-switch" : "*",
-		"iscroll" : "4.2.5"
+		"iscroll" : "4.2.5",
+		"lightbox" : "*"
 	}
 }

@@ -8,6 +8,8 @@ use FSMPILoL\Tournament\Summonerdata;
 use FSMPILoL\Tournament\Group;
 use FSMPILoL\Form\ZeitmeldungForm;
 use FSMPILoL\Form\ErgebnismeldungForm;
+use FSMPILoL\Form\CommentPaarungForm;
+use FSMPILoL\Form\ResultPaarungForm;
 use FSMPILoL\Entity\User;
 
 use ZfcUser\Form\Login as LoginForm;
@@ -466,6 +468,133 @@ class TournamentController extends AbstractActionController
 		$this->setAPIData();
 		
 		return new ViewModel(array('tournament' => $tournament));
+	}
+	
+	public function paarungBlockAction(){
+		$this->authenticate();
+		
+		if(!$this->zfcUserAuthentication()->hasIdentity())
+			return $this->redirect()->toRoute('zfcadmin');
+		
+		$identity = $this->zfcUserAuthentication()->getIdentity();
+		if($identity->getRole() > User::ROLE_MODERATOR)
+			return $this->redirect()->toRoute('home');
+		
+		$tournament = $this->getTournament();
+		if(!$tournament)
+			return $this->redirect()->toRoute('zfcadmin/paarungen');
+		
+        $matchId = $this->getEvent()->getRouteMatch()->getParam('match_id');
+		$em = $this->getEntityManager();
+		$match = $em->getRepository('FSMPILoL\Entity\Match')->find((int)$matchId);
+		if(!$match)
+			return $this->redirect()->toRoute('zfcadmin/paarungen');
+		
+		$match->setIsBlocked(true);
+		$em->flush();
+		
+		return $this->redirect()->toRoute('zfcadmin/paarungen');
+	}
+
+	public function paarungUnblockAction(){
+		$this->authenticate();
+		
+		if(!$this->zfcUserAuthentication()->hasIdentity())
+			return $this->redirect()->toRoute('zfcadmin');
+		
+		$identity = $this->zfcUserAuthentication()->getIdentity();
+		if($identity->getRole() > User::ROLE_MODERATOR)
+			return $this->redirect()->toRoute('home');
+		
+		$tournament = $this->getTournament();
+		if(!$tournament)
+			return $this->redirect()->toRoute('zfcadmin/paarungen');
+		
+        $matchId = $this->getEvent()->getRouteMatch()->getParam('match_id');
+		$em = $this->getEntityManager();
+		$match = $em->getRepository('FSMPILoL\Entity\Match')->find((int)$matchId);
+		if(!$match)
+			return $this->redirect()->toRoute('zfcadmin/paarungen');
+		
+		$match->setIsBlocked(false);
+		$em->flush();
+		
+		return $this->redirect()->toRoute('zfcadmin/paarungen');
+	}
+	
+	public function paarungCommentAction(){
+		$this->authenticate();
+		
+		if(!$this->zfcUserAuthentication()->hasIdentity())
+			return $this->redirect()->toRoute('zfcadmin');
+		
+		$identity = $this->zfcUserAuthentication()->getIdentity();
+		if($identity->getRole() > User::ROLE_MODERATOR)
+			return $this->redirect()->toRoute('home');
+		
+		$tournament = $this->getTournament();
+		if(!$tournament)
+			return $this->redirect()->toRoute('zfcadmin/paarungen');
+		
+        $matchId = $this->getEvent()->getRouteMatch()->getParam('match_id');
+		$em = $this->getEntityManager();
+		$match = $em->getRepository('FSMPILoL\Entity\Match')->find((int)$matchId);
+		if(!$match)
+			return $this->redirect()->toRoute('zfcadmin/paarungen');
+		
+		$form = new CommentPaarungForm();
+		$form->setBindOnValidate(false);
+		$form->bind($match);
+		
+        /** @var $request \Zend\Http\Request */
+        $request = $this->getRequest();
+		if ($request->isPost()) {
+			$form->setData($request->getPost());
+			if ($form->isValid()) {
+				$form->bindValues();
+				$em->flush();
+				return $this->redirect()->toRoute('zfcadmin/paarungen');
+			}
+        }
+		return new ViewModel(array('id' => $match->getId(), 'form' => $form));
+	}
+	
+	public function paarungSetResultAction(){
+		$this->authenticate();
+		
+		if(!$this->zfcUserAuthentication()->hasIdentity())
+			return $this->redirect()->toRoute('zfcadmin');
+		
+		$identity = $this->zfcUserAuthentication()->getIdentity();
+		if($identity->getRole() > User::ROLE_MODERATOR)
+			return $this->redirect()->toRoute('home');
+		
+		$tournament = $this->getTournament();
+		if(!$tournament)
+			return $this->redirect()->toRoute('zfcadmin/paarungen');
+		
+        $matchId = $this->getEvent()->getRouteMatch()->getParam('match_id');
+		$em = $this->getEntityManager();
+		$match = $em->getRepository('FSMPILoL\Entity\Match')->find((int)$matchId);
+		if(!$match)
+			return $this->redirect()->toRoute('zfcadmin/paarungen');
+		
+		$form = new ResultPaarungForm();
+		$form->setBindOnValidate(false);
+		$form->bind($match);
+		
+        /** @var $request \Zend\Http\Request */
+        $request = $this->getRequest();
+		if ($request->isPost()) {
+			$form->setData($request->getPost());
+			if ($form->isValid()) {
+				$form->bindValues();
+				$match->setIsBlocked(true);
+				$em->flush();
+				return $this->redirect()->toRoute('zfcadmin/paarungen');
+			}
+        }
+		return new ViewModel(array('id' => $match->getId(), 'form' => $form));
 	}
 	
 	protected function authenticate(){

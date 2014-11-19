@@ -199,16 +199,26 @@ class Match implements InputFilterAwareInterface, JsonSerializable
 	public function populate($data = array()){
 		if(!empty($data['id']))
 			$this->setId($data['id']);
-		$this->setNumber($data['number']);
+		if(!empty($data['number']))
+			$this->setNumber($data['number']);
 		if(!empty($data['round']))
 			$this->setRound($data['round']);
 		if(!empty($data['teamHome']))
 			$this->setTeamHome($data['teamHome']);
 		if(!empty($data['teamGuest']))
 			$this->setTeamGuest($data['teamGuest']);
-		$this->setIsBlocked($data['isBlocked']);
-		$this->setTime($data['time']);
-		$this->setFoodleUrl($data['foodleURL']);
+		if(isset($data['pointsHome']))
+			$this->setPointsHome($data['pointsHome']);
+		if(isset($data['pointsGuest']))
+			$this->setPointsGuest($data['pointsGuest']);
+		if(!empty($data['anmerkung']))
+			$this->setAnmerkung($data['anmerkung']);
+		if(!empty($data['isBlocked']))
+			$this->setIsBlocked($data['isBlocked']);
+		if(!empty($data['time']))
+			$this->setTime($data['time']);
+		if(!empty($data['foodleURL']))
+			$this->setFoodleUrl($data['foodleURL']);
 	}
  
 	public function setInputFilter(InputFilterInterface $inputFilter){
@@ -235,7 +245,7 @@ class Match implements InputFilterAwareInterface, JsonSerializable
 			
 			$inputFilter->add($factory->createInput(array(
 				'name'       => 'number',
-				'required'   => true,
+				'required'   => false,
 				'filters' => array(
 					array('name' => 'Int'),
 				),
@@ -268,7 +278,7 @@ class Match implements InputFilterAwareInterface, JsonSerializable
 			
 			$inputFilter->add($factory->createInput(array(
 				'name'       => 'isBlocked',
-				'required'   => true,
+				'required'   => false,
 				'filters' => array(
 					array('name' => 'Boolean'),
 				),
@@ -297,6 +307,10 @@ class Match implements InputFilterAwareInterface, JsonSerializable
 	public function toJson(){
 		$data = $this->jsonSerialize();
 		return Json::encode($data, true, array('silenceCyclicalExceptions' => true));
+	}
+	
+	public function getArrayCopy(){
+		return $this->jsonSerialize();
 	}
 	
 	/**

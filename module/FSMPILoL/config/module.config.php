@@ -95,14 +95,58 @@ return array(
 			'zfcadmin' => array(
 				'child_routes' => array(
 					'paarungen' => array(
-		                'type' => 'literal',
+		                'type' => 'segment',
 		                'options' => array(
-		                    'route'    => '/paarungen',
+		                    'route'    => '/paarungen[/:match_id]',
 		                    'defaults' => array(
 		                        'controller' => 'Tournament',
 		                        'action'     => 'paarungenAdmin',
+								'match_id'   => 0,
 		                    ),
 		                ),
+						'may_terminate' => true,
+						'child_routes' => array(
+							'block' => array(
+				                'type' => 'literal',
+				                'options' => array(
+				                    'route'    => '/block',
+				                    'defaults' => array(
+				                        'controller' => 'Tournament',
+				                        'action'     => 'paarungBlock',
+				                    ),
+				                ),
+							),
+							'unblock' => array(
+				                'type' => 'literal',
+				                'options' => array(
+				                    'route'    => '/unblock',
+				                    'defaults' => array(
+				                        'controller' => 'Tournament',
+				                        'action'     => 'paarungUnblock',
+				                    ),
+				                ),
+							),
+							'comment' => array(
+				                'type' => 'literal',
+				                'options' => array(
+				                    'route'    => '/comment',
+				                    'defaults' => array(
+				                        'controller' => 'Tournament',
+				                        'action'     => 'paarungComment',
+				                    ),
+				                ),
+							),
+							'setresult' => array(
+				                'type' => 'literal',
+				                'options' => array(
+				                    'route'    => '/setresult',
+				                    'defaults' => array(
+				                        'controller' => 'Tournament',
+				                        'action'     => 'paarungSetResult',
+				                    ),
+				                ),
+							)
+						),
 		            ),
 				),
 			),

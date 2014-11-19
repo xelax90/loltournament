@@ -17,10 +17,10 @@ abstract class AbstractRoundCreator {
 		'pointsPerMatchLoss' => 0,
 		'pointsPerMatchFree' => 2,
 		'ignoreColors' => false
-	)
+	);
 	
 	public function __construct(Group $group){
-		$this->group = $group
+		$this->group = $group;
 	}
 	
 	public function getTournament(){

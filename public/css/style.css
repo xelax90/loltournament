@@ -5,3 +5,120 @@ body {
 .table>tbody>tr>td.matchGame-table-container{
 	padding-left: 30px;
 }
+
+.admin-paarung .position{
+	float: left;
+	line-height: 48px;
+	font-size: 28px;
+	width: 50px;
+}
+
+.admin-paarung .gamedate{
+	float: left;
+	width: 80px;
+	padding: 9px 0;
+	line-height: 17px;
+	text-align: left;
+}
+
+.admin-paarung .team{
+	background-repeat: no-repeat;
+	background-size: 52px;
+	background-position-x: left;
+	min-height: 48px;
+	padding: 2px 2px 2px 58px;
+	margin-left: 0px;
+	width: 430px;
+	float: left;
+}
+
+.admin-paarung .team.guest{
+	margin-left: 20px;
+}
+
+.admin-paarung .team .teamname{
+	font-weight: bold;
+	margin: 0 0 10px 0;
+	font-size: 17px;
+
+}
+.admin-paarung .team .teamname.blocked{
+	color: red;
+}
+
+.admin-paarung .team .players{
+	display: none;
+}
+
+.admin-paarung .result{
+	float: right;
+	line-height: 24px;
+	/*font-size: 28px; */
+	width: 75px;
+	text-align: center;
+}
+
+.admin-paarung .player{
+	margin: 0 0 10px 0;
+	background-repeat: no-repeat;
+	background-size: 52px;
+	background-position-x: left;
+	min-height: 44px;
+	padding: 6px 2px 2px 58px;	
+	line-height: 20px;
+	position: relative;
+	overflow: auto;
+}
+.admin-paarung .player .player_summonername,
+.admin-paarung .player .player_level{
+	float: left;
+	clear: left;
+}
+
+.admin-paarung .player .player_level{
+	clear: left;
+}
+.admin-paarung .player .player_summonername{
+	font-weight: bold;
+}
+.admin-paarung .player .player_summonername.captain{
+	color: red;
+}
+.admin-paarung .player .player_normalWins,
+.admin-paarung .player .player_rankedWins{
+	float: right;
+}
+
+.admin-paarung .player .player_rankedWins{
+	clear: right;
+}
+.admin-paarung .player .player_subborder{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 52px;
+	height: 52px;
+	border: 2px solid #FF4400;
+}
+
+.admin-paarung .table .cell-screen-gast,
+.admin-paarung .table .cell-screen-heim{
+	width: 40%;
+}
+
+.admin-paarung .table .cell-id{
+	width: 40px;
+}
+
+.admin-paarung .table .cell-meldung-heim,
+.admin-paarung .table .cell-meldung-gast,
+.admin-paarung .table .cell-ergebnis{
+	width: 70px;
+	text-align: center;
+}
+
+.admin-paarung .team .teamname[onclick]:not([onclick='']) {
+	cursor: pointer;
+}
+
+

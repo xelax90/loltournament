@@ -3,98 +3,128 @@
 	<?php foreach($group->getRounds() as $round): ?>
 		<h2>Runde <?= $round->getNumber() ?> (<?= $round->getType() ?>)</h2>
 		
-		<table class="table">
-		    <thead>
-		        <tr>
-					<th>Id</th>
-					<th>Nr</th>
-					<th>Zeit</th>
-					<th>Team Heim</th>
-					<th>Team Gast</th>
-					<th>Ergebnis</th>
-					<th>Anmerkung</th>
-		            <th>&nbsp;</th>
-		        </tr>
-		    </thead>
-		    <tbody>
-		    <?php foreach ($round->getMatches() as $match): ?>
-		        <tr>
-					<td class="cell cell-id"><?= $match->getId() ?></td>
-					<td class="cell cell-nr"><?= $match->getNumber() ?></td>
-					<td class="cell cell-zeit"><?= $match->getTime()->format('Y-m-d H:i') ?></td>
-					<td class="cell cell-heim"><?= $match->getTeamHome() ? $match->getTeamHome()->getName() : 'Spielfrei' ?></td>
-					<td class="cell cell-gast"><?= $match->getTeamGuest() ? $match->getTeamGuest()->getName() : 'Spielfrei' ?></td>
-					<td class="cell cell-ergebnis"><?= $match->getPointsHome() . ' - ' . $match->getPointsGuest() ?></td>
-					<td class="cell cell-anmerkung"><?= $match->getAnmerkung() ?></td>
-		            <td class="cell cell-ctrls">
-						<?php
-							$buttons = array(
-								'block' => array(
-									'title' => 'Blockieren',
-									'route' => 'zfcadmin/paarungen',
-									'params' => array(
-										'match_id' => $match->getId()
-									),
-								),
-								'setresult' => array(
-									'title' => 'Ergebnis setzen',
-									'route' => 'zfcadmin/paarungen',
-									'params' => array(
-										'match_id' => $match->getId()
-									),
-								),
-							);
-						?>
-						<?php $c = 0;?>
-						<?php foreach($buttons as $button): ?>
-							<?= $c == 0 ? '' : '|'  ?>
-							<a href="<?php echo $this->url($button['route'], $button['params']); ?>" <?= empty($button['warning']) ? '' : 'onclick=" return confirm(\''.$button['warning'].'\')"' ?> >
-								<?php echo $this->translate($button['title']) ?>
-							</a>
-							<?php $c++; ?>
-						<?php endforeach; ?>
-		            </td>
-		        </tr>
-				<tr><td colspan="8" class="matchGame-table-container"><table class="table table-hover">
-				    <thead>
-				        <tr>
-							<th>Id</th>
-							<th>Nr</th>
-							<th>Ergebnis</th>
-							<th><abbr title="Meldung Heim">MeldH</abbr></th>
-							<th><abbr title="Screen Heim">ScrH</abbr></th>
-							<th><abbr title="Anmerkung Heim">AnmH</abbr></th>
-							<th><abbr title="Meldung Gast">MeldG</abbr></th>
-							<th><abbr title="Screen Gast">ScrG</abbr></th>
-							<th><abbr title="Anmerkung Gast">AnmG</abbr></th>
-				            <th>&nbsp;</th>
-				        </tr>
-				    </thead>
+		<?php foreach ($round->getMatches() as $match): ?>
+			<?php
+				$pointsHome = "";
+				$pointsGuest = "";
+				$hasConflict = false;
+				$screensMissing = false;
+				foreach($match->getGames() as $game){
+					if($game->getPointsBlue() !== null && $game->getPointsPurple() !== null){
+						$pointsHome  += $match->getTeamHome()  == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
+						$pointsGuest += $match->getTeamGuest() == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
+					}
 					
-					<tbody>
-						<?php foreach($match->getGames() as $game) : ?>
-							<?php
-								$ergebnis  = $match->getTeamHome()  == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
-								$ergebnis .= ' - ';
-								$ergebnis .= $match->getTeamGuest() == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
-							?>
+					if($game->getMeldungHome() && empty($game->getScreenHome()) && empty($game->getScreenGuest()) && empty($game->getReport()))
+						$screensMissing = true;
+					
+					if($game->getMeldungGuest() && empty($game->getScreenGuest()) && empty($game->getScreenHome()) && empty($game->getReport()) )
+						$screensMissing = true;
+					
+					if($game->getMeldungHome() !== null && $game->getMeldungGuest() !== null && $game->getMeldungHome() != $game->getMeldungGuest())
+						$hasConflict = true;
+				}
+				
+				$result = "";
+				$result .= $match->getPointsHome() === null ? $pointsHome : $match->getPointsHome();
+				$result .= " - ";
+				$result .= $match->getPointsGuest() === null ? $pointsGuest : $match->getPointsGuest();
+				$matchResult = $match->getPointsHome() . ' - ' . $match->getPointsGuest();
+				if($match->getAnmerkung()){
+					$matchResult = '<abbr title="'.$match->getAnmerkung().'">'.$matchResult.'</abbr>';
+				}
+				$result .= ' (' . $matchResult . ')';
+				
+				$panelcls = 'panel-default';
+				if($match->getIsBlocked() && !$screensMissing)
+					$panelcls = 'panel-success';
+				elseif($hasConflict || $screensMissing)
+					$panelcls = 'panel-danger';
+				elseif($pointsHome || $pointsGuest)
+					$panelcls = 'panel-warning';
+			?>
+			<div id="match_<?= $match->getId() ?>" class="panel <?= $panelcls ?> admin-paarung">
+				<div class="panel-heading" data-toggle="collapse" data-target="#match_<?= $match->getId() ?> .panel-body" style="position: relative;">
+					<div class="position"><?= $match->getNumber() ?></div>
+					<div class="gamedate"><?= $match->getTime()->format('m.d<\b\r>H:i') ?></div>
+					<div class="result">
+						<?= $result ?><br>
+						<a class="btn btn-xs" title="Alles Okay (blockieren)" href="<?= $this->url('zfcadmin/paarungen/block', array('match_id' => $match->getId())) ?>">
+							<i class="fa fa-check"></i>
+						</a>
+						<a class="btn btn-xs" title="Ergebnis setzen und blockieren" href="<?= $this->url('zfcadmin/paarungen/setresult', array('match_id' => $match->getId())) ?>">
+							<i class="fa fa-exclamation"></i>
+						</a>
+						<a class="btn btn-xs" title="Kommentieren (und nicht blockieren)" href="<?= $this->url('zfcadmin/paarungen/comment', array('match_id' => $match->getId())) ?>">
+							<i class="fa fa-comments"></i>
+						</a>
+						<?php if($hasConflict || $screensMissing) : ?>
+						<button class="btn btn-warning btn-xs" style="position: absolute;top: -9px;right: -9px;" title="<?= $hasConflict ? 'Konflikt' : 'Screen fehlt' ?>"><i class="glyphicon glyphicon-info-sign"></i></button>
+						<?php endif; ?>
+					</div>
+					<?php
+					$teamOptions = array(
+						'showFarberwartung' => true,
+						'useBootstrap' => true,
+						'playerOptions' => array(
+							'addStyles' => '',
+							'showCaptain' => true,
+							'showCaptainContact' => true,
+							'showAllContacts' => false,
+							'emailWithLink' => true,
+							'showWins' => false
+						)
+					);
+					echo $this->partial('fsmpi-lo-l/tournament/partial/team.phtml', array('team' => $match->getTeamHome(), 'match' => $match) + $teamOptions);
+					echo $this->partial('fsmpi-lo-l/tournament/partial/team.phtml', array('team' => $match->getTeamGuest(), 'match' => $match) + $teamOptions);
+					?>
+					<div style="clear: both;"></div>
+				</div>
+				<div class="panel-body collapse">
+					<table class="table table-hover">
+					    <thead>
+					        <tr>
+								<th>Nr</th>
+								<th><abbr title="Meldung Heim">MeldH</abbr></th>
+								<th><abbr title="Screen Heim">ScrH</abbr></th>
+								<th><abbr title="Meldung Gast">MeldG</abbr></th>
+								<th><abbr title="Screen Gast">ScrG</abbr></th>
+								<th><abbr title="Ergebnis">Erg</abbr></th>
+					        </tr>
+					    </thead>
+
+						<tbody>
+							<?php $anmerkungHome = ''; $anmerkungGuest = ''; ?>
+							<?php foreach($match->getGames() as $game) : ?>
+								<?php
+									if($game->getAnmerkungHome())
+										$anmerkungHome .= ($anmerkungHome ? '<br>' : '') .$game->getAnmerkungHome();
+									if($game->getAnmerkungGuest())
+										$anmerkungGuest .= ($anmerkungHome ? '<br>' : '') .$game->getAnmerkungGuest();
+									
+									$ergebnis  = $match->getTeamHome()  == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
+									$ergebnis .= ' - ';
+									$ergebnis .= $match->getTeamGuest() == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
+								?>
+								<tr>
+									<td class="cell cell-nr"><?= $game->getNumber() ?></td>
+									<td class="cell cell-meldung-heim"><?= $game->getMeldungHome() ?></td>
+									<td class="cell cell-screen-heim"><?php if($game->getScreenHome()): ?><a data-lightbox="game_<?= $game->getId() ?>_H" data-title="<?= $match->getTeamHome() ? $match->getTeamHome()->getName() : 'Spielfrei' ?> - <?= $match->getTeamGuest() ? $match->getTeamGuest()->getName() : 'Spielfrei' ?>: Spiel <?= $game->getNumber() ?>" href="<?= $this->basePath() . $game->getScreenHome() ?>">Screen</a><?php endif; ?></td>
+									<td class="cell cell-meldung-gast"><?= $game->getMeldungGuest() ?></td>
+									<td class="cell cell-screen-gast"><?php if($game->getScreenGuest()): ?><a data-lightbox="game_<?= $game->getId() ?>_H" data-title="<?= $match->getTeamHome() ? $match->getTeamHome()->getName() : 'Spielfrei' ?> - <?= $match->getTeamGuest() ? $match->getTeamGuest()->getName() : 'Spielfrei' ?>: Spiel <?= $game->getNumber() ?>" href="<?= $this->basePath() . $game->getScreenGuest() ?>">Screen</a><?php endif; ?></td>
+									<td class="cell cell-ergebnis"><?= $ergebnis ?></td>
+								</tr>
+							<?php endforeach; ?>
 							<tr>
-								<td class="cell cell-id"><?= $game->getId() ?></td>
-								<td class="cell cell-nr"><?= $game->getNumber() ?></td>
-								<td class="cell cell-ergebnis"><?= $ergebnis ?></td>
-								<td class="cell cell-meldung-heim"><?= $game->getMeldungHome() ?></td>
-								<td class="cell cell-screen-heim"><?php if($game->getScreenHome()): ?><a href="<?= $this->basePath() . $game->getScreenHome() ?>" target="_blank">Screen</a><?php endif; ?></td>
-								<td class="cell cell-anmerkung-heim"><?= $game->getAnmerkungHome() ?></td>
-								<td class="cell cell-meldung-gast"><?= $game->getMeldungGuest() ?></td>
-								<td class="cell cell-screen-gast"><?php if($game->getScreenGuest()): ?><a href="<?= $this->basePath() . $game->getScreenGuest() ?>" target="_blank">Screen</a><?php endif; ?></td>
-								<td class="cell cell-anmerkung-gast"><?= $game->getAnmerkungGuest() ?></td>
-								<td class="cell cell-ctrls"></td>
+								<td class="cell cell-nr"></td>
+								<td colspan="2" class="cell cell-anmerkung"><?= $anmerkungHome ?></td>
+								<td colspan="2" class="cell cell-anmerkung"><?= $anmerkungGuest ?></td>
+								<td class="cell cell-ergebnis"></td>
 							</tr>
-						<?php endforeach; ?>
-					</tbody>
-				</table></td></tr>
-		    <?php endforeach; ?>
-		    </tbody>
-		</table>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		<?php endforeach;?>
 	<?php endforeach; ?>
 <?php endforeach; ?>

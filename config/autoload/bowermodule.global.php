@@ -19,11 +19,6 @@ return array(
 				'modules' => array(
 					'jquery',
 					'iscroll',
-					//'bootstrap',
-					//"Selecter",
-					//"Stepper",
-					//"iCheck",
-					//"bootstrap-switch"
 				)
 			),
 			'admin' => array(
@@ -35,7 +30,8 @@ return array(
 					"Selecter",
 					"Stepper",
 					"iCheck",
-					"bootstrap-switch"
+					"bootstrap-switch",
+					'lightbox',
 				)
 			),
 			'ieLT9' => array(

@@ -22,6 +22,7 @@ class ZeitmeldungForm extends Form{
 			),
 			'attributes' => array(
 				'id' => 'zeitmeldung_time',
+				'placeholder' => 'YYYY-MM-DD HH:MM'
 			)
 		));
 
@@ -32,7 +33,6 @@ class ZeitmeldungForm extends Form{
 				'value' => 'Offiziellen Spieltermin melden',
 				'id' => 'zeitmeldung_submit',
 				'style' => 'float: left; clear: both',
-				'placeholder' => 'YYYY-MM-DD HH:MM'
 			),
 		));
 

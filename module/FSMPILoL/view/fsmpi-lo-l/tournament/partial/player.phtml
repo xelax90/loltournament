@@ -1,8 +1,19 @@
-<?php $player = $this->player; ?>
+<?php 
+/** @var $player \FSMPILoL\Entity\Player */
+$player = $this->player; 
+?>
 <div class="player" style="margin: 0  0 10px 0; background-image: url('<?= $this->fsmpiLoLDDragon()->profileIcon($player->getAnmeldung()->getSummonerdata()->getProfileIconId()) ?>'); <?= $this->addStyles ?: '' ?>">
 	<?php if(($player->getIsCaptain() && $this->showCaptainContact) || $this->showAllContacts) : ?>
 	<div class="player_summonername <?= $player->getIsCaptain() && $this->showCaptain ? 'captain' : '' ?>"><?= $player->getAnmeldung()->getName() ?></div>
-	<div class="<?= $this->showEmailRight ? 'player_rankedWins' : 'player_level' ?>"><?= $player->getAnmeldung()->getEmail() ?></div>
+	<div class="<?= $this->showEmailRight ? 'player_rankedWins' : 'player_level' ?>">
+		<?php if($this->emailWithLink): ?>
+		<a href="mailto:<?= rawurlencode($player->getAnmeldung()->getName() . " <".$player->getAnmeldung()->getEmail().">") ?>">
+		<?php endif;?>
+			<?= $player->getAnmeldung()->getEmail() ?>
+		<?php if($this->emailWithLink): ?>
+		</a>
+		<?php endif;?>
+	</div>
 	<?php endif; ?>
 	<div class="player_summonername <?= $player->getIsCaptain() && $this->showCaptain ? 'captain' : '' ?>"><?= $player->getAnmeldung()->getSummonerName() ?></div>
 	
@@ -19,4 +30,5 @@
 	<?php if($player->getIsCaptain() && $this->showCaptain) : ?>
 	<div class="player_subborder"></div>
 	<?php endif; ?>
+	<div style="clear: both"></div>
 </div>

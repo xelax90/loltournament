@@ -6,7 +6,6 @@ use FSMPILoL\Entity\Player;
 use FSMPILoL\Entity\Team;
 
 use FSMPILoL\Riot\RiotAPI;
-use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Collections\ArrayCollection;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -27,7 +26,8 @@ class TeamMatcher{
 	protected $tournament;
 	protected $em;
 	protected $anmeldung;
-	
+	protected $entityManager;
+
 	public function getServiceLocator(){
 		return $this->serviceLocator;
 	}
@@ -104,17 +104,18 @@ class TeamMatcher{
 		$subbed = array();
 		foreach($singles as $anmeldung){
 			$standardname = RiotAPI::getStandardName($anmeldung->getSummonerName());
-			if($anmeldung->getIsSub() != 2 && !in_array($standardname, $this->fixed_subs))
+			if($anmeldung->getIsSub() != 2 && !in_array($standardname, $this->fixed_subs)){
 				$plCount++;
-			else{
+			} else{
 				$summoner = $summoners[$standardname];
 				$subs[] = new Player($anmeldung, null, false, $summoner, $api);
 				$subbed[] = $standardname;
 			}
 		}
 		$subCount = $plCount % 5;
-		if($subCount + count($subs) < 4)
+		if($subCount + count($subs) < 4){
 			$subCount += 5;
+		}
 		
 		// choose subs
 		$keys = array_keys($singles);
@@ -122,8 +123,9 @@ class TeamMatcher{
 			$r = mt_rand(0, count($keys)-1);
 			$anmeldung = $singles[$keys[$r]];
 			
-			if($anmeldung->getIsSub() != 1)
+			if($anmeldung->getIsSub() != 1){
 				continue;
+			}
 			
 			$standardname = RiotAPI::getStandardName($anmeldung->getSummonerName());
 			$summoner = $summoners[$standardname];
@@ -135,23 +137,24 @@ class TeamMatcher{
 		}
 		$this->subs = $subs;
 		
-		$this->singles = array()
+		$this->singles = array();
 		// add remaining singles
 		foreach($singles as $anmeldung){
 			$standardname = RiotAPI::getStandardName($anmeldung->getSummonerName());
 			$summoner = $summoners[$standardname];
-			if(in_array($standardname, $subbed))
+			if(in_array($standardname, $subbed)){
 				continue;
+			}
 			$this->singles[] = new Player($anmeldung, null, false, $summoner, $api);
 		}
 	}
 	
 	public function match(){
-		$matched = array();
+		$toMatch = array();
 		
 		// prepare data
 		foreach($this->teams as $team){
-			$matched[] = $team;
+			$toMatch[] = $team;
 		}
 		
 		$icons = array_values($this->getAnmeldung()->getAvailableIcons());
@@ -163,11 +166,11 @@ class TeamMatcher{
 			unset($icons[$icon]);
 			$icons = array_values($icons);
 			$team->setPlayers(new ArrayCollection(array($player)));
-			$matched[] = $team;
+			$toMatch[] = $team;
 		}
 		
 		$matched_counted = array();
-		foreach($matched as $team){
+		foreach($toMatch as $team){
 			$matched_counted[count($team->getPlayers())][] = $team;
 		}
 		
@@ -185,7 +188,7 @@ class TeamMatcher{
 			$em->persist($sub);
 		}
 		
-		foreach($matched as $count => $teams){
+		foreach($matched as $teams){
 			foreach($teams as $team){
 				$em->persist($team);
 			}
@@ -251,10 +254,11 @@ class TeamMatcher{
 			unset($matched[1][$last]);
 			
 			$last--;
-			if(substr(strtolower($t1->getName()), 0, 6) == "team 1")
+			if(substr(strtolower($t1->getName()), 0, 6) == "team 1"){
 				$teamname = $t2->getName();
-			else
+			} else{
 				$teamname = $t1->getName();
+			}
 			$newTeam = $this->combineTeams($t1, $t2, $teamname);
 			
 			$matched[2][] = $newTeam;
@@ -296,10 +300,11 @@ class TeamMatcher{
 			
 			$last--;
 			
-			if(substr(strtolower($t1->getName()), 0, 6) == "team 1")
+			if(substr(strtolower($t1->getName()), 0, 6) == "team 1"){
 				$teamname = $t2->getName();
-			else
+			} else{
 				$teamname = $t1->getName();
+			}
 			$newTeam = $this->combineTeams($t1, $t2, $teamname);
 			$matched[4][] = $newTeam;
 		}
@@ -377,9 +382,9 @@ class TeamMatcher{
 		$t1->setName($team->getName()."_1");
 		$t1->setIcon($team->icon);
 		
-		$t1 = new Team();
-		$t1->setName($team->getName()."_2");
-		$t1->setIcon($team->getIcon());
+		$t2 = new Team();
+		$t2->setName($team->getName()."_2");
+		$t2->setIcon($team->getIcon());
 		
 		$t1Players = array();
 		$t2Players = array();
@@ -392,7 +397,7 @@ class TeamMatcher{
 				$t2Players[] = $player;
 				$player->setTeam($t2);
 			}
-			$i++
+			$i++;
 		}
 		$t1->setPlayers(new ArrayCollection($t1Players));
 		$t2->setPlayers(new ArrayCollection($t2Players));

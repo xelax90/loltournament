@@ -4,10 +4,11 @@
 	
 	$teamSide = '';
 	if($match != null){
-		if($match->getTeamHome() == $team)
+		if($match->getTeamHome() == $team){
 			$teamSide = ' home ';
-		elseif($match->getTeamHome() == $team)
+		} elseif($match->getTeamHome() == $team){
 			$teamSide = ' guest ';
+		}
 	}
 	
 	if($team != null) :
@@ -15,10 +16,12 @@
 		$playersId = '';
 		if($match){
 			$containerIds = array();
-			if($match->getTeamHome())
+			if($match->getTeamHome()){
 				$containerIds[] = "#players_".$match->getRound()->getNumber()."_".$match->getTeamHome()->getId();
-			if($match->getTeamGuest())
+			}
+			if($match->getTeamGuest()){
 				$containerIds[] = "#players_".$match->getRound()->getNumber()."_".$match->getTeamGuest()->getId();
+			}
 			
 			$js = "var elms = $('".implode(", ", $containerIds)."'); if(elms.css('display') == 'block'){elms.css('display', 'none')} else {elms.css('display', 'block')}";
 			$js = ' onclick="'.$js.'" ';
@@ -36,8 +39,8 @@
 		}
 		
 	?>
-	<div class="team <?= $teamSide ?>" <?= $js ?> style="background-image: url('<?= $this->basePath() ?>/img/summoner_icons/<?= $team->getIcon() ?>')">
-		<div class="teamname"><?= $team->getName() ?> (<?= $team->getData()->getPoints() ?>) <?= $this->showScore ? '('.$team->getScore().')' : '' ?> <?= $this->showFarberwartung ? $team->getData()->getFarberwartung() : '' ?></div>
+	<div class="team <?= $teamSide ?>" style="background-image: url('<?= $this->basePath() ?>/img/summoner_icons/<?= $team->getIcon() ?>')">
+		<div class="teamname" <?= $js ?>><?= $team->getName() ?> (<?= $team->getData()->getPoints() ?>) <?= $this->showScore ? '('.$team->getScore().')' : '' ?> <?= $this->showFarberwartung ? $team->getData()->getFarberwartung() : '' ?></div>
 		<div class="players" <?= $playersId ?>>
 	<?php
 		foreach($team->getPlayers() as $player):
