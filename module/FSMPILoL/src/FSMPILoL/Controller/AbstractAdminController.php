@@ -13,7 +13,7 @@ abstract class AbstractAdminController extends AbstractActionController
 	protected $em;
 	
 	/**
-	 * @return Doctrine\ORM\EntityManager
+	 * @return \Doctrine\ORM\EntityManager
 	 */
 	public function getEntityManager(){
 		if (null === $this->em) {

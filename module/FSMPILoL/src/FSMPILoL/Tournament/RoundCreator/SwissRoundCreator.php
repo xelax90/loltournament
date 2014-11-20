@@ -8,20 +8,14 @@ use Doctrine\Collection\ArrayCollection;
 class SwissRoundCreator extends AbstractRoundCreator {
 	
 	public function nextRound(AlreadyPlayedInterface $gameCheck, DateTime $startDate, $properties, $isHidden = true, $duration = 14, $timeForDates = 7){
-		$defaultProperties = array(
-			'pointsPerGamePoint' => 1,
-			'pointsPerMatchWin' => 0,
-			'pointsPerMatchDraw' => 0,
-			'pointsPerMatchLoss' => 0,
-			'pointsPerMatchFree' => 2,
-			'ignoreColors' => false
-		);
-		$properties = $properties + $defaultProperties + $this->globalDefaults;
+		$farberwartungen = array("+g" => -3, "g" => -2, "-o" => -1, "o" => 0, "+o" => 1, "h" => 2, "+h" => 3);
+		
+		$props= $properties + $this->getDefaultProperties();
 		
 		$round = new Round();
-		$round->setNumber($group->getMaxRoundNumber() + 1);
+		$round->setNumber($this->getGroup()->getMaxRoundNumber() + 1);
 		$round->setGroup($this->getGroup()->getGroup());
-		$round->setProperties($properties);
+		$round->setProperties($props);
 		$round->setStartDate($startDate);
 		$round->setDuration($duration);
 		$round->setTimeForDates($timeForDates);
@@ -42,6 +36,7 @@ class SwissRoundCreator extends AbstractRoundCreator {
 		
 		$punktegruppenKeys = array_keys($punktegruppen);
 		$matches = array();
+		$matchCount = 1;
 		foreach($punktegruppenKeys as $keyIndex => $gruppeIndex){
 			$punktegruppe = $punktegruppen[$gruppeIndex];
 			
@@ -96,12 +91,13 @@ class SwissRoundCreator extends AbstractRoundCreator {
 						$matched[] = $j;
 						
 						$match = new Match();
-						$match->setNumber($number);
+						$match->setNumber($matchCount);
 						$match->setRound($round);
 						$match->setTeamHome($teamHome);
 						$match->setTeamGuest($teamGuest);
 						$this->createGamesForMatch($match);
 						$matches[] = $match;
+						$matchCount++;
 						break;
 					}
 				}
@@ -152,13 +148,14 @@ class SwissRoundCreator extends AbstractRoundCreator {
 						if($team->getIsBlocked()) continue;
 						
 						$match = new Match();
-						$match->setNumber($number);
+						$match->setNumber($matchCount);
 						$match->setRound($round);
 						$match->setTeamHome($team);
 						$match->setTeamGuest(null);
 						$match->setPointsHome($round->getParameter()['pointsPerMatchFree']);
 						$match->setPointsGuest(0);
 						$matches[] = $match;
+						$matchCount++;
 						$matched[] = $tnr;
 					}
 				}
@@ -199,4 +196,16 @@ class SwissRoundCreator extends AbstractRoundCreator {
 		}
 		return $result;
 	}
+	
+	protected function _getDefaultProperties() {
+		return array(
+			'pointsPerGamePoint' => 1,
+			'pointsPerMatchWin' => 0,
+			'pointsPerMatchDraw' => 0,
+			'pointsPerMatchLoss' => 0,
+			'pointsPerMatchFree' => 2,
+			'ignoreColors' => false
+		);
+	}
+	
 }

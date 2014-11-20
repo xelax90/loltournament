@@ -8,6 +8,7 @@ return array(
             'tournament' => 'FSMPILoL\Controller\TournamentController',
             'admin' => 'FSMPILoL\Controller\AdminController',
 			'tournamentadmin' => 'FSMPILoL\Controller\TournamentAdminController',
+			'roundcreator' => 'FSMPILoL\Controller\RoundCreatorController',
         ),
     ),
     
@@ -156,6 +157,41 @@ return array(
 							)
 						),
 		            ),
+					'runden' => array(
+		                'type' => 'segment',
+		                'options' => array(
+		                    'route'    => '/rounds[/:group_id]',
+		                    'defaults' => array(
+		                        'controller' => 'roundcreator',
+		                        'action'     => 'index',
+								'group_id'   => 0,
+		                    ),
+		                ),
+						'may_terminate' => true,
+						'child_routes' => array(
+							'create' => array(
+				                'type' => 'segment',
+				                'options' => array(
+				                    'route'    => '/create[/:preset]',
+				                    'defaults' => array(
+				                        'controller' => 'roundcreator',
+				                        'action'     => 'create',
+										'preset'     => '',
+				                    ),
+				                ),
+							),
+							'setpreset' => array(
+				                'type' => 'literal',
+				                'options' => array(
+				                    'route'    => '/setpreset',
+				                    'defaults' => array(
+				                        'controller' => 'roundcreator',
+				                        'action'     => 'setpreset',
+				                    ),
+				                ),
+							),
+						),
+					),
 				),
 			),
         ),
@@ -235,6 +271,10 @@ return array(
                 $config = $sm->get('Config');
                 return new Options\AnmeldungOptions(isset($config['fsmpilol_anmeldung']) ? $config['fsmpilol_anmeldung'] : array());
             },
+			'FSMPILoL\Options\RoundCreator' => function ($sm) {
+                $config = $sm->get('Config');
+                return new Options\RoundCreatorOptions(isset($config['fsmpilol_roundcreator']) ? $config['fsmpilol_roundcreator'] : array());
+            },
 		),
     ),
     
@@ -282,6 +322,7 @@ return array(
 		),
 		'admin' => array(
 			array('label' => 'Paarungen', 'route' => 'zfcadmin/paarungen'),
+			array('label' => 'Runden', 'route' => 'zfcadmin/runden'),
 		),
 		
 	),
@@ -309,5 +350,12 @@ return array(
 			)
 		)
 	),
-
+	
+	'fsmpilol_roundcreator' => array(
+		'round_types' => array(
+			'swiss' => 'FSMPILoL\Tournament\RoundCreator\SwissRoundCreator',
+			'random' => 'FSMPILoL\Tournament\RoundCreator\RandomRoundCreator',
+			'knockout' => 'FSMPILoL\Tournament\RoundCreator\KnockoutRoundCreator',
+		),
+	),
 );

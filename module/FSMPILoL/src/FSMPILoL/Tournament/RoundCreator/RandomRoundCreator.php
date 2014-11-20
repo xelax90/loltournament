@@ -8,12 +8,7 @@ use Doctrine\Collection\ArrayCollection;
 class RandomRoundCreator extends AbstractRoundCreator {
 	
 	public function nextRound(AlreadyPlayedInterface $gameCheck, DateTime $startDate, $properties, $isHidden = true, $duration = 14, $timeForDates = 7){
-		$defaultProperties = array(
-			'pointsPerGamePoint' => 0,
-			'pointsPerMatchWin' => 1,
-			'ignoreColors' => true
-		);
-		$properties = $properties + $defaultProperties + $this->globalDefaults;
+		$properties = $properties + $this->getDefaultProperties();
 		
 		$round = new Round();
 		$round->setNumber($this->getGroup()->getMaxRoundNumber() + 1);
@@ -59,4 +54,13 @@ class RandomRoundCreator extends AbstractRoundCreator {
 		$em->persist($round);
 		$em->flush();
 	}
+
+	protected function _getDefaultProperties() {
+		return array(
+			'pointsPerGamePoint' => 0,
+			'pointsPerMatchWin' => 1,
+			'ignoreColors' => true
+		);
+	}
+
 }

@@ -15,12 +15,16 @@ class AbstractTournamentAdminController extends AbstractAdminController{
 	/** @var array */
 	protected $summoners;
 	
-	/** @var Tournament */
+	/** @var \FSMPILoL\Entity\Tournament */
 	protected $tournament;
 
-	/** @var RiotAPI */
+	/** @var \FSMPILoL\Riot\RiotAPi */
 	protected $api;
 	
+	/**
+	 * 
+	 * @return \FSMPILoL\Entity\Tournament
+	 */
 	public function getTournament(){
 		if(null === $this->tournament){
 			$options = $this->getServiceLocator()->get('FSMPILoL\Options\Anmeldung');
@@ -31,6 +35,10 @@ class AbstractTournamentAdminController extends AbstractAdminController{
 		return $this->tournament;
 	}
 	
+	/**
+	 * 
+	 * @return array
+	 */
 	public function getSummoners(){
 		if(null === $this->summoners){
 			$tournament = $this->getTournament();
@@ -44,6 +52,10 @@ class AbstractTournamentAdminController extends AbstractAdminController{
 		return $this->summoners;
 	}
 	
+	/**
+	 * 
+	 * @return \FSMPILoL\Riot\RiotAPi
+	 */
 	public function getAPI(){
 		if(null === $this->api){
 			$this->api = new RiotAPI($this->getServiceLocator());

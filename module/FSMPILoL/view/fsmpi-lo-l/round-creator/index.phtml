@@ -1,0 +1,59 @@
+<?php
+$tournament = $this->tournament;
+/* @var $tournament FSMPILoL\Entity\Tournament */
+$groups = $tournament->getGroups();
+foreach($groups as $group):
+	/* @var $group FSMPILoL\Entity\Group */
+?>
+	<h1>Gruppe <?= $group->getNumber() ?></h1>
+	
+	<div class="navbar filter-bar">
+		<div class="navbar-inner">
+			<div class="pull-right">
+				<a href="<?php echo $this->url('zfcadmin/runden/create', array('group_id' => $group->getId())) ?>" class="btn btn-primary">
+					<?php echo $this->translate('Neue Runde auslosen') ?>
+				</a>
+			</div>
+		</div>
+	</div>
+	
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Nr</th>
+				<th>Sichtbar</th>
+				<th>Typ</th>
+				<th>Parameter</th>
+			</tr>
+		</thead>
+
+		<tbody>
+			<?php 
+				$rounds = $group->getRounds()->toArray();
+				usort($rounds, function($a, $b){return $a->getNumber() - $b->getNumber();});
+			?>
+			<?php foreach($rounds as $round) : /* @var $round FSMPILoL\Entity\Round */ ?>
+				<?php 
+					$properties = $round->getProperties();
+					$parameter = array();
+					foreach($properties as $name => $value){
+						$val = $value;
+						if($value == false)
+							$val = 0;
+						$parameter[] = "$name = $val";
+					}
+				?>
+				<tr>
+					<td class="cell cell-id"><?= $round->getId() ?></td>
+					<td class="cell cell-nr"><?= $round->getNumber() ?></td>
+					<td class="cell cell-sichtbar"><?= $round->getIsHidden() ? 'Nein' : 'Ja' ?></td>
+					<td class="cell cell-typ"><?= ucfirst($round->getType()) ?></td>
+					<td class="cell cell-parameter"><?= implode('<br>', $parameter) ?></td>
+				</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+	
+<?php
+endforeach;

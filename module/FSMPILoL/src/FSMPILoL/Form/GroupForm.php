@@ -27,5 +27,14 @@ class GroupForm extends Form
 				'min' => 1,
 			)
 		));
+		
+		$this->add(array(
+			'name' => 'submit',
+			'type' => 'Submit',
+			'attributes' => array(
+				'value' => 'Go',
+				'class' => 'btn btn-success'
+			),
+		));
 	}
 }

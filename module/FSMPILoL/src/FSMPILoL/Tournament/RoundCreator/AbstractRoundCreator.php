@@ -3,13 +3,14 @@ namespace FSMPILoL\Tournament\RoundCreator;
 
 use Doctrine\Collection\ArrayCollection;
 use FSMPILoL\Tournament\Group;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 abstract class AbstractRoundCreator {
 	
 	protected $tournament;
 	protected $group;
 	
-	protected $globalDefaults = array(
+	protected static $globalDefaults = array(
 		'gamesPerMatch' => 3,
 		'pointsPerGamePoint' => 1,
 		'pointsPerMatchWin' => 0,
@@ -21,6 +22,30 @@ abstract class AbstractRoundCreator {
 	
 	public function __construct(Group $group){
 		$this->group = $group;
+	}
+	
+	/**
+	 * 
+	 * @param Group $group
+	 * @param string $type
+	 * @param ServiceLocatorInterface $sl
+	 * @return \FSMPILoL\Tournament\RoundCreator\AbstractRoundCreator
+	 */
+	public static function getInstance(Group $group, $type, ServiceLocatorInterface $sl){
+		/* @var $options \FSMPILoL\Options\RoundCreatorOptions */
+		$options = $sl->get('FSMPILoL\Options\RoundCreator');
+		$types = $options->getRoundTypes();
+		if(!empty($types[$type]) && class_exists($types[$type]) ){
+			try{
+				$creator = new $types[$type]($group);
+				return $creator;
+			} catch (Exception $ex) {}
+		}
+		return null;
+	}
+	
+	public static function getGlobalDefaults(){
+		return self::$globalDefaults;
 	}
 	
 	public function getTournament(){
@@ -38,7 +63,13 @@ abstract class AbstractRoundCreator {
 		return $this->group = $group;
 	}
 	
-	abstract public function nextRound(\DateTime $startDate, $properties, $isHidden = true, $duration = 14, $timeForDates = 7);
+	abstract protected function _getDefaultProperties();
+	
+	public function getDefaultProperties(){
+		return $this->_getDefaultProperties() + self::$globalDefaults;
+	}
+	
+	abstract public function nextRound(AlreadyPlayedInterface $gameCheck, \DateTime $startDate, $properties, $isHidden = true, $duration = 14, $timeForDates = 7);
 	
 	protected function createGamesForMatch($match){
 		$properties = $match->getRound()->getProperties();

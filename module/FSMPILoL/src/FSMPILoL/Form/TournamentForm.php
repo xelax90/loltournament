@@ -25,5 +25,14 @@ class TournamentForm extends Form
 				'class' => 'form-control',
 			)
 		));
+		
+		$this->add(array(
+			'name' => 'submit',
+			'type' => 'Submit',
+			'attributes' => array(
+				'value' => 'Go',
+				'class' => 'btn btn-success'
+			),
+		));
 	}
 }
