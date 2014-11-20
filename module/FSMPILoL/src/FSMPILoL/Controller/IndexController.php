@@ -3,7 +3,6 @@ namespace FSMPILoL\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use FSMPILoL\Riot\RiotAPI;
 
 class IndexController extends AbstractActionController
 {

@@ -19,20 +19,7 @@ class ErgebnismeldungForm extends Form{
 		
 		$games = $match->getGames();
 		
-		/*
-		$ergebnisse = array();
-		$gc = count($games);
-		for($i = 0; $i <= ceil($gc / 2); $i++){
-			for($j = 0; $j <= ceil($gc / 2); $j++){
-				if($i + $j > $gc)
-					continue;
-				if($i < ceil($gc / 2) && $j < ceil($gc / 2))
-					continue;
-				$ergebnisse[] = $i."-".$j;
-			}
-		}*/
-		
-		$ergebnisse = array('-' => '-', '1-0' => '1-0', '0-1' => '0-1');
+		$ergebnisse = array('-' => '-', '1-0' => '1-0', '0-1' => '0-1','+--' => '1-0 kampflos','--+' => '0-1 kampflos');
 		
 		$i = 0;
 		$ergs = array();

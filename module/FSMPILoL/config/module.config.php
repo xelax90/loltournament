@@ -5,7 +5,9 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'index' => 'FSMPILoL\Controller\IndexController',
-            'tournament' => 'FSMPILoL\Controller\TournamentController'
+            'tournament' => 'FSMPILoL\Controller\TournamentController',
+            'admin' => 'FSMPILoL\Controller\AdminController',
+			'tournamentadmin' => 'FSMPILoL\Controller\TournamentAdminController',
         ),
     ),
     
@@ -93,13 +95,19 @@ return array(
                 ),
             ),
 			'zfcadmin' => array(
+				'options' => array(
+					'defaults' => array(
+						'controller' => 'admin',
+						'action' => 'index',
+					)
+				),
 				'child_routes' => array(
 					'paarungen' => array(
 		                'type' => 'segment',
 		                'options' => array(
 		                    'route'    => '/paarungen[/:match_id]',
 		                    'defaults' => array(
-		                        'controller' => 'Tournament',
+		                        'controller' => 'tournamentadmin',
 		                        'action'     => 'paarungenAdmin',
 								'match_id'   => 0,
 		                    ),
@@ -111,7 +119,7 @@ return array(
 				                'options' => array(
 				                    'route'    => '/block',
 				                    'defaults' => array(
-				                        'controller' => 'Tournament',
+				                        'controller' => 'tournamentadmin',
 				                        'action'     => 'paarungBlock',
 				                    ),
 				                ),
@@ -121,7 +129,7 @@ return array(
 				                'options' => array(
 				                    'route'    => '/unblock',
 				                    'defaults' => array(
-				                        'controller' => 'Tournament',
+				                        'controller' => 'tournamentadmin',
 				                        'action'     => 'paarungUnblock',
 				                    ),
 				                ),
@@ -131,7 +139,7 @@ return array(
 				                'options' => array(
 				                    'route'    => '/comment',
 				                    'defaults' => array(
-				                        'controller' => 'Tournament',
+				                        'controller' => 'tournamentadmin',
 				                        'action'     => 'paarungComment',
 				                    ),
 				                ),
@@ -141,7 +149,7 @@ return array(
 				                'options' => array(
 				                    'route'    => '/setresult',
 				                    'defaults' => array(
-				                        'controller' => 'Tournament',
+				                        'controller' => 'tournamentadmin',
 				                        'action'     => 'paarungSetResult',
 				                    ),
 				                ),

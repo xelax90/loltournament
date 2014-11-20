@@ -38,7 +38,7 @@ else
 											$pointsHome = "";
 											$pointsGuest = "";
 											foreach($match->getGames() as $game){
-												if($game->getPointsBlue() !== null && $game->getPointsPurple() !== null){
+												if($game->getPointsBlue() !== null || $game->getPointsPurple() !== null){
 													$pointsHome  += $match->getTeamHome()  == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
 													$pointsGuest += $match->getTeamGuest() == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
 												}

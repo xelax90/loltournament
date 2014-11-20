@@ -54,7 +54,7 @@ class Player implements InputFilterAwareInterface, JsonSerializable
 	protected $summonerId;
 	
 	/**
-	 * @ORM\OneToOne(targetEntity="User",inversedBy="player")
+	 * @ORM\ManyToOne(targetEntity="User",inversedBy="players")
 	 * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", onDelete="SET NULL")
 	 */
 	protected $user;

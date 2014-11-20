@@ -107,13 +107,13 @@ class Group {
 		return $round;
 	}
 	
+	// TODO optimize cache key to update when data changed
 	public function getCacheKey(){
 		$rounds = $this->getGroup()->getRounds();
 		$maxRoundId = 0;
 		foreach($rounds as $round){
 			$maxRoundId = max($maxRoundId, $round->getId());
 		}
-		
 		$teams = $this->getGroup()->getTeams();
 		$maxTeamId = 0;
 		foreach($teams as $team){
@@ -177,22 +177,26 @@ class Group {
 				foreach($match->getGames() as $game){
 					if($game->getTeamBlue() == $th){
 						$pointsHome += $game->getPointsBlue() * $round->getProperties()['pointsPerGamePoint'];
-						if($game->getPointsBlue() > $game->getPointsPurple())
+						if ($game->getPointsBlue() > $game->getPointsPurple()) {
 							$gamesWonHome++;
+						}
 					} elseif($game->getTeamPurple() == $th){
 						$pointsHome += $game->getPointsPurple() * $round->getProperties()['pointsPerGamePoint'];
-						if($game->getPointsPurple() > $game->getPointsBlue())
+						if ($game->getPointsPurple() > $game->getPointsBlue()) {
 							$gamesWonHome++;
+						}
 					}
 					
 					if($game->getTeamBlue() == $tg){
 						$pointsGuest += $game->getPointsBlue() * $round->getProperties()['pointsPerGamePoint'];
-						if($game->getPointsBlue() > $game->getPointsPurple())
+						if ($game->getPointsBlue() > $game->getPointsPurple()) {
 							$gamesWonGuest++;
+						}
 					} elseif($game->getTeamPurple() == $tg){
 						$pointsGuest += $game->getPointsPurple() * $round->getProperties()['pointsPerGamePoint'];
-						if($game->getPointsPurple() > $game->getPointsBlue())
+						if ($game->getPointsPurple() > $game->getPointsBlue()) {
 							$gamesWonGuest++;
+						}
 					}
 				}
 				

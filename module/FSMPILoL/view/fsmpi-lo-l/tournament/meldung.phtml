@@ -1,5 +1,5 @@
 <?php
-		$player = $this->zfcUserIdentity()->getPlayer();
+		$player = $this->zfcUserIdentity()->getPlayer($this->tournament);
 		if($player){
 			$team = $player->getTeam();
 			if($team)

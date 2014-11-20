@@ -10,15 +10,17 @@
 				$hasConflict = false;
 				$screensMissing = false;
 				foreach($match->getGames() as $game){
-					if($game->getPointsBlue() !== null && $game->getPointsPurple() !== null){
-						$pointsHome  += $match->getTeamHome()  == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
-						$pointsGuest += $match->getTeamGuest() == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
+					$blueIsHome = $match->getTeamHome() == $game->getTeamBlue();
+					$isKampflos = ($game->getPointsBlue() !== null || $game->getPointsPurple() !== null) && ($game->getPointsBlue() === null || $game->getPointsPurple() === null);
+					if($game->getPointsBlue() !== null || $game->getPointsPurple() !== null){
+						$pointsHome  += $blueIsHome  ? $game->getPointsBlue() : $game->getPointsPurple();
+						$pointsGuest += !$blueIsHome ? $game->getPointsBlue() : $game->getPointsPurple();
 					}
 					
-					if($game->getMeldungHome() && empty($game->getScreenHome()) && empty($game->getScreenGuest()) && empty($game->getReport()))
+					if($game->getMeldungHome() && empty($game->getScreenHome()) && empty($game->getScreenGuest()) && empty($game->getReport()) && !$isKampflos)
 						$screensMissing = true;
 					
-					if($game->getMeldungGuest() && empty($game->getScreenGuest()) && empty($game->getScreenHome()) && empty($game->getReport()) )
+					if($game->getMeldungGuest() && empty($game->getScreenGuest()) && empty($game->getScreenHome()) && empty($game->getReport()) && !$isKampflos)
 						$screensMissing = true;
 					
 					if($game->getMeldungHome() !== null && $game->getMeldungGuest() !== null && $game->getMeldungHome() != $game->getMeldungGuest())
@@ -102,6 +104,15 @@
 									if($game->getAnmerkungGuest())
 										$anmerkungGuest .= ($anmerkungHome ? '<br>' : '') .$game->getAnmerkungGuest();
 									
+									$isKampflos = ($game->getPointsBlue() !== null || $game->getPointsPurple() !== null) && ($game->getPointsBlue() === null || $game->getPointsPurple() === null);
+									
+									$blue = $game->getPointsBlue();
+									$purple = $game->getPointsPurple();
+									if($isKampflos && $blue === null){
+										$blue = '-';
+									} elseif ($isKampflos){
+										$purple = '-';
+									}
 									$ergebnis  = $match->getTeamHome()  == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();
 									$ergebnis .= ' - ';
 									$ergebnis .= $match->getTeamGuest() == $game->getTeamBlue() ? $game->getPointsBlue() : $game->getPointsPurple();

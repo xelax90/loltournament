@@ -5,6 +5,7 @@ use ZfcUser\Entity\User as ZfcUserEntity;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 use Zend\Json\Json;
+use FSMPILoL\Entity\Tournament;
 
 /**
  * A User.
@@ -44,9 +45,9 @@ class User extends ZfcUserEntity implements JsonSerializable
 	public $phone;
 	
 	/**
-	 * @ORM\OneToOne(targetEntity="Player", mappedBy="user")
+	 * @ORM\OneToMany(targetEntity="Player", mappedBy="user")
 	 */
-	protected $player;
+	protected $players;
 	
     /**
      * Get role.
@@ -104,8 +105,13 @@ class User extends ZfcUserEntity implements JsonSerializable
      */
 	public function setPhone($phone){ $this->phone = $phone; return $this; }
 	
-	public function getPlayer(){
-		return $this->player;
+	public function getPlayer(Tournament $tournament){
+		/** @var $player \FSMPILoL\Entity\Player  */
+		foreach($this->players as $player){
+			if($player->getAnmeldung()->getTournament() == $tournament)
+				return $player;
+		}
+		return null;
 	}
 	
 	public function getArrayCopy(){

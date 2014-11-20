@@ -16,6 +16,8 @@ class Module
 		$eventManager = $app->getEventManager(); 
 		$sm = $app->getServiceManager();
 		
+		$this->protectViewsLogin($e);
+		
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
 
@@ -51,7 +53,7 @@ class Module
 			),
 		);
 	}
-
+	
 	protected function extendUserRegistrationForm(EventManager $eventManager){
 		// custom fields of registration form (ZfcUser)
 		$sharedEvents = $eventManager->getSharedManager();
@@ -207,4 +209,36 @@ class Module
 			}
 		);
 	}
+	
+	protected function protectViewsLogin(MvcEvent $e){
+		$app = $e->getApplication();
+		$sm  = $app->getServiceManager();
+		$eventManager = $app->getEventManager();
+		$auth = $sm->get('zfcuser_auth_service');
+		$eventManager->attach(
+			MvcEvent::EVENT_ROUTE,
+			function($e) use ($auth) {
+				$routeMatch = $e->getRouteMatch();
+				$routeName = $routeMatch->getMatchedRouteName();
+				$routeSplit = explode('/', $routeName);
+				if(!$auth->hasIdentity() || ($auth->hasIdentity() && $auth->getIdentity()->getRole() > User::ROLE_MODERATOR)){
+					if(strtolower($routeSplit[0]) === 'zfcadmin'){
+						$response = $e->getResponse();
+						$response->getHeaders()->addHeaderLine(
+							'Location',
+							$e->getRouter()->assemble(
+								array(),
+								array('name' => 'home')
+							)
+						);
+						$response->setStatusCode(302);
+						return $response;
+					}
+				}
+				return;
+			},
+			-100
+		);		
+	}
+	
 }
