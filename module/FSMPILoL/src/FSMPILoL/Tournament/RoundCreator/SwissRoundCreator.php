@@ -3,18 +3,25 @@ namespace FSMPILoL\Tournament\RoundCreator;
 use FSMPILoL\Entity\Round;
 use FSMPILoL\Entity\Match;
 use FSMPILoL\Entity\Game;
-use Doctrine\Collection\ArrayCollection;
+use FSMPILoL\Entity\Team;
+use Doctrine\Common\Collections\ArrayCollection;
+use FSMPILoL\Tournament\Teamdata;
+
 
 class SwissRoundCreator extends AbstractRoundCreator {
 	
-	public function nextRound(AlreadyPlayedInterface $gameCheck, DateTime $startDate, $properties, $isHidden = true, $duration = 14, $timeForDates = 7){
+	const roundType = 'swiss';
+	
+	public function nextRound(AlreadyPlayedInterface $gameCheck, \DateTime $startDate, $properties, $isHidden = true, $duration = 14, $timeForDates = 7){
 		$farberwartungen = array("+g" => -3, "g" => -2, "-o" => -1, "o" => 0, "+o" => 1, "h" => 2, "+h" => 3);
+		$this->getGroup()->setAPIData();
 		
 		$props= $properties + $this->getDefaultProperties();
 		
 		$round = new Round();
 		$round->setNumber($this->getGroup()->getMaxRoundNumber() + 1);
 		$round->setGroup($this->getGroup()->getGroup());
+		$round->setType($this->getType());
 		$round->setProperties($props);
 		$round->setStartDate($startDate);
 		$round->setDuration($duration);
@@ -28,9 +35,14 @@ class SwissRoundCreator extends AbstractRoundCreator {
 		// get round results
 		$roundData = $this->getRoundData();
 		
+		foreach($teams as $team){
+			/* @var $team Team */
+			$team->setData($roundData[$team->getId()]);
+		}
+		
 		$punktegruppen = array();
 		foreach($teams as $team){
-			$punktegruppen[$roundData[$team->getId()]->getPoints()][] = $team;
+			$punktegruppen[$team->getData()->getPoints()][] = $team;
 		}
 		krsort($punktegruppen);
 		
@@ -43,7 +55,7 @@ class SwissRoundCreator extends AbstractRoundCreator {
 			//echo "<br> start of loop: <br>";
 			//foreach($punktegruppe as $k => $v) echo $k . " " . $v . " - ";
 			
-			usort($punktegruppe, array("Team", "compareFarberwartung"));
+			usort($punktegruppe, array("\FSMPILoL\Entity\Team", "compareFarberwartung"));
 			$matched = array();
 			for($i = 0; $i < count($punktegruppe); $i++):
 				$t1 = $punktegruppe[$i];
@@ -53,7 +65,7 @@ class SwissRoundCreator extends AbstractRoundCreator {
 				if(in_array($i, $matched)) continue;
 				
 				$besteVerteilung = array();
-				switch($t1->getFarberwartung()):
+				switch($t1->getData()->getFarberwartung()):
 					case "+h" : $besteVerteilung = array("+g", "g", "-o", "+o", "h"); break;
 					case "h"  : $besteVerteilung = array("g", "+g", "-o", "+o", "h", "+h"); break;
 					case "+o" : $besteVerteilung = array("+g", "g", "-o", "+o", "h", "+h"); break;
@@ -74,12 +86,12 @@ class SwissRoundCreator extends AbstractRoundCreator {
 						if(in_array($j, $matched)) continue;
 						if(!$t2->hasCaptain()) continue;
 						if($t2->getIsBlocked()) continue;
-						if($t2->getFarberwartung() != $erwartung && !$round->getProperties()['ignoreColors']) continue;
+						if($t2->getData()->getFarberwartung() != $erwartung && !$round->getProperties()['ignoreColors']) continue;
 						if($gameCheck->alreadyPlayed($t1, $t2)) continue;
 						
 						$teamHome = null;
 						$teamGuest = null;
-						if($farberwartungen[$t1->getFarberwartung()] < $farberwartungen[$t2->getFarberwartung()]){
+						if($farberwartungen[$t1->getData()->getFarberwartung()] < $farberwartungen[$t2->getData()->getFarberwartung()]){
 							$teamHome = $t2;
 							$teamGuest = $t1;
 						} else {
@@ -152,7 +164,7 @@ class SwissRoundCreator extends AbstractRoundCreator {
 						$match->setRound($round);
 						$match->setTeamHome($team);
 						$match->setTeamGuest(null);
-						$match->setPointsHome($round->getParameter()['pointsPerMatchFree']);
+						$match->setPointsHome($round->getProperties()['pointsPerMatchFree']);
 						$match->setPointsGuest(0);
 						$matches[] = $match;
 						$matchCount++;
@@ -207,5 +219,9 @@ class SwissRoundCreator extends AbstractRoundCreator {
 			'ignoreColors' => false
 		);
 	}
-	
+
+	public function getType() {
+		return self::roundType;
+	}
+
 }

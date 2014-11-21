@@ -4,6 +4,9 @@ namespace FSMPILoL\Tournament;
 use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use FSMPILoL\Entity\Group AS GroupEntity;
+use DateTime;
+use FSMPILoL\Riot\RiotAPi;
+use FSMPILoL\Tournament\Summonerdata;
 
 class Group {
 
@@ -24,6 +27,11 @@ class Group {
 	
 	protected $cache;
 	
+	/** @var array */
+	protected $summoners;
+	
+	/** @var RiotAPi */
+	protected $api;
 	
 	protected function getServiceLocator(){
 		return $this->serviceLocator;
@@ -45,6 +53,17 @@ class Group {
 	
 	public function getGroup(){
 		return $this->group;
+	}
+	
+	public function getTournament(){
+		return $this->getGroup()->getTournament();
+	}
+
+	public function getAPI(){
+		if(null === $this->api){
+			$this->api = new RiotAPI($this->getServiceLocator());
+		}
+		return $this->api;
 	}
 	
 	public function __construct(GroupEntity $group, ServiceLocatorInterface $sl){
@@ -77,29 +96,32 @@ class Group {
 		// sort rounds by round number in descending order
 		usort($rounds, function($r1, $r2){return $r2->getNumber() - $r1->getNumber();});
 		
-		$new = new DateTime();
+		$now = new DateTime();
 		foreach($rounds as $round){
-			$date = new DateTime($round->getStartDate());
+			$date = clone $round->getStartDate();
 			$date->modify('+'.$round->getDuration().' days');
 			
-			if($now <= $date)
+			if ($now <= $date) {
 				return $round;
+			}
 		}
 		return null;
 	}
 	
 	public function getCurrentRound(){
 		$rounds = $this->getGroup()->getRounds()->toArray();
-		if(empty($rounds))
+		if (empty($rounds)) {
 			return null;
-		
+		}
+
 		// sort rounds by round number in descending order
 		usort($rounds, function($r1, $r2){return $r2->getNumber() - $r1->getNumber();});
 		
 		$round = null;
 		foreach($rounds as $r){
-			if($r->getIsHidden())
+			if ($r->getIsHidden()) {
 				continue;
+			}
 			$round = $r;
 			break;
 		}
@@ -214,11 +236,13 @@ class Group {
 					$pointsHome += $round->getProperties()['pointsPerMatchDraw'];
 				}
 				
-				if($th)
+				if ($th) {
 					$roundData[$th->getId()]->setPoints($roundData[$th->getId()]->getPoints() + $pointsHome);
-				if($tg)
+				}
+				if ($tg) {
 					$roundData[$tg->getId()]->setPoints($roundData[$tg->getId()]->getPoints() + $pointsGuest);
-				
+				}
+
 				if(!$round->getProperties()['ignoreColors']){
 					if($th){
 						$roundData[$th->getId()]->setPlayedHome($roundData[$th->getId()]->getPlayedHome() + 1);
@@ -247,6 +271,60 @@ class Group {
 		
 		$cache->addItem($cacheKey, serialize($result));
 		return $result;
+	}
+	
+	/**
+	 * @return array
+	 */
+	public function getTournamentSummoners(){
+		if(null === $this->summoners){
+			$tournament = $this->getTournament();
+			if(!$tournament){
+				return null;
+			}
+			$anmeldungen = $tournament->getAnmeldungen();
+			$api = $this->getAPI();
+			$this->summoners = $api->getSummoners($anmeldungen);
+		}
+		return $this->summoners;
+	}
+	
+	protected function getSummonerCacheKey(){
+		$anmeldungen = $this->getTournament()->getAnmeldungen();
+		$maxAnmeldungId = 0;
+		foreach($anmeldungen as $anmeldung){
+			$maxAnmeldungId = max($maxAnmeldungId, $anmeldung->getId());
+		}
+		return $maxAnmeldungId;
+	}
+	
+	
+	public function setAPIData(){
+		$tournament = $this->getTournament();
+		$api = $this->getAPI();
+		$anmeldungen = $tournament->getAnmeldungen();
+		
+		$summonerdata = array();
+		
+		$cache = $this->getServiceLocator()->get('FSMPILoL\SummonerdataCache');
+		$cacheKey = $this->getSummonerCacheKey();
+		
+		if($cache->hasItem($cacheKey) && !$cache->itemHasExpired($cacheKey)){
+			$summonerdata = unserialize($cache->getItem($cacheKey));
+		} else {
+			$summoners = $this->getTournamentSummoners();
+			foreach($anmeldungen as $anmeldung){
+				$standardname = RiotAPI::getStandardName($anmeldung->getSummonerName());
+				$summoner = $summoners[$standardname];
+				$summonerdata[$anmeldung->getId()] = new Summonerdata($api, $anmeldung, $summoner);
+			}
+			$cache->addItem($cacheKey, serialize($summonerdata));
+		}
+		
+		foreach($anmeldungen as $anmeldung){
+			$summonerdata[$anmeldung->getId()]->setAnmeldung($anmeldung);
+			$anmeldung->setSummonerdata($summonerdata[$anmeldung->getId()]);
+		}
 	}
 	
 }

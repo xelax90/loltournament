@@ -271,12 +271,11 @@ class Game implements InputFilterAwareInterface, JsonSerializable
 		$password = bin2hex($bytes);
 		//$password = "bbabababa";
 		
-		$codes = array();
 		$data = array(
 			"name" => $tournamentName.PHP_EOL.
 						"Rd. ".$this->getMatch()->getRound()->getNumber(). ", Match ".$this->getMatch()->getNumber(). ", Spiel ".$this->getNumber().PHP_EOL.
 						$this->getTeamBlue()->getName() . " - ".$this->getTeamPurple()->getName(),
-			"extra" => $this->gameID."_".$i,
+			"extra" => $this->getId()."_".$this->getNumber(),
 			"password" => $password,
 			"report" => "http://lol.fsmpi.rwth-aachen.de/gamereport.html"
 		);

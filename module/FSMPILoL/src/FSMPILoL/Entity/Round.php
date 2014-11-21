@@ -159,6 +159,10 @@ class Round implements InputFilterAwareInterface, JsonSerializable, AlreadyPlaye
 		return $this->matches;
 	}
 
+	public function setMatches(\Doctrine\Common\Collections\Collection $matches){
+		return $this->matches = $matches;
+	}
+
 	/**
 	 * Populate from an array.
 	 *

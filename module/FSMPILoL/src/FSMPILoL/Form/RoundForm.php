@@ -5,12 +5,17 @@ use Zend\Form\Form;
 use FSMPILoL\Tournament\RoundCreator\AbstractRoundCreator;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use FSMPILoL\Options\RoundCreatorOptions;
+use Zend\InputFilter;
 
 class RoundForm extends Form
 {
+	protected $inputFilter;
+	
 	public function __construct(ServiceLocatorInterface $sl){
 		// we want to ignore the name passed
 		parent::__construct('round');
+		$inputFilter = new InputFilter\InputFilter();
+		$filterFactory = new InputFilter\Factory();
 		
 		$this->add(array(
 			'name' => 'id',
@@ -67,7 +72,8 @@ class RoundForm extends Form
 			),
 			'attributes' => array(
 				'id' => 'round_startdate',
-				'placeholder' => 'YYYY-MM-DD HH:MM'
+				'placeholder' => 'YYYY-MM-DD HH:MM',
+				'class' => 'form-control',
 			)
 		));
 		
@@ -109,7 +115,7 @@ class RoundForm extends Form
 		foreach($globalDefaults as $param => $value){
 			if(is_int($value)){
 				$this->add(array(
-					'name' => 'properties['.$param.']',
+					'name' => 'properties_'.$param,
 					'type' => 'Number',
 					'options' => array(
 						'label' => $param,
@@ -121,7 +127,7 @@ class RoundForm extends Form
 				));
 			} elseif(is_bool($value)) {
 				$this->add(array(
-					'name' => 'properties['.$param.']',
+					'name' => 'properties_'.$param,
 					'type' => 'Select',
 					'options' => array(
 						'label' => $param,
@@ -132,9 +138,13 @@ class RoundForm extends Form
 						'class' => 'form-control',
 					)
 				));
+				$inputFilter->add($filterFactory->createInput(array(
+					'name' => 'properties_'.$param,
+					'required' => false,
+				)));
 			} else {
 				$this->add(array(
-					'name' => 'properties['.$param.']',
+					'name' => 'properties_'.$param,
 					'type' => 'Text',
 					'options' => array(
 						'label' => $param,
@@ -156,6 +166,7 @@ class RoundForm extends Form
 				'class' => 'btn btn-primary'
 			),
 		));
-
+		
+		$this->setInputFilter($inputFilter);
 	}
 }

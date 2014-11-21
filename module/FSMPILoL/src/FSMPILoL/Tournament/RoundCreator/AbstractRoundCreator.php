@@ -1,14 +1,22 @@
 <?php
 namespace FSMPILoL\Tournament\RoundCreator;
 
-use Doctrine\Collection\ArrayCollection;
+use Doctrine\Common\Collections\ArrayCollection;
 use FSMPILoL\Tournament\Group;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use FSMPILoL\Entity\Game;
 
 abstract class AbstractRoundCreator {
 	
 	protected $tournament;
 	protected $group;
+	protected $serviceLocator;
+	
+	/**
+	 * @var Doctrine\ORM\EntityManager
+	 */
+	protected $em;
+	
 	
 	protected static $globalDefaults = array(
 		'gamesPerMatch' => 3,
@@ -20,8 +28,9 @@ abstract class AbstractRoundCreator {
 		'ignoreColors' => false
 	);
 	
-	public function __construct(Group $group){
+	public function __construct(Group $group, ServiceLocatorInterface $sl){
 		$this->group = $group;
+		$this->serviceLocator = $sl;
 	}
 	
 	/**
@@ -37,7 +46,7 @@ abstract class AbstractRoundCreator {
 		$types = $options->getRoundTypes();
 		if(!empty($types[$type]) && class_exists($types[$type]) ){
 			try{
-				$creator = new $types[$type]($group);
+				$creator = new $types[$type]($group, $sl);
 				return $creator;
 			} catch (Exception $ex) {}
 		}
@@ -55,6 +64,9 @@ abstract class AbstractRoundCreator {
 		return $this->tournament;
 	}
 	
+	/**
+	 * @return Group
+	 */
 	public function getGroup(){
 		return $this->group;
 	}
@@ -63,6 +75,25 @@ abstract class AbstractRoundCreator {
 		return $this->group = $group;
 	}
 	
+	/**
+	 * @return ServiceLocatorInterface
+	 */
+	protected function getServiceLocator(){
+		return $this->serviceLocator;
+	}
+
+
+	/**
+	 * @return \Doctrine\ORM\EntityManager
+	 */
+	public function getEntityManager(){
+		if (null === $this->em) {
+			$this->em = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+		}
+		return $this->em;
+	}
+	
+	
 	abstract protected function _getDefaultProperties();
 	
 	public function getDefaultProperties(){
@@ -70,6 +101,11 @@ abstract class AbstractRoundCreator {
 	}
 	
 	abstract public function nextRound(AlreadyPlayedInterface $gameCheck, \DateTime $startDate, $properties, $isHidden = true, $duration = 14, $timeForDates = 7);
+	
+	/**
+	 * @return string
+	 */
+	abstract public function getType();
 	
 	protected function createGamesForMatch($match){
 		$properties = $match->getRound()->getProperties();

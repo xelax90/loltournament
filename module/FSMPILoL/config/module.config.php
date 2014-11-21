@@ -166,6 +166,9 @@ return array(
 		                        'action'     => 'index',
 								'group_id'   => 0,
 		                    ),
+							'constraints' => array(
+								'group_id'         => '[0-9]*',
+							),
 		                ),
 						'may_terminate' => true,
 						'child_routes' => array(
@@ -178,6 +181,9 @@ return array(
 				                        'action'     => 'create',
 										'preset'     => '',
 				                    ),
+									'constraints' => array(
+										'preset'         => '[a-zA-Z0-9_-]*',
+									),
 				                ),
 							),
 							'setpreset' => array(

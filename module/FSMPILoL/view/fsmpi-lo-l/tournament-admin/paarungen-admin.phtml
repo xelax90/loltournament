@@ -48,7 +48,7 @@
 			<div id="match_<?= $match->getId() ?>" class="panel <?= $panelcls ?> admin-paarung">
 				<div class="panel-heading" data-toggle="collapse" data-target="#match_<?= $match->getId() ?> .panel-body" style="position: relative;">
 					<div class="position"><?= $match->getNumber() ?></div>
-					<div class="gamedate"><?= $match->getTime()->format('m.d<\b\r>H:i') ?></div>
+					<div class="gamedate"><?= $match->getTime() ? $match->getTime()->format('m.d<\b\r>H:i') : '' ?></div>
 					<div class="result">
 						<?= $result ?><br>
 						<a class="btn btn-xs" title="Alles Okay (blockieren)" href="<?= $this->url('zfcadmin/paarungen/block', array('match_id' => $match->getId())) ?>">

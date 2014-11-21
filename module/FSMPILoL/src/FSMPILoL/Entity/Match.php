@@ -81,7 +81,7 @@ class Match implements InputFilterAwareInterface, JsonSerializable
 	protected $isBlocked = false;
  	
 	/**
-	 * @ORM\Column(type="datetime");
+	 * @ORM\Column(type="datetime", nullable=true);
 	 */
 	protected $time;
  	

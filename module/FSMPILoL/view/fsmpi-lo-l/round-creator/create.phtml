@@ -1,7 +1,11 @@
 <?php
 $form = $this->form;
 $form->prepare();
-$form->setAttribute('action', $this->url('zfcadmin/runden/create', array('group_id' => $this->group->getId())));
+$routeParams = array('group_id' => $this->group->getId());
+if(!empty($this->preset)){
+	$routeParams['preset'] = $this->preset;
+}
+$form->setAttribute('action', $this->url('zfcadmin/runden/create', $routeParams));
 $form->setAttribute('method', 'post');
 
 $presetForm = $this->presetForm;
@@ -62,4 +66,4 @@ $presetForm->setAttribute('method', 'post');
             <?php endif ?>
         <?php endforeach ?>
     </dl>
-<?php echo $this->form()->closeTag() ?>
+<?php echo $this->form()->closeTag();

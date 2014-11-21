@@ -92,8 +92,14 @@ class RoundCreatorController extends AbstractTournamentAdminController{
 			$creator = AbstractRoundCreator::getInstance($gGroup, $preset, $this->getServiceLocator());
 			if($creator){
 				$defaults = $creator->getDefaultProperties();
-				$form->setData(array('properties' => $defaults));
+				$data = array();
+				foreach($defaults as $key => $value){
+					$data['properties_'.$key] = $value;
+				}
+				$form->setData($data);
 			}
+		} else {
+			$preset = '';
 		}
 
         /* @var $request \Zend\Http\Request */
@@ -102,14 +108,20 @@ class RoundCreatorController extends AbstractTournamentAdminController{
 			$form->setData($request->getPost());
 			if ($form->isValid()) {
 				$data = $form->getData();
-				var_dump($data);
-				aser();
-				return $this->_redirectToPaarungen();
+				$creator = AbstractRoundCreator::getInstance($gGroup, $data['type'], $this->getServiceLocator());
+				$properties = array();
+				foreach($data as $key => $value){
+					if(strpos($key, 'properties_') === 0){
+						$properties[str_replace('properties_', '', $key)] = $value;
+					}
+				}
+				$creator->nextRound($group, new \DateTime($data['startDate']), $properties, true, $data['duration'], $data['timeForDates']);
+				return $this->_redirectToRunden();
 			}
         }
 		
 		$presetForm = new RoundPresetForm($this->getServiceLocator());
 		
-		return new ViewModel(array('group' => $group, 'form' => $form, 'presetForm' => $presetForm));
+		return new ViewModel(array('group' => $group, 'form' => $form, 'presetForm' => $presetForm, 'preset' => $preset));
 	}
 }
