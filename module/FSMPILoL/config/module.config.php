@@ -196,6 +196,51 @@ return array(
 				                    ),
 				                ),
 							),
+							'edit' => array(
+				                'type' => 'segment',
+				                'options' => array(
+				                    'route'    => '/edit/:round_id',
+									'constraints' => array(
+										'round_id'    => '[0-9]+',
+									),
+				                ),
+								'may_terminate' => false,
+								'child_routes' => array(
+									'hide' => array(
+										'type' => 'literal',
+										'options' => array(
+											'route'    => '/hide',
+											'defaults' => array(
+												'controller' => 'roundcreator',
+												'action'     => 'hide',
+											),
+											'constraints' => array(
+												'round_id'    => '[0-9]+',
+											),
+										),
+									),
+									'show' => array(
+										'type' => 'literal',
+										'options' => array(
+											'route'    => '/show',
+											'defaults' => array(
+												'controller' => 'roundcreator',
+												'action'     => 'show',
+											),
+										),
+									),
+									'delete' => array(
+										'type' => 'literal',
+										'options' => array(
+											'route'    => '/delete',
+											'defaults' => array(
+												'controller' => 'roundcreator',
+												'action'     => 'delete',
+											),
+										),
+									),
+								),
+							),
 						),
 					),
 				),

@@ -37,7 +37,6 @@ class RandomRoundCreator extends AbstractRoundCreator {
 					break;
 				}
 			}
-			
 		} while (!$roundOK);
 		
 		$matches = array();
@@ -49,6 +48,9 @@ class RandomRoundCreator extends AbstractRoundCreator {
 			$match->setTeamHome($teams[$i]);
 			$match->setTeamGuest($teams[$i+1]);
 			$this->createGamesForMatch($match);
+			if ($teams[$i] === null || $teams[$i + 1] === null) {
+				$match->setIsBlocked(true);
+			}
 			$matches[] = $match;
 			$number++;
 		}

@@ -25,6 +25,7 @@ foreach($groups as $group):
 				<th>Sichtbar</th>
 				<th>Typ</th>
 				<th>Parameter</th>
+				<th>&nbsp;</th>
 			</tr>
 		</thead>
 
@@ -50,6 +51,42 @@ foreach($groups as $group):
 					<td class="cell cell-sichtbar"><?= $round->getIsHidden() ? 'Nein' : 'Ja' ?></td>
 					<td class="cell cell-typ"><?= ucfirst($round->getType()) ?></td>
 					<td class="cell cell-parameter"><?= implode('<br>', $parameter) ?></td>
+					<?php
+						$buttons = array();
+						
+						if($round->getIsHidden()){
+							$buttons[] = array(
+								'title' => "Zeigen",
+								'route' => 'zfcadmin/runden/edit/show',
+								'params' => array('group_id' => $round->getGroup()->getId(), 'round_id' => $round->getId()),
+							);
+						} else {
+							$buttons[] = array(
+								'title' => "Verstecken",
+								'route' => 'zfcadmin/runden/edit/hide',
+								'params' => array('group_id' => $round->getGroup()->getId(), 'round_id' => $round->getId()),
+							);
+						}
+						
+						if($this->zfcUserIdentity()->getRole() <= \FSMPILoL\Entity\User::ROLE_ADMIN){
+							$buttons[] = array(
+								'title' => "L&ouml;schen",
+								'route' => 'zfcadmin/runden/edit/delete',
+								'params' => array('group_id' => $round->getGroup()->getId(), 'round_id' => $round->getId()),
+								'warning' => 'Runde wirklich l&ouml;schen?'
+							);
+						}
+					?>
+		            <td class="cell cell-ctrls">
+						<?php $c = 0;?>
+						<?php foreach($buttons as $button): ?>
+							<?= $c == 0 ? '' : '|'  ?>
+							<a href="<?php echo $this->url($button['route'], $button['params']); ?>" <?= empty($button['warning']) ? '' : 'onclick=" return confirm(\''.$button['warning'].'\')"' ?> >
+								<?php echo $this->translate($button['title']) ?>
+							</a>
+							<?php $c++; ?>
+						<?php endforeach; ?>
+					</td>
 				</tr>
 			<?php endforeach; ?>
 		</tbody>

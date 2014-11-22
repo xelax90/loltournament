@@ -13,6 +13,7 @@ use FSMPILoL\Form\RoundForm;
 use FSMPILoL\Form\RoundPresetForm;
 use FSMPILoL\Tournament\Group;
 use FSMPILoL\Tournament\RoundCreator\AbstractRoundCreator;
+use FSMPILoL\Entity\User;
 
 /**
  * Description of RoundCreatorController
@@ -124,4 +125,77 @@ class RoundCreatorController extends AbstractTournamentAdminController{
 		
 		return new ViewModel(array('group' => $group, 'form' => $form, 'presetForm' => $presetForm, 'preset' => $preset));
 	}
+	
+	public function showAction(){
+		$em = $this->getEntityManager();
+		
+		$group_id = $this->getEvent()->getRouteMatch()->getParam('group_id');
+		/* @var $group \FSMPILoL\Entity\Group */
+		$group = $em->getRepository('FSMPILoL\Entity\Group')->find($group_id);
+		if(empty($group)){
+			return $this->_redirectToRunden();
+		}
+		
+		$round_id = $this->getEvent()->getRouteMatch()->getParam('round_id');
+		/* @var $group \FSMPILoL\Entity\Group */
+		$round = $em->getRepository('FSMPILoL\Entity\Round')->find($round_id);
+		if(empty($round)){
+			return $this->_redirectToRunden();
+		}
+		
+		$round->setIsHidden(false);
+		$em->flush();
+		return $this->_redirectToRunden();
+	}
+
+		
+	public function hideAction(){
+		$em = $this->getEntityManager();
+		
+		$group_id = $this->getEvent()->getRouteMatch()->getParam('group_id');
+		/* @var $group \FSMPILoL\Entity\Group */
+		$group = $em->getRepository('FSMPILoL\Entity\Group')->find($group_id);
+		if(empty($group)){
+			return $this->_redirectToRunden();
+		}
+		
+		$round_id = $this->getEvent()->getRouteMatch()->getParam('round_id');
+		/* @var $group \FSMPILoL\Entity\Group */
+		$round = $em->getRepository('FSMPILoL\Entity\Round')->find($round_id);
+		if(empty($round)){
+			return $this->_redirectToRunden();
+		}
+		
+		$round->setIsHidden(true);
+		$em->flush();
+		return $this->_redirectToRunden();
+	}
+
+	
+	public function deleteAction(){
+		if($this->zfcUserAuthentication()->getIdentity()->getRole() > User::ROLE_ADMIN){
+			return $this->_redirectToRunden();
+		}
+		
+		$em = $this->getEntityManager();
+		
+		$group_id = $this->getEvent()->getRouteMatch()->getParam('group_id');
+		/* @var $group \FSMPILoL\Entity\Group */
+		$group = $em->getRepository('FSMPILoL\Entity\Group')->find($group_id);
+		if(empty($group)){
+			return $this->_redirectToRunden();
+		}
+		
+		$round_id = $this->getEvent()->getRouteMatch()->getParam('round_id');
+		/* @var $group \FSMPILoL\Entity\Group */
+		$round = $em->getRepository('FSMPILoL\Entity\Round')->find($round_id);
+		if(empty($round)){
+			return $this->_redirectToRunden();
+		}
+		
+		$em->remove($round);
+		$em->flush();
+		return $this->_redirectToRunden();
+	}
+
 }

@@ -1,20 +1,23 @@
 <?php foreach($this->tournament->getGroups() as $group) :  ?>
 	<h1>Gruppe <?= $group->getNumber() ?></h1>
 	<?php foreach($group->getRounds() as $round): ?>
-		<h2>Runde <?= $round->getNumber() ?> (<?= $round->getType() ?>)</h2>
-		
+		<h2>Runde <?= $round->getNumber() ?> (<?= $round->getType() ?>) <?= $round->getIsHidden() ? '<i>versteckt</i>' : '' ?></h2>
+
 		<?php foreach ($round->getMatches() as $match): ?>
 			<?php
+				/* @var $match \FSMPILoL\Entity\Match */
 				$pointsHome = "";
 				$pointsGuest = "";
 				$hasConflict = false;
 				$screensMissing = false;
+				$hasResult = false;
 				foreach($match->getGames() as $game){
 					$blueIsHome = $match->getTeamHome() == $game->getTeamBlue();
 					$isKampflos = ($game->getPointsBlue() !== null || $game->getPointsPurple() !== null) && ($game->getPointsBlue() === null || $game->getPointsPurple() === null);
 					if($game->getPointsBlue() !== null || $game->getPointsPurple() !== null){
 						$pointsHome  += $blueIsHome  ? $game->getPointsBlue() : $game->getPointsPurple();
 						$pointsGuest += !$blueIsHome ? $game->getPointsBlue() : $game->getPointsPurple();
+						$hasResult = true;
 					}
 					
 					if($game->getMeldungHome() && empty($game->getScreenHome()) && empty($game->getScreenGuest()) && empty($game->getReport()) && !$isKampflos)
@@ -36,6 +39,7 @@
 					$matchResult = '<abbr title="'.$match->getAnmerkung().'">'.$matchResult.'</abbr>';
 				}
 				$result .= ' (' . $matchResult . ')';
+				$hasResult = $hasResult || $match->getPointsHome() !== null || $match->getPointsGuest() !== null;
 				
 				$panelcls = 'panel-default';
 				if($match->getIsBlocked() && !$screensMissing)
@@ -51,17 +55,27 @@
 					<div class="gamedate"><?= $match->getTime() ? $match->getTime()->format('m.d<\b\r>H:i') : '' ?></div>
 					<div class="result">
 						<?= $result ?><br>
+						<?php if($match->getIsBlocked()) : ?>
+						<a class="btn btn-xs" title="Doch nicht okay (unblock)" href="<?= $this->url('zfcadmin/paarungen/unblock', array('match_id' => $match->getId())) ?>">
+							<i class="fa fa-undo"></i>
+						</a>
+						<?php elseif($hasResult) :  ?>
 						<a class="btn btn-xs" title="Alles Okay (blockieren)" href="<?= $this->url('zfcadmin/paarungen/block', array('match_id' => $match->getId())) ?>">
 							<i class="fa fa-check"></i>
 						</a>
+						<?php endif; ?>
 						<a class="btn btn-xs" title="Ergebnis setzen und blockieren" href="<?= $this->url('zfcadmin/paarungen/setresult', array('match_id' => $match->getId())) ?>">
 							<i class="fa fa-exclamation"></i>
 						</a>
 						<a class="btn btn-xs" title="Kommentieren (und nicht blockieren)" href="<?= $this->url('zfcadmin/paarungen/comment', array('match_id' => $match->getId())) ?>">
 							<i class="fa fa-comments"></i>
 						</a>
-						<?php if($hasConflict || $screensMissing) : ?>
-						<button class="btn btn-warning btn-xs" style="position: absolute;top: -9px;right: -9px;" title="<?= $hasConflict ? 'Konflikt' : 'Screen fehlt' ?>"><i class="glyphicon glyphicon-info-sign"></i></button>
+						<?php $btnCount = 0; ?>
+						<?php if($hasConflict || $screensMissing) : $btnCount++; ?>
+						<button class="btn btn-danger btn-xs" style="position: absolute;top: -9px;right: <?= - 9 + ($btnCount - 1) * 30 ?>px;" title="<?= $hasConflict ? 'Konflikt' : 'Screen fehlt' ?>"><i class="fa fa-info-circle"></i> </button>
+						<?php endif; ?>
+						<?php if(!empty($match->getAnmerkung())) : $btnCount++; ?>
+						<button class="btn btn-info btn-xs" style="position: absolute;top: -9px;right: <?= - 9 + ($btnCount - 1) * 30 ?>px;" title="<?= $match->getAnmerkung() ?>"><i class="fa fa-comments"></i> </button>
 						<?php endif; ?>
 					</div>
 					<?php

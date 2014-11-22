@@ -166,6 +166,7 @@ class SwissRoundCreator extends AbstractRoundCreator {
 						$match->setTeamGuest(null);
 						$match->setPointsHome($round->getProperties()['pointsPerMatchFree']);
 						$match->setPointsGuest(0);
+						$match->setIsBlocked(true);
 						$matches[] = $match;
 						$matchCount++;
 						$matched[] = $tnr;
