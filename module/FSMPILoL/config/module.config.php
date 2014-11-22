@@ -10,6 +10,7 @@ return array(
 			'tournamentadmin' => 'FSMPILoL\Controller\TournamentAdminController',
 			'roundcreator' => 'FSMPILoL\Controller\RoundCreatorController',
 			'teamadmin' => 'FSMPILoL\Controller\TeamAdminController',
+			'myteamadmin' => 'FSMPILoL\Controller\MyTeamAdminController',
         ),
     ),
     
@@ -258,6 +259,85 @@ return array(
 							),
 		                ),
 						'may_terminate' => true,
+						'child_routes' => array(
+							'anmerkung' => array(
+				                'type' => 'literal',
+				                'options' => array(
+				                    'route'    => '/anmerkung',
+									'defaults' => array(
+										'controller' => 'teamadmin',
+										'action' => 'anmerkung',
+									)
+				                ),
+							),
+							'block' => array(
+				                'type' => 'literal',
+				                'options' => array(
+				                    'route'    => '/block',
+									'defaults' => array(
+										'controller' => 'teamadmin',
+										'action' => 'block',
+									)
+				                ),
+							),
+							'unblock' => array(
+				                'type' => 'literal',
+				                'options' => array(
+				                    'route'    => '/unblock',
+									'defaults' => array(
+										'controller' => 'teamadmin',
+										'action' => 'unblock',
+									)
+				                ),
+							),
+						),
+					),
+					'myteams' => array(
+		                'type' => 'segment',
+		                'options' => array(
+		                    'route'    => '/myteams[/:team_id]',
+		                    'defaults' => array(
+		                        'controller' => 'myteamadmin',
+		                        'action'     => 'index',
+								'team_id'   => 0,
+		                    ),
+							'constraints' => array(
+								'team_id'         => '[0-9]*',
+							),
+		                ),
+						'may_terminate' => true,
+						'child_routes' => array(
+							'anmerkung' => array(
+				                'type' => 'literal',
+				                'options' => array(
+				                    'route'    => '/anmerkung',
+									'defaults' => array(
+										'controller' => 'myteamadmin',
+										'action' => 'anmerkung',
+									)
+				                ),
+							),
+							'block' => array(
+				                'type' => 'literal',
+				                'options' => array(
+				                    'route'    => '/block',
+									'defaults' => array(
+										'controller' => 'myteamadmin',
+										'action' => 'block',
+									)
+				                ),
+							),
+							'unblock' => array(
+				                'type' => 'literal',
+				                'options' => array(
+				                    'route'    => '/unblock',
+									'defaults' => array(
+										'controller' => 'myteamadmin',
+										'action' => 'unblock',
+									)
+				                ),
+							),
+						),
 					),
 				),
 			),
@@ -391,6 +471,7 @@ return array(
 			array('label' => 'Paarungen', 'route' => 'zfcadmin/paarungen'),
 			array('label' => 'Runden', 'route' => 'zfcadmin/runden'),
 			array('label' => 'Teams', 'route' => 'zfcadmin/teams'),
+			array('label' => 'Meine Teams', 'route' => 'zfcadmin/myteams'),
 		),
 		
 	),

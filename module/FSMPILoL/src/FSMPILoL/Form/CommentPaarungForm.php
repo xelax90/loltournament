@@ -2,7 +2,6 @@
 namespace FSMPILoL\Form;
 
 use Zend\Form\Form;
-use FSMPILoL\Entity\Match;
 
 class CommentPaarungForm extends Form{
 	public function __construct(){

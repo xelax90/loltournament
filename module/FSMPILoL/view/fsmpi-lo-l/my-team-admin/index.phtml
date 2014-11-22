@@ -2,25 +2,20 @@
 $tournament = $this->tournament;
 /* @var $tournament FSMPILoL\Entity\Tournament */
 $groups = $tournament->getGroups();
+$identity = $this->zfcUserIdentity();
 foreach($groups as $group):
 	/* @var $group FSMPILoL\Entity\Group */
 ?>
 	<h1>Gruppe <?= $group->getNumber() ?></h1>
 	
-	<div class="navbar filter-bar">
-		<div class="navbar-inner">
-			<div class="pull-right">
-				<a href="<?php echo $this->url('zfcadmin/teams') ?>" class="btn btn-primary">
-					<?php echo $this->translate('Neues Team aus Ersatzspielern') ?>
-				</a>
-			</div>
-		</div>
-	</div>
 	<?php 
 		$teams = $group->getTeams()->toArray();
 		usort($teams, function($a, $b){return $a->getNumber() - $b->getNumber();});
 
 		foreach($teams as $team) : 
+			if($team->getAnsprechpartner() != $identity){
+				continue;
+			}
 			/* @var $team FSMPILoL\Entity\Team */ 
 			$teamOptions = array(
 				'showFarberwartung' => true,
@@ -51,21 +46,21 @@ foreach($groups as $group):
 					<a class="btn btn-xs" title="Nachricht an den Captain" href="mailto:<?= rawurlencode($cptMail) ?>">
 						<i class="fa fa-envelope"></i>
 					</a>
-					<a class="btn btn-xs" title="Anmerkung hinzufügen" href="<?= $this->url('zfcadmin/teams/anmerkung', array('team_id' => $team->getId())) ?>">
+					<a class="btn btn-xs" title="Anmerkung hinzufügen" href="<?= $this->url('zfcadmin/myteams/anmerkung', array('team_id' => $team->getId())) ?>">
 						<i class="fa fa-comments"></i>
 					</a>
-					<a class="btn btn-xs" title="Team verwarnen" href="<?= $this->url('zfcadmin/teams', array('team_id' => $team->getId())) ?>">
+					<a class="btn btn-xs" title="Team verwarnen" href="<?= $this->url('zfcadmin/myteams', array('team_id' => $team->getId())) ?>">
 						<i class="fa fa-gavel"></i>
 					</a>
-					<a class="btn btn-xs" title="Ersatzspieler permanent hinzuf&uuml;gen" href="<?= $this->url('zfcadmin/teams', array('team_id' => $team->getId())) ?>">
+					<a class="btn btn-xs" title="Ersatzspieler permanent hinzuf&uuml;gen" href="<?= $this->url('zfcadmin/myteams', array('team_id' => $team->getId())) ?>">
 						<i class="fa fa-plus"></i>
 					</a>
 					<?php if($team->getIsBlocked()) : ?>
-					<a class="btn btn-xs" title="Aktivieren" href="<?= $this->url('zfcadmin/teams/unblock', array('team_id' => $team->getId())) ?>">
+					<a class="btn btn-xs" title="Aktivieren" href="<?= $this->url('zfcadmin/myteams/unblock', array('team_id' => $team->getId())) ?>">
 						<i class="fa fa-check"></i>
 					</a>
-					<?php elseif($identity->getRole() <= \FSMPILoL\Entity\User::ROLE_ADMIN || $team->getAnsprechpartner() == $identity): ?>
-					<a class="btn btn-xs" title="Blockieren" href="<?= $this->url('zfcadmin/teams/block', array('team_id' => $team->getId())) ?>">
+					<?php else : ?>
+					<a class="btn btn-xs" title="Blockieren" href="<?= $this->url('zfcadmin/myteams/block', array('team_id' => $team->getId())) ?>">
 						<i class="fa fa-ban"></i>
 					</a>
 					<?php endif; ?>
