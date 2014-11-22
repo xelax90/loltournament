@@ -60,6 +60,11 @@ class Team implements InputFilterAwareInterface, JsonSerializable
 	protected $icon;
  	
 	/**
+	 * @ORM\Column(type="text");
+	 */
+	protected $anmerkung;
+ 	
+	/**
      * @ORM\ManyToOne(targetEntity="User")
 	 * @ORM\JoinColumn(name="ansprechpartner_id", referencedColumnName="user_id")
 	 */
@@ -120,7 +125,10 @@ class Team implements InputFilterAwareInterface, JsonSerializable
 	public function setIcon($icon){
 		$this->icon = $icon;
 	}
-
+	
+	/**
+	 * @return User
+	 */
 	public function getAnsprechpartner(){
 		return $this->ansprechpartner;
 	}
@@ -135,6 +143,14 @@ class Team implements InputFilterAwareInterface, JsonSerializable
 	
 	public function setPlayers($players){
 		$this->players = $players;
+	}
+	
+	public function getAnmerkung(){
+		return $this->anmerkung;
+	}
+	
+	public function setAnmerkung($anmerkung){
+		$this->anmerkung = $anmerkung;
 	}
 	
 	public function getData(){

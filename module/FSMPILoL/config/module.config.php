@@ -9,6 +9,7 @@ return array(
             'admin' => 'FSMPILoL\Controller\AdminController',
 			'tournamentadmin' => 'FSMPILoL\Controller\TournamentAdminController',
 			'roundcreator' => 'FSMPILoL\Controller\RoundCreatorController',
+			'teamadmin' => 'FSMPILoL\Controller\TeamAdminController',
         ),
     ),
     
@@ -243,6 +244,21 @@ return array(
 							),
 						),
 					),
+					'teams' => array(
+		                'type' => 'segment',
+		                'options' => array(
+		                    'route'    => '/teams[/:team_id]',
+		                    'defaults' => array(
+		                        'controller' => 'teamadmin',
+		                        'action'     => 'index',
+								'team_id'   => 0,
+		                    ),
+							'constraints' => array(
+								'team_id'         => '[0-9]*',
+							),
+		                ),
+						'may_terminate' => true,
+					),
 				),
 			),
         ),
@@ -374,6 +390,7 @@ return array(
 		'admin' => array(
 			array('label' => 'Paarungen', 'route' => 'zfcadmin/paarungen'),
 			array('label' => 'Runden', 'route' => 'zfcadmin/runden'),
+			array('label' => 'Teams', 'route' => 'zfcadmin/teams'),
 		),
 		
 	),

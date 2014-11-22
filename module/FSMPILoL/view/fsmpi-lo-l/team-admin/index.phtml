@@ -1,0 +1,72 @@
+<?php
+$tournament = $this->tournament;
+/* @var $tournament FSMPILoL\Entity\Tournament */
+$groups = $tournament->getGroups();
+foreach($groups as $group):
+	/* @var $group FSMPILoL\Entity\Group */
+?>
+	<h1>Gruppe <?= $group->getNumber() ?></h1>
+	
+	<div class="navbar filter-bar">
+		<div class="navbar-inner">
+			<div class="pull-right">
+				<a href="<?php echo $this->url('zfcadmin/teams') ?>" class="btn btn-primary">
+					<?php echo $this->translate('Neues Team aus Ersatzspielern') ?>
+				</a>
+			</div>
+		</div>
+	</div>
+	<?php 
+		$teams = $group->getTeams()->toArray();
+		usort($teams, function($a, $b){return $a->getNumber() - $b->getNumber();});
+
+		foreach($teams as $team) : 
+			/* @var $team FSMPILoL\Entity\Team */ 
+			$teamOptions = array(
+				'showFarberwartung' => true,
+				'useBootstrap' => true,
+				'playerOptions' => array(
+					'addStyles' => '',
+					'showCaptain' => true,
+					'showCaptainContact' => true,
+					'showAllContacts' => true,
+					'emailWithLink' => true,
+					'showWins' => true,
+					'showEmailRight' => true,
+				)
+			);
+		?>
+		<div class="panel panel-default admin-team">
+			<div class="panel-heading">
+				<div class="result">
+					<a class="btn btn-xs" title="Nachricht an das Team" href="<?= $this->url('zfcadmin/teams', array('team_id' => $team->getId())) ?>">
+						<i class="fa fa-envelope"></i>
+					</a>
+					<a class="btn btn-xs" title="Anmerkung hinzufügen" href="<?= $this->url('zfcadmin/teams', array('team_id' => $team->getId())) ?>">
+						<i class="fa fa-comments"></i>
+					</a>
+					<a class="btn btn-xs" title="Team verwarnen" href="<?= $this->url('zfcadmin/teams', array('team_id' => $team->getId())) ?>">
+						<i class="fa fa-gavel"></i>
+					</a>
+					<a class="btn btn-xs" title="Ersatzspieler permanent hinzuf&uuml;gen" href="<?= $this->url('zfcadmin/teams', array('team_id' => $team->getId())) ?>">
+						<i class="fa fa-plus"></i>
+					</a>
+					<?php if($team->getIsBlocked()) : ?>
+					<a class="btn btn-xs" title="Aktivieren" href="<?= $this->url('zfcadmin/teams', array('team_id' => $team->getId())) ?>">
+						<i class="fa fa-check"></i>
+					</a>
+					<?php else: ?>
+					<a class="btn btn-xs" title="Blockieren" href="<?= $this->url('zfcadmin/teams', array('team_id' => $team->getId())) ?>">
+						<i class="fa fa-ban"></i>
+					</a>
+					<?php endif; ?>
+				</div>
+				<div class="team-ansprechpartner"><?= $team->getAnsprechpartner()->getDisplayName() ?> <?= $team->getAnsprechpartner()->getEmail() ?></div>
+				<?php echo $this->partial('fsmpi-lo-l/tournament/partial/team.phtml', array('team' => $team) + $teamOptions); ?>
+			</div>
+		</div>
+		<?php
+		endforeach; 
+	?>
+<?php
+endforeach;
