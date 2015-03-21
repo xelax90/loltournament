@@ -4,7 +4,7 @@ namespace FSMPILoL\View\Helper;
 use Zend\View\Helper\AbstractHelper;
 
 class DDragonHelper extends AbstractHelper {
-	protected $version = '4.19.2';
+	protected $version = '5.5.3';
 	protected $base = 'http://ddragon.leagueoflegends.com/cdn/';
 	protected $profileIconPath = 'img/profileicon/';
 	

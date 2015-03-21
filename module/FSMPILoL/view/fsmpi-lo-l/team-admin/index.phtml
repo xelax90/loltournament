@@ -1,6 +1,7 @@
 <?php
 $tournament = $this->tournament;
 /* @var $tournament FSMPILoL\Entity\Tournament */
+$identity = $this->identity;
 $groups = $tournament->getGroups();
 foreach($groups as $group):
 	/* @var $group FSMPILoL\Entity\Group */

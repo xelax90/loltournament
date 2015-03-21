@@ -198,7 +198,7 @@ function IconSelect($$elementID, $$parameters) {
         
         _View.clearUI();
         
-        _View.iconSelectElement.setAttribute('class', 'icon-select');
+        _View.iconSelectElement.setAttribute('class', _View.iconSelectElement.getAttribute('class') + ' icon-select');
         
         var selectedBoxElement = document.createElement('div');
         selectedBoxElement.setAttribute('class' ,'selected-box');

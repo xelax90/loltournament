@@ -11,6 +11,7 @@ return array(
 			'roundcreator' => 'FSMPILoL\Controller\RoundCreatorController',
 			'teamadmin' => 'FSMPILoL\Controller\TeamAdminController',
 			'myteamadmin' => 'FSMPILoL\Controller\MyTeamAdminController',
+			'anmeldung' => 'FSMPILoL\Controller\AnmeldungController',
         ),
     ),
     
@@ -96,6 +97,30 @@ return array(
                         'action'     => 'myteam',
                     ),
                 ),
+            ),
+            'anmeldung' => array(
+                'type' => 'literal',
+                'options' => array(
+                    'route'    => '/anmeldung',
+                    'defaults' => array(
+                        'controller' => 'anmeldung',
+                        'action'     => 'index',
+                    ),
+                ),
+				'may_terminate' => false,
+				'child_routes' => array(
+					'form' => array(
+						'type' => 'literal',
+						'options' => array(
+							'route'    => '/form',
+							'defaults' => array(
+								'controller' => 'anmeldung',
+								'action'     => 'form',
+							),
+						),
+
+					)
+				)
             ),
 			'zfcadmin' => array(
 				'options' => array(
@@ -473,7 +498,9 @@ return array(
 			array('label' => 'Teams', 'route' => 'zfcadmin/teams'),
 			array('label' => 'Meine Teams', 'route' => 'zfcadmin/myteams'),
 		),
-		
+		'streaming' => array(
+			
+		)
 	),
     
     

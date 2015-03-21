@@ -341,6 +341,10 @@ class Anmeldung implements InputFilterAwareInterface, JsonSerializable
 		return Json::encode($data, true, array('silenceCyclicalExceptions' => true));
 	}
 	
+	public function getArrayCopy(){
+		return $this->jsonSerialize();
+	}
+	
 	/**
 	 * Returns data to show in json
 	 * @return array

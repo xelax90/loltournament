@@ -39,7 +39,7 @@
 		}
 		
 	?>
-	<div class="team <?= $teamSide ?>" style="background-image: url('<?= $this->basePath() ?>/img/summoner_icons/<?= $team->getIcon() ?>')">
+	<div class="team <?= $teamSide ?>" style="background-image: url('<?= $this->basePath() ?>/img/teamicons/<?= $team->getIcon() ?>')">
 		<div class="teamname" <?= $js ?>><?= $team->getName() ?> (<?= $team->getData()->getPoints() ?>) <?= $this->showScore ? '('.$team->getScore().')' : '' ?> <?= $this->showFarberwartung ? $team->getData()->getFarberwartung() : '' ?></div>
 		<div class="players" <?= $playersId ?>>
 	<?php

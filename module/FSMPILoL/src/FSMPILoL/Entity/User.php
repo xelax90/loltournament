@@ -17,6 +17,7 @@ class User extends ZfcUserEntity implements JsonSerializable
 {
 	const ROLE_ADMIN = 10;
 	const ROLE_MODERATOR = 20;
+	const ROLE_STREAMER = 25;
 	const ROLE_REPORTER = 30;
 	
 	public static function getRoles(){
@@ -26,6 +27,7 @@ class User extends ZfcUserEntity implements JsonSerializable
 	protected static $roles = array(
 		self::ROLE_ADMIN => 'Admin', 
 		self::ROLE_MODERATOR => 'Moderator', 
+		self::ROLE_STREAMER => 'Streamer', 
 		self::ROLE_REPORTER => 'Reporter'
 	);
 

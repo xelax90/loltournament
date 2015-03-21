@@ -1,0 +1,144 @@
+<?php
+
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+?>
+<div class="anmeldung">
+	<div class="content">
+		<ul>
+			<li id="einzelanmeldung">
+				<div class="header">
+					<b>Einzelanmeldung zur RWTH Liga</b><span><a href="#teamanmeldung">Zur Teamanmeldung</a></span>
+				</div>
+				<div class="article">
+					<?php 
+						$form = $this->singleForm;
+						$form->setAttribute('action', $this->url('anmeldung/form'))
+							 ->prepare();
+						echo $this->form()->openTag($form); 
+						echo $this->formCollection($form->get('anmeldung'));
+					?>
+					<div class="input_container">
+						<?= $this->formInput($teamForm->get('submit')); ?>
+					</div>
+					<?php
+						echo $this->form()->closeTag();
+					?>
+				</div>
+			</li>
+			<li id="teamanmeldung">
+				<div class="header">
+					<b>Teamanmeldung zur RWTH Liga</b><span><a href="#einzelanmeldung">Zur Einzelanmeldung</a></span>
+				</div>
+				<div class="article">
+					<p>
+						Ihr könnt euch mit bis zu fünf Spielern (mind. zwei) als Team anmelden. <br> 
+						Wenn ihr weniger als fünf Spieler seid, lasst die restlichen Felder frei und euch werden andere Spieler zugelost<br>
+					</p>
+					<?php
+						/* @var $teamForm FSMPILoL\Form\AnmeldungTeamForm */
+						$teamForm = $this->teamForm;
+						$teamForm->setAttribute('action', $this->url('anmeldung/form'))
+								 ->prepare();
+					?>
+					<script type="text/javascript">
+						<?php
+							$icons = $this->icons;
+							$ics = array();
+							$cnt = 0;
+							foreach($icons as $icon){
+								if($icon != "ProfileIcon_Poro.png"){
+									$ics[] = "{'iconFilePath':'".$this->basePath()."/img/teamIcons/".$icon."', 'iconValue':'".$icon."'}";
+								}
+								$cnt++;
+							}
+						?>
+						IconSelect.COMPONENT_ICON_FILE_PATH = '<?= $this->basePath() ?>/img/control/icon-select/arrow.png';
+						var iconSelect;
+						var selectedText;
+
+						window.onload = function(){
+							selectedText = document.getElementById('team_icon_text');
+
+							document.getElementById('team-icon-select').addEventListener('changed', function(e){
+							   selectedText.value = iconSelect.getSelectedValue();
+							});
+
+							iconSelect = new IconSelect("team-icon-select",                 
+								{
+									'selectedIconWidth':48,
+									'selectedIconHeight':48,
+									'selectedBoxPadding':1,
+									'iconsWidth':48,
+									'iconsHeight':48,
+									'boxIconSpace':1,
+									'vectoralIconNumber':4,
+									'horizontalIconNumber':4
+								}
+							);
+
+							var icons = [<?php echo implode(",", $ics) ?>];
+
+							iconSelect.refresh(icons);
+							<?php
+								if(!empty($teamForm->get('team_icon_text')->getValue())){
+									foreach($icons as $i => $icon){
+										if($icon == $teamForm->get('team_icon_text')->getValue()){
+											echo 'iconSelect.setSelectedIndex('.$i.');';
+											break;
+										}
+									}
+								}
+							?>
+							
+						};
+					</script>
+					
+					<?php 
+						echo $this->form()->openTag($teamForm); 
+						echo $this->formRow($teamForm->get('teamName'));
+					?>
+						<label for="anmeldung_teamname">Team Icon<sup>*</sup>:</label>
+				        <div id="team-icon-select" class="input_container" style="height: auto;"></div>
+					<?php
+						echo $this->formRow($teamForm->get('team_icon_text'));
+						echo $this->formCollection($teamForm->get('anmeldungen'));
+					?>
+						<script type="text/javascript">
+							function add_player() {
+								var currentCount = $('#teamanmeldung form > fieldset > fieldset').length;
+								if(currentCount >= 8)
+									return false;
+								var template = $('#teamanmeldung form > fieldset > span').data('template');
+								template = template.replace(/__index__/g, currentCount);
+								var temp = $(template).prepend('<legend>Spieler '+(currentCount + 1)+'</legend>');
+								$('#teamanmeldung form > fieldset').append(temp);
+								return false;
+							}
+						</script>
+						<div class="input_container" style="margin-bottom: 20px">
+							<button onclick="return add_player()">Add Player</button>
+						</div>
+						<?= $this->formLabel($teamForm->get('ausschreibung_gelesen')); ?>
+						<div class="input_container">
+							<?= $this->formCheckbox($teamForm->get('ausschreibung_gelesen')); ?>
+							Ich bestätige hiermit, dass ich die Ausschreibung gelesen habe und wir mit dem Inhalt einverstanden sind.
+						</div>
+						<?php if(!empty($teamForm->get('ausschreibung_gelesen')->getMessages())): ?>
+							<div class="input_container"><?= $this->formElementErrors($teamForm->get('ausschreibung_gelesen')) ?></div> 
+						<?php endif; ?>
+					<?php
+						echo $this->formRow($teamForm->get('anmerkung'));
+					?>
+					<div class="input_container">
+						<?= $this->formInput($teamForm->get('submit')); ?>
+					</div>
+					<?= $this->form()->closeTag(); ?>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>

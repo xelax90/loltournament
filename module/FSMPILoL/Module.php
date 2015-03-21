@@ -50,6 +50,7 @@ class Module
             ),
 			'factories' => array(
 				'Navigation' => 'Zend\Navigation\Service\DefaultNavigationFactory',
+				'StreamNavigation' => 'Zend\Navigation\Service\StreamNavigationFactory',
 			),
 		);
 	}

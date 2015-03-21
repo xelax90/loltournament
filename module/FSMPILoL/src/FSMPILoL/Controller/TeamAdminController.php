@@ -27,7 +27,7 @@ class TeamAdminController extends AbstractTournamentAdminController{
 		$this->setTeamdata();
 		$this->setAPIData();
 		
-		return new ViewModel(array('tournament' => $tournament));
+		return new ViewModel(array('tournament' => $tournament, 'identity' => $this->zfcUserAuthentication()->getIdentity()));
 	}
 	
 	protected function _redirectToTeams(){

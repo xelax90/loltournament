@@ -17,6 +17,8 @@ class Anmeldung{
 	 */
 	protected $tournament;
 	
+	protected $config;
+	
 	/**
 	 * @var ServiceLocatorInterface
 	 */
@@ -90,8 +92,16 @@ class Anmeldung{
 		
 		$used = array();
 		foreach($this->getAll() as $anmeldung){
-			if($anmeldung->getIcon())
+			if ($anmeldung->getIcon()) {
 				$used[] = $anmeldung->getIcon();
+			}
+		}
+		
+		$tournament = $this->getTournament();
+		foreach($tournament->getGroups() as $group){
+			foreach($group->getTeams() as $team){
+				$used[] = $team->getIcon();
+			}
 		}
 		
 		return array_diff($icons, $used);

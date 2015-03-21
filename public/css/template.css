@@ -1054,7 +1054,8 @@ body {
 	vertical-align: text-top;
 }
 
-#body .anmeldung .content input[type=submit]{
+#body .anmeldung .content input[type=submit],
+#body .anmeldung .content button{
 	float: right;
 	background-color: #7e7e7e;
 	border: 1px solid #22272a;
@@ -1073,6 +1074,17 @@ body {
 	border: 1px solid #22272a;
 	margin: 5px 0;
 	clear: both;
+}
+#body .anmeldung .content fieldset#teamanmeldung_spieler,
+#body .anmeldung .content fieldset.anmeldung_single_fieldset{
+	border:none;
+	padding:0;
+	margin:0;
+}
+
+#body .anmeldung .content fieldset#teamanmeldung_spieler>legend,
+#body .anmeldung .content fieldset.anmeldung_single_fieldset>legend{
+	display:none;
 }
 
 #body .blog .sidebar,
