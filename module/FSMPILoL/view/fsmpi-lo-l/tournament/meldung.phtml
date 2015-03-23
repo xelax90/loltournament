@@ -1,13 +1,13 @@
 <?php
-		$player = $this->zfcUserIdentity()->getPlayer($this->tournament);
-		if($player){
-			$team = $player->getTeam();
-			if($team)
-				$group = $team->getGroup();
-		}
-		$idCorrect = true;
-		if(!$player || !$team || !$group)
-			$idCorrect = false;
+	$player = $this->zfcUserIdentity()->getPlayer($this->tournament);
+	if($player){
+		$team = $player->getTeam();
+		if($team)
+			$group = $team->getGroup();
+	}
+	$idCorrect = true;
+	if(!$player || !$team || !$group)
+		$idCorrect = false;
 ?>
 <div class="anmeldung ergebnisse personal">
 	<div class="content">
@@ -21,7 +21,12 @@
 				<?php
 				$rounds = $group->getRounds()->toArray();
 				usort($rounds, function($a, $b){return $b->getNumber() - $a->getNumber();});
-				foreach($rounds as $round) : ?>
+				foreach($rounds as $round) : 
+					/* @var $round FSMPILoL\Entity\Round */
+					if($round->getIsHidden()){
+						continue;
+					}
+				?>
 				<li>
 					<div class="header">
 						<b>Runde <?= $round->getNumber() ?></b>
@@ -64,7 +69,7 @@
 								$result .= $match->getPointsHome() === null ? $pointsHome : $match->getPointsHome();
 								$result .= " - ";
 								$result .= $match->getPointsGuest() === null ? $pointsGuest : $match->getPointsGuest();
-
+								//echo $match->getId();
 								echo $this->partial('fsmpi-lo-l/tournament/partial/paarung.phtml', array(
 									'match' => $match,
 									'position' => 0,
@@ -77,14 +82,14 @@
 											'showCaptain' => true,
 											'showCaptainContact' => true,
 											'showAllContacts' => false,
-											'showWins' => false
+											'showWins' => false,
 										)
 									)
 								));
 
 							?>
 						</div>
-						<?php if(!$match->getIsBlocked()) : ?>
+						<?php if(!$match->getIsBlocked()) : echo $match->getId(); ?>
 						<div class="tournament_codes">
 							<div class="heading">Tournament Codes</div>
 							<?php $i = 0; foreach($match->getGames() as $game): $i++; ?>

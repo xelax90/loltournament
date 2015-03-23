@@ -1,16 +1,10 @@
 <?php
 use FSMPILoL\Entity\User;
-use FSMPILoL\Form\ErgebnismeldungForm;
-use FSMPILoL\Form\ZeitmeldungForm;
-
-define('DEBUG', false);
 
 $tournament = $this->tournament;
 $identity = $this->zfcUserIdentity();
-if($identity)
-	define('ADMIN', $identity->getRole() <= User::ROLE_ADMIN);
-else
-	define('ADMIN', false);
+$isAdmin = $identity->getRole() <= User::ROLE_ADMIN;
+$debug = false;
 
 		if(!$identity || $identity->getRole() <= User::ROLE_MODERATOR || true) :
 		?>
@@ -21,13 +15,14 @@ else
 					<?php
 					$groupCount = count($tournament->getGroups());
 					foreach($tournament->getGroups() as $group) :
-						//$rounds = $group->getRounds()->toArray();
-						//usort($rounds, function($a, $b){return $b->getNumber() - $a->getNumber();});
 						foreach($group->getRounds() as $round) : 
+							if($round->getIsHidden() && !$isAdmin){
+								continue;
+							}
 						?>
 						<li>
-							<div class="header">
-								<b>Runde <?= $round->getNumber() ?></b>
+							<div class="header" <?= $round->getIsHidden() ? 'style="border-color: red;"' : '' ?>>
+								<b>Runde <?= $round->getNumber() ?> <?= $round->getIsHidden() ? "(Nicht freigegeben)" : "" ?></b>
 							</div>
 
 							<div class="article">

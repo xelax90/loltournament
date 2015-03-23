@@ -145,8 +145,15 @@ class TournamentController extends AbstractActionController
 					
 					$zeitForm = new ZeitmeldungForm($match, $team);
 					$data = array('match_id' => $match->getId());
-					if(!empty($match->getTime()) && $match->getTime()->format('Y') > 0)
-						$data['time'] = $match->getTime()->format('Y-m-d\TH:i:s');
+					
+					if($isHome){
+						$timeGetter = 'getTimeHome';
+					} else {
+						$timeGetter = 'getTimeGuest';
+					}
+					
+					if(!empty($match->$timeGetter()) && $match->$timeGetter()->format('Y') > 0)
+						$data['time'] = $match->$timeGetter()->format('Y-m-d\TH:i:s');
 					$zeitForm->setData($data);
 					
 					$ergebnisForm = new ErgebnismeldungForm($match, $team);
@@ -179,9 +186,28 @@ class TournamentController extends AbstractActionController
 						$data = $formIndex['zeit']->getData();
 						$match = $em->getRepository('FSMPILoL\Entity\Match')->find((int)$data['match_id']);
 						$date = new DateTime($data['time']);
-						$match->setTime($date);
+						$isHome = $team == $match->getTeamHome();
+						$isComplete = false;
+						$isConflict = false;
+						if($isHome){
+							$match->setTimeHome($date);
+							$isComplete = !empty($match->getTimeGuest());
+						} else {
+							$match->setTimeGuest($date);
+							$isComplete = !empty($match->getTimeHome());
+						}
+						
+						if($isComplete){
+							$isConflict = $match->getTimeHome() != $match->getTimeGuest();
+						}
+						
 						$em->flush();
 						$viewMessages['zeitmeldung_success'] = 'Zeit erfolgreich gespeichert';
+						if(!$isComplete){
+							$viewMessages['zeitmeldung_success'] .= '. Sie muss noch vom Gegnerteam bestätigt werden!';
+						} else if($isConflict) {
+							$viewMessages['zeitmeldung_success'] .= '. WARNUNG: Sie stimmt nicht mit der eingetragenen Zeit des Gegerteams überein!';
+						}
 					}
 				} else {
 					if($this->validateErgebnisreport($formIndex['ergebnis'], $data)){
@@ -256,6 +282,7 @@ class TournamentController extends AbstractActionController
 		$form->setData($data);
 		$em = $this->getEntitymanager();
 		$identity = $this->zfcUserAuthentication()->getIdentity();
+		$tournament = $this->getTournament();
 		$player = $identity->getPlayer($tournament);
 		$team = $player->getTeam();
 		$group = $team->getGroup();
@@ -267,10 +294,11 @@ class TournamentController extends AbstractActionController
 			return false;
 		} 
 		
+		/* Not necessary since both teams have to enter a date.
 		if(!$player->getIsCaptain()){
 			$time->setMessages(array("Nur Captains können eine Zeit eintragen"));
 			return false;
-		}
+		} */
 		
 		if(empty($data['time'])){ 
 			$time->setMessages(array("Termin nicht eingetragen"));

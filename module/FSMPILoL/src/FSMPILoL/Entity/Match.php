@@ -83,7 +83,12 @@ class Match implements InputFilterAwareInterface, JsonSerializable
 	/**
 	 * @ORM\Column(type="datetime", nullable=true);
 	 */
-	protected $time;
+	protected $timeHome;
+ 	
+	/**
+	 * @ORM\Column(type="datetime", nullable=true);
+	 */
+	protected $timeGuest;
  	
 	/**
 	 * @ORM\Column(type="text", nullable=true);
@@ -167,12 +172,31 @@ class Match implements InputFilterAwareInterface, JsonSerializable
 		$this->isBlocked = $isBlocked;
 	}
 
+	public function getTimeHome(){
+		return $this->timeHome;
+	}
+
+	public function setTimeHome($time){
+		$this->timeHome = $time;
+	}
+
+	public function getTimeGuest(){
+		return $this->timeGuest;
+	}
+
+	public function setTimeGuest($time){
+		$this->timeGuest = $time;
+	}
+
 	public function getTime(){
-		return $this->time;
+		if(!empty($this->getTimeHome()) && !empty($this->getTimeGuest())){
+			return $this->timeHome;
+		}
+		return null;
 	}
 
 	public function setTime($time){
-		$this->time = $time;
+		$this->timeHome = $time;
 	}
 
 	public function getFoodleURL(){
