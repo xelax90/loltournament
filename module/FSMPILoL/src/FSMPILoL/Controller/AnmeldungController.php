@@ -68,8 +68,6 @@ class AnmeldungController extends AbstractActionController
 		$i = 1;
 		foreach ($anmeldungCollection as $anmeldungFieldset) {
 			$anmeldungFieldset->setLabel('Spieler '.$i);
-			$anmeldungFieldset->remove('isSub');
-			$anmeldungFieldset->remove('anmerkung');
 			$i++;
 		}
 		

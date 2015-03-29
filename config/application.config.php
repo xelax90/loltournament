@@ -10,6 +10,7 @@ return array(
 		'ZfcUserDoctrineORM',
 		'ZfcAdmin',
 		'ZfcUserAdmin',
+		'XelaxHTMLPurifier',
         'FSMPILoL',
     ),
 

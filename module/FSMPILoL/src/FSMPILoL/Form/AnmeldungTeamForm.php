@@ -11,13 +11,14 @@ namespace FSMPILoL\Form;
 use Zend\Form\Form;
 use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
 use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterProviderInterface;
 
 /**
  * Description of AnmeldungSingleForm
  *
  * @author schurix
  */
-class AnmeldungTeamForm extends Form{
+class AnmeldungTeamForm extends Form implements InputFilterProviderInterface{
 
 	public function __construct(){
 		// we want to ignore the name passed
@@ -60,6 +61,11 @@ class AnmeldungTeamForm extends Form{
                 'allow_add' => true,
                 'target_element' => array(
                     'type' => 'FSMPILoL\Form\AnmeldungFieldset',
+					'options' => array(
+						'showSub' => false,
+						'showAnmerkungen' => false,
+						'data_required' => false,
+					)
                 )
             ),
 			'attributes' => array(
@@ -103,21 +109,38 @@ class AnmeldungTeamForm extends Form{
 		$this->addInputFilter();
 	}
 	
-	public function addInputFilter(){
+	public function getInputFilterSpecification() {
 		$filterSpec = array(
 			'teamName' => array(
 				'required' => true,
+				'filters' => array(
+					array('name' => 'StringTrim'),
+					array('name' => 'StripTags'),
+					array('name' => 'XelaxHTMLPurifier\Filter\HTMLPurifier'),
+				),
 			),
 			'team_icon_text' => array(
 				'required' => true,
+				'filters' => array(
+					array('name' => 'StringTrim'),
+					array('name' => 'StripTags'),
+					array('name' => 'XelaxHTMLPurifier\Filter\HTMLPurifier'),
+				),
+			),
+			'anmerkung' => array(
+				'required' => false,
+				'filters' => array(
+					array('name' => 'StringTrim'),
+					array('name' => 'StripTags'),
+					array('name' => 'XelaxHTMLPurifier\Filter\HTMLPurifier'),
+				),
 			),
 			'ausschreibung_gelesen' => array(
 				'required' => true,
 			),
 		);
-		$filterFactory = new \Zend\InputFilter\Factory();
-		$this->setInputFilter($filterFactory->createInputFilter($filterSpec));
 		
+		/*
 		$filter = $this->get('anmeldungen')->getTargetElement()->getInputFilterSpecification();
 		$collectionFilter = $filterFactory->createInputFilter($filter);
 		$collectionFilter->get('name')->setRequired(false);
@@ -126,7 +149,9 @@ class AnmeldungTeamForm extends Form{
 		$collectionContainerFilter = new \Zend\InputFilter\CollectionInputFilter();
 		$collectionContainerFilter->setInputFilter($collectionFilter);
 		$this->getInputFilter()->add($collectionContainerFilter, 'anmeldungen');
+		*/
+		
+		return $filterSpec;
 	}
-	
-	
+
 }

@@ -2,9 +2,9 @@
 namespace FSMPILoL\Form;
 
 use Zend\Form\Form;
-use FSMPILoL\Entity\Match;
+use Zend\InputFilter\InputFilterProviderInterface;
 
-class ResultPaarungForm extends Form{
+class ResultPaarungForm extends Form implements InputFilterProviderInterface{
 	public function __construct(){
 		// we want to ignore the name passed
 		parent::__construct('setresult');
@@ -63,6 +63,38 @@ class ResultPaarungForm extends Form{
 				'class' => 'btn btn-success',
 			),
 		));
-
 	}
+
+	public function getInputFilterSpecification() {
+		$filter = array(
+			'id' => array(
+				'required' => false,
+				'filters' => array(
+					array('name' => 'Int'),
+				),
+			),
+			'pointsHome' => array(
+				'required' => false,
+				'filters' => array(
+					array('name' => 'Int'),
+				),
+			),
+			'pointsGuest' => array(
+				'required' => false,
+				'filters' => array(
+					array('name' => 'Int'),
+				),
+			),
+			'anmerkung' => array(
+				'required' => false,
+				'filters' => array(
+					array('name' => 'StringTrim'),
+					array('name' => 'StripTags'),
+					array('name' => 'XelaxHTMLPurifier\Filter\HTMLPurifier'),
+				),
+			),
+		);
+		return $filter;
+	}
+
 }

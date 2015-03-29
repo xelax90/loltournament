@@ -2,8 +2,9 @@
 namespace FSMPILoL\Form;
 
 use Zend\Form\Form;
+use Zend\InputFilter\InputFilterProviderInterface;
 
-class TournamentForm extends Form
+class TournamentForm extends Form implements InputFilterProviderInterface
 {
 	public function __construct(){
 		// we want to ignore the name passed
@@ -35,4 +36,24 @@ class TournamentForm extends Form
 			),
 		));
 	}
+
+	public function getInputFilterSpecification() {
+		$filter = array(
+			'id' => array(
+				'required' => false,
+				'filters' => array(
+					array('name' => 'Int'),
+				),
+			),
+			'name' => array(
+				'required' => true,
+				'filters' => array(
+					array('name' => 'StringTrim'),
+					array('name' => 'XelaxHTMLPurifier\Filter\HTMLPurifier'),
+				),
+			),
+		);
+		return $filter;
+	}
+
 }

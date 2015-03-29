@@ -2,12 +2,18 @@
 namespace FSMPILoL\Form;
 
 use Zend\Form\Form;
+use Zend\InputFilter\InputFilterProviderInterface;
+use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
+use FSMPILoL\Entity\Group;
 
-class GroupForm extends Form
+class GroupForm extends Form implements InputFilterProviderInterface
 {
 	public function __construct(){
 		// we want to ignore the name passed
 		parent::__construct('group');
+		
+		$this->setHydrator(new ClassMethodsHydrator(false))
+				->setObject(new Group());
 		
 		$this->add(array(
 			'name' => 'id',
@@ -37,4 +43,23 @@ class GroupForm extends Form
 			),
 		));
 	}
+
+	public function getInputFilterSpecification() {
+		$filter = array(
+			'id' => array(
+				'required' => false,
+				'filters' => array(
+					array('name' => 'Int'),
+				),
+			),
+			'number' => array(
+				'required' => true,
+				'filters' => array(
+					array('name' => 'Int'),
+				),
+			),
+		);
+		return $filter;
+	}
+
 }

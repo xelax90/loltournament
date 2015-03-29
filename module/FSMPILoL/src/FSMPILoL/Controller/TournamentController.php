@@ -232,7 +232,7 @@ class TournamentController extends AbstractActionController
 								( !$isHome && empty($game->getMeldungHome())  ) ||
 								$game->getMeldungGuest() == $game->getMeldungHome()
 							){
-								if($ergebnis != '1-0' || $ergebnis == '0-1'){
+								if($ergebnis == '1-0' || $ergebnis == '0-1'){
 									$game->setPointsBlue($split[1 - ($game->getNumber() % 2)]);
 									$game->setPointsPurple($split[$game->getNumber() % 2]);
 								} elseif($ergebnis == '+--') {

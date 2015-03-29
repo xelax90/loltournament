@@ -3,7 +3,7 @@ namespace FSMPILoL\Form;
 
 use Zend\Form\Form;
 
-class CommentPaarungForm extends Form{
+class CommentPaarungForm extends Form implements \Zend\InputFilter\InputFilterProviderInterface{
 	public function __construct(){
 		// we want to ignore the name passed
 		parent::__construct('comment');
@@ -36,4 +36,25 @@ class CommentPaarungForm extends Form{
 		));
 
 	}
+
+	public function getInputFilterSpecification() {
+		$filters = array(
+			'id' => array(
+				'required' => true,
+				'filters' => array(
+					array('name' => 'Int'),
+				),
+			),
+			'anmerkung' => array(
+				'required' => true,
+				'filters' => array(
+					array('name' => 'StringTrim'),
+					array('name' => 'StripTags'),
+					array('name' => 'XelaxHTMLPurifier\Filter\HTMLPurifier'),
+				),
+			),
+		);
+		return $filters;
+	}
+
 }

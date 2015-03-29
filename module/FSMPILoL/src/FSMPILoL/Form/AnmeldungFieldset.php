@@ -12,12 +12,14 @@ use FSMPILoL\Entity\Anmeldung;
 use Zend\Form\InputFilterProviderFieldset;
 use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
 use Zend\Form\Fieldset;
+use Zend\InputFilter\InputFilterProviderInterface;
+
 /**
  * Description of AnmeldungForm
  *
  * @author schurix
  */
-class AnmeldungFieldset extends Fieldset implements \Zend\InputFilter\InputFilterProviderInterface{
+class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface{
 	
 	public function __construct($name = "", $options = array()){
 		if($name == ""){
@@ -32,12 +34,20 @@ class AnmeldungFieldset extends Fieldset implements \Zend\InputFilter\InputFilte
 		//$this->setFilters();
 	}
 	
+	public function setOptions($options) {
+		parent::setOptions($options);
+		
+		if(isset($options['showSub']) && !$options['showSub']){
+			$this->remove('isSub');
+		}
+		
+		if(isset($options['showAnmerkungen']) && !$options['showAnmerkungen']){
+			$this->remove('anmerkung');
+		}
+		
+	}
+	
 	protected function addUserfields() {
-		/* $this->add(array(
-			'name' => 'id',
-			'type' => 'Hidden',
-		)); */
-
 		$this->add(array(
 			'name' => 'name',
 			'type' => 'Text',
@@ -141,17 +151,23 @@ class AnmeldungFieldset extends Fieldset implements \Zend\InputFilter\InputFilte
      * @return array
      \*/
     public function getInputFilterSpecification(){
-		$filters = array(
-			'name' => array(
-				'required' => true,
-			),
-			'email' => array(
-				'required' => true,
-			),
-			'summonerName' => array(
-				'required' => true,
-			),
-		);
+		$filters = array();
+		
+		$dataRequired = true;
+		if(isset($this->getOptions()['data_required']) && !$this->getOption('data_required')){
+			$dataRequired = false;
+		}
+		$textFields = array('name' => true, 'email' => true, 'facebook' => false, 'otherContact' => false, 'summonerName' => true, 'anmerkung' => false);
+		foreach($textFields as $field => $required){
+			$filters[$field] = array(
+				'required' => $required && $dataRequired,
+				'filters' => array(
+					array('name' => 'StringTrim'),
+					array('name' => 'StripTags'),
+					array('name' => 'XelaxHTMLPurifier\Filter\HTMLPurifier'),
+				),
+			);
+		}
 		
 		$filters['isSub'] = array(
 			'required' => false,
