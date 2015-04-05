@@ -150,7 +150,7 @@ body {
 #body div div .featured {
 	height: 361px;
 	margin: 0;
-	padding: 0;
+	padding-bottom: 102px;
 	position: relative;
 	width: 960px;
 }
@@ -174,7 +174,7 @@ body {
 	background: #0a0a0a url(../img/gradient.png) repeat-x bottom center;
 	margin: 0 auto;
 	overflow: hidden;
-	padding: 102px 9px 22px 9px;
+	padding: 0 9px 22px 9px;
 	width: 940px;
 }
 #body div div .section > div {
@@ -1450,7 +1450,7 @@ body {
 	margin: 0 auto;
 	padding: 0 0 41px;
 	overflow: hidden;
-	width: 800px;
+	width: 400px;
 }
 #footer ul li {
 	display: block;
