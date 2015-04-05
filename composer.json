@@ -20,6 +20,7 @@
 		"zf-commons/zfc-user": "1.*",
 		"zf-commons/zfc-user-doctrine-orm": "dev-master",
 		"zf-commons/zfc-admin" : "dev-master",
-		"danielss89/zfc-user-admin" : "dev-master"
+		"danielss89/zfc-user-admin" : "dev-master",
+		"xelax90/zf2-filter-htmlpurifier" : "*"
     }
 }

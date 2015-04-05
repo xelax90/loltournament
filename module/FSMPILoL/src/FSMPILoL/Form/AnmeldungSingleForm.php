@@ -11,12 +11,14 @@ namespace FSMPILoL\Form;
 use Zend\Form\Form;
 use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
 use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterProviderInterface;
+
 /**
  * Description of AnmeldungSingleForm
  *
  * @author schurix
  */
-class AnmeldungSingleForm extends Form{
+class AnmeldungSingleForm extends Form implements InputFilterProviderInterface{
 
 	public function __construct(){
 		// we want to ignore the name passed
@@ -63,5 +65,14 @@ class AnmeldungSingleForm extends Form{
 
 	}
 
-	
+	public function getInputFilterSpecification() {
+		$filters = array(
+			'ausschreibung_gelesen' => array(
+				'required' => true,
+			)
+		);
+		
+		return $filters;
+	}
+
 }

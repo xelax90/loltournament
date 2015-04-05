@@ -3,8 +3,9 @@ namespace FSMPILoL\Form;
 
 use Zend\Form\Form;
 use FSMPILoL\Entity\Match;
+use Zend\InputFilter\InputFilterProviderInterface;
 
-class ZeitmeldungForm extends Form{
+class ZeitmeldungForm extends Form implements InputFilterProviderInterface{
 	public function __construct(Match $match){
 		// we want to ignore the name passed
 		parent::__construct('zeitmeldung');
@@ -37,4 +38,20 @@ class ZeitmeldungForm extends Form{
 		));
 
 	}
+
+	public function getInputFilterSpecification() {
+		$filter = array(
+			'match_id' => array(
+				'required' => true,
+				'filters' => array(
+					array('name' => 'Int'),
+				),
+			),
+			'time' => array(
+				'required' => true,
+			),
+		);
+		return $filter;		
+	}
+
 }

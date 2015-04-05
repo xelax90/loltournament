@@ -5,12 +5,22 @@ use Zend\Form\Form;
 use FSMPILoL\Entity\Match;
 use Zend\Form\Element;
 use Zend\InputFilter;
+use Zend\InputFilter\InputFilterProviderInterface;
 
-class ErgebnismeldungForm extends Form{
+class ErgebnismeldungForm extends Form implements InputFilterProviderInterface{
+	protected $filterSpec = array();
+	
+	/**
+	 * @var Match
+	 */
+	protected $match = null;
+	
+	protected $ergebnisse = array('-' => '-', '1-0' => '1-0', '0-1' => '0-1','+--' => '1-0 kampflos','--+' => '0-1 kampflos');
+
 	public function __construct(Match $match){
+		$this->match = $match;
 		// we want to ignore the name passed
 		parent::__construct('ergebnismeldung');
-		$inputFilter = new InputFilter\InputFilter();
 		
 		$this->add(array(
 			'name' => 'match_id',
@@ -18,8 +28,6 @@ class ErgebnismeldungForm extends Form{
 		));
 		
 		$games = $match->getGames();
-		
-		$ergebnisse = array('-' => '-', '1-0' => '1-0', '0-1' => '0-1','+--' => '1-0 kampflos','--+' => '0-1 kampflos');
 		
 		$i = 0;
 		$ergs = array();
@@ -31,7 +39,7 @@ class ErgebnismeldungForm extends Form{
 				'type' => 'Select',
 				'options' => array(
 					'label' => 'Ergebnis Spiel '.$i,
-					'options' => $ergebnisse,
+					'options' => $this->ergebnisse,
 				),
 				'attributes' => array(
 					'id' => 'ergebnismeldung_ergebnis_'.$game->getId(),
@@ -42,10 +50,6 @@ class ErgebnismeldungForm extends Form{
 	        $file->setLabel('Screen Spiel '.$i);
 			$file->setAttribute('id', 'ergebnismeldung_screen_'.$game->getId());
 			$screens[] = $file;
-			
-			$fileInput = new InputFilter\FileInput('screen_'.$game->getId());
-			$fileInput->setRequired(false);
-			$inputFilter->add($fileInput);
 		}
 		
 		foreach($ergs as $ergebnis){
@@ -77,7 +81,50 @@ class ErgebnismeldungForm extends Form{
 				'placeholder' => 'YYYY-MM-DD HH:MM'
 			),
 		));
-
-		$this->setInputFilter($inputFilter);
 	}
+
+	public function getInputFilterSpecification() {
+		$filterSpec = array();
+		$games = $this->match->getGames();
+		
+		$minGames = ceil(count($games) / 2);
+		$i = 1;
+		foreach($games as $game){
+			$filterSpec['ergebnis_'.$game->getId()] = array(
+				'required' => $i <= $minGames,
+				'filters' => array(
+					array('name' => 'StringTrim'),
+					array('name' => 'StripTags')
+				),
+				'validators' => array(
+					array('name' => 'InArray', array('haystack' => $this->ergebnisse)),
+				)
+			);
+			
+			$filterSpec['screen_'.$game->getId()] = array(
+				'type' => 'Zend\InputFilter\FileInput',
+				'required' => false
+			);
+			$i++;
+		}
+		
+		$filterSpec['anmerkung'] = array(
+			'required' => false,
+			'filters' => array(
+				array('name' => 'StringTrim'),
+				array('name' => 'StripTags'),
+				array('name' => 'XelaxHTMLPurifier\Filter\HTMLPurifier'),
+			),
+		);
+		
+		$filterSpec['match_id'] = array(
+			'required' => true,
+			'filters' => array(
+				array('name' => 'Int'),
+			),
+		);
+		
+		return $filterSpec;
+	}
+
 }

@@ -5,17 +5,14 @@ use Zend\Form\Form;
 use FSMPILoL\Tournament\RoundCreator\AbstractRoundCreator;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use FSMPILoL\Options\RoundCreatorOptions;
-use Zend\InputFilter;
+use Zend\InputFilter\InputFilterProviderInterface;
 
-class RoundForm extends Form
+class RoundForm extends Form implements InputFilterProviderInterface
 {
-	protected $inputFilter;
 	
 	public function __construct(ServiceLocatorInterface $sl){
 		// we want to ignore the name passed
 		parent::__construct('round');
-		$inputFilter = new InputFilter\InputFilter();
-		$filterFactory = new InputFilter\Factory();
 		
 		$this->add(array(
 			'name' => 'id',
@@ -138,10 +135,6 @@ class RoundForm extends Form
 						'class' => 'form-control',
 					)
 				));
-				$inputFilter->add($filterFactory->createInput(array(
-					'name' => 'properties_'.$param,
-					'required' => false,
-				)));
 			} else {
 				$this->add(array(
 					'name' => 'properties_'.$param,
@@ -166,7 +159,64 @@ class RoundForm extends Form
 				'class' => 'btn btn-primary'
 			),
 		));
-		
-		$this->setInputFilter($inputFilter);
 	}
+
+	public function getInputFilterSpecification() {
+		$filter = array(
+			'id' => array(
+				'required' => false,
+				'filters' => array(
+					array('name' => 'Int'),
+				),
+			),
+			'number' => array(
+				'required' => true,
+				'filters' => array(
+					array('name' => 'Int'),
+				),
+			),
+			'duration' => array(
+				'required' => true,
+				'filters' => array(
+					array('name' => 'Int'),
+				),
+			),
+			'timeForDates' => array(
+				'required' => true,
+				'filters' => array(
+					array('name' => 'Int'),
+				),
+			),
+			'isHidden' => array(
+				'required' => true,
+				'filters' => array(
+					array('name' => 'Int'),
+				),
+			),
+		);
+		
+		$globalDefaults = AbstractRoundCreator::getGlobalDefaults();
+		foreach($globalDefaults as $param => $value){
+			if(is_int($value) || is_bool($value)){
+				$filter['properties_'.$param] = array(
+					'required' => false,
+					'filters' => array(
+						array('name' => 'Int'),
+					),
+				);
+			} else {
+				$filter['properties_'.$param] = array(
+					'required' => false,
+					'filters' => array(
+						array('name' => 'StringTrim'),
+						array('name' => 'XelaxHTMLPurifier\Filter\HTMLPurifier'),
+					),
+				);
+			}
+		}
+		
+		
+		return $filter;
+	}
+
 }
