@@ -109,6 +109,16 @@ class Game implements InputFilterAwareInterface, JsonSerializable
 	/**
 	 * @ORM\Column(type="text", nullable=true);
 	 */
+	protected $gameLinkHome;
+ 	
+	/**
+	 * @ORM\Column(type="text", nullable=true);
+	 */
+	protected $gameLinkGuest;
+ 	
+	/**
+	 * @ORM\Column(type="text", nullable=true);
+	 */
 	protected $report;
  	
 	/**
@@ -250,6 +260,23 @@ class Game implements InputFilterAwareInterface, JsonSerializable
 		$this->streamLink = $streamLink;
 	}
 	
+	function getGameLinkHome() {
+		return $this->gameLinkHome;
+	}
+
+	function getGameLinkGuest() {
+		return $this->gameLinkGuest;
+	}
+
+	function setGameLinkHome($gameLinkHome) {
+		$this->gameLinkHome = $gameLinkHome;
+	}
+
+	function setGameLinkGuest($gameLinkGuest) {
+		$this->gameLinkGuest = $gameLinkGuest;
+	}
+
+		
 	public function generateTournamentCode(){
 		
 		// Keine Codes für Spielfrei

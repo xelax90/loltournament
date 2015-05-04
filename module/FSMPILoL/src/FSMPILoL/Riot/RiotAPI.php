@@ -142,7 +142,7 @@ class RiotAPi {
 		return $result;
 	}
 
-	public function getStats($summonerID, $season = "SEASON4"){
+	public function getStats($summonerID, $season = "SEASON2015"){
 		$url = "/api/lol/euw/v1.3/stats/by-summoner/".$summonerID."/summary?season=".$season;
 		$result = $this->request($url);
 		return $result;

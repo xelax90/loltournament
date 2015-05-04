@@ -3,7 +3,7 @@ use FSMPILoL\Entity\User;
 
 $tournament = $this->tournament;
 $identity = $this->zfcUserIdentity();
-$isAdmin = $identity->getRole() <= User::ROLE_ADMIN;
+$isAdmin = !empty($identity) && $identity->getRole() <= User::ROLE_ADMIN;
 $debug = false;
 
 		if(!$identity || $identity->getRole() <= User::ROLE_MODERATOR || true) :

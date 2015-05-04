@@ -83,7 +83,15 @@ class TournamentController extends AbstractActionController
 		$this->setAPIData();
 		
 		//$api = new RiotAPI($this->getServiceLocator());
-		return new ViewModel(array('tournament' => $tournament));
+		$loginForm = $this->getServiceLocator()->get('zfcuser_login_form');
+		$fm = $this->flashMessenger()->setNamespace('zfcuser-login-form')->getMessages();
+		if (isset($fm[0])) {
+			$loginForm->setMessages(
+				array('identity' => array($fm[0]))
+			);
+		}
+		
+		return new ViewModel(array('tournament' => $tournament, 'loginForm' => $loginForm));
 	}
 	
 	public function paarungenAction(){
