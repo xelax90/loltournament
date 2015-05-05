@@ -316,6 +316,8 @@ class Group {
 				$standardname = RiotAPI::getStandardName($anmeldung->getSummonerName());
 				if(!empty($summoners[$standardname])){
 					$summoner = $summoners[$standardname];
+				} else {
+					// TODO try to get summoner directly and detect name changes
 				}
 				$summonerdata[$anmeldung->getId()] = new Summonerdata($api, $anmeldung, $summoner);
 			}
