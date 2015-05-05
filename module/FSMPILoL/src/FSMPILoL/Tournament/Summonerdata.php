@@ -2,18 +2,33 @@
 namespace FSMPILoL\Tournament;
 
 use FSMPILoL\Riot\RiotAPI;
+use FSMPILoL\Entity\Anmeldung;
 
 class Summonerdata {
 	protected $anmeldung;
 	protected $anmeldung_id;
-	protected $rankedWins;
-	protected $normalWins;
-	protected $tier;
-	protected $level;
-	protected $profileIconId;
+	protected $rankedWins = 0;
+	protected $normalWins = 0;
+	protected $tier = "Unranked";
+	protected $level = 0;
+	protected $profileIconId = 0;
 	protected $score;
 	
+	/**
+	 * 
+	 * @param RiotAPI $api
+	 * @param Anmeldung $anmeldung
+	 * @param stdClass $summoner
+	 */
 	public function __construct(RiotAPI $api, $anmeldung, $summoner){
+		$this->anmeldung = $anmeldung;
+		$this->anmeldung_id = $anmeldung->getId();
+		$this->getScore(true);
+		
+		if(empty($summoner)){
+			return;
+		}
+		
 		$stats = $api->getStats($summoner->id);
 		
 		$leagueEntries = $api->getLeagueEntry($summoner->id);
@@ -34,14 +49,17 @@ class Summonerdata {
 		
 		$rankedWins = 0;
 		$normalWins = 0;
-		foreach($stats->playerStatSummaries as $summary){
-			if($summary->playerStatSummaryType == "RankedSolo5x5")
-				$rankedWins = $summary->wins;
-			elseif($summary->playerStatSummaryType == "Unranked")
-				$normalWins = $summary->wins;
+		if(!empty($stats->playerStatSummaries)){
+			foreach($stats->playerStatSummaries as $summary){
+				if($summary->playerStatSummaryType == "RankedSolo5x5")
+					$rankedWins = $summary->wins;
+				elseif($summary->playerStatSummaryType == "Unranked")
+					$normalWins = $summary->wins;
+			}
+		} else {
+			//debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 		}
 		
-		$this->anmeldung = $anmeldung;
 		$this->rankedWins = $rankedWins;
 		$this->normalWins = $normalWins;
 		$this->tier = $league;

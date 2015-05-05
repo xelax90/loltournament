@@ -308,14 +308,15 @@ class Group {
 		
 		$cache = $this->getServiceLocator()->get('FSMPILoL\SummonerdataCache');
 		$cacheKey = $this->getSummonerCacheKey();
-		
 		if($cache->hasItem($cacheKey) && !$cache->itemHasExpired($cacheKey)){
 			$summonerdata = unserialize($cache->getItem($cacheKey));
 		} else {
 			$summoners = $this->getTournamentSummoners();
 			foreach($anmeldungen as $anmeldung){
 				$standardname = RiotAPI::getStandardName($anmeldung->getSummonerName());
-				$summoner = $summoners[$standardname];
+				if(!empty($summoners[$standardname])){
+					$summoner = $summoners[$standardname];
+				}
 				$summonerdata[$anmeldung->getId()] = new Summonerdata($api, $anmeldung, $summoner);
 			}
 			$cache->addItem($cacheKey, serialize($summonerdata));
