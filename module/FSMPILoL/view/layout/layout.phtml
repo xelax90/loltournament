@@ -7,7 +7,10 @@ endif; ?>
 <html lang="de">
 <head>
     <meta charset="utf-8">
-    <?php echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false) ?>
+    <?php 
+        /*echo $this->headTitle('ZF2 '. $this->translate('Skeleton Application'))->setSeparator(' - ')->setAutoEscape(false)*/
+        echo $this->headTitle('League of Legends Tournament - RWTH Gaming Group');
+    ?>
 
     <?php echo $this->headMeta()
         ->appendName('viewport', 'width=device-width, initial-scale=1.0')
@@ -15,7 +18,7 @@ endif; ?>
     ?>
 
     <!-- Le styles -->
-    <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'))
+    <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/png', 'href' => $this->basePath() . '/img/rwthgg_icon.png'))
                     ->prependStylesheet($this->basePath() . '/css/style.css')
                     ->prependStylesheet($this->basePath() . '/css/iconselect.css')
                     ->prependStylesheet($this->basePath() . '/css/template.css') ?>
@@ -53,30 +56,20 @@ endif; ?>
 			<div>
 				<ul>
 					<li id="facebook"> <!-- Turniergruppe -->
-						<a target="_blank" href="https://www.facebook.com/groups/339517166200659/">facebook</a>
+						<a target="_blank" href="https://www.facebook.com/groups/783094445105479/">facebook</a>
 					</li>
-					<li id="googleplus"> <!-- Communitygruppe -->
-						<a target="_blank" href="https://www.facebook.com/groups/439327219510270/">RWTH GG</a>
+					<li id="googleplus"> <!-- RWTHGG Facebookseite -->
+						<a target="_blank" href="https://www.facebook.com/rwthgg">RWTH Gaming Group</a>
 					</li>
-					<li id="bitstars">
+					<!--<li id="bitstars">
 						<a target="_blank" href="http://www.bitstars.com">Bitstars</a>
-					</li>
+					</li>-->
 					<li id="fachschaft">
 						<a target="_blank" href="http://www.fsmpi.rwth-aachen.de">Fachschaft</a>
 					</li>					
-					
-					<!--li id="facebook">
-						<a target="_blank" href="https://www.facebook.com/groups/439327219510270/">facebook</a>
-					</li -->
-					<!-- li id="twitter">
-						<a href="http://freewebsitetemplates.com/go/twitter/">twitter</a>
-					</li>
-					<li id="googleplus" style="height: 73px">
-						<a href="http://freewebsitetemplates.com/go/googleplus/">googleplus</a>
-					</li -->
 				</ul>
 				<p>
-					League of Legends AK isn’t endorsed by Riot Games and doesn’t reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.
+					Events managed by the RWTH Gaming Group, the RWTH Gaming Group itself and this page are not endorsed by Riot Games and do not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc. League of Legends © Riot Games, Inc.
 				</p>
 			</div>
 		</div>
