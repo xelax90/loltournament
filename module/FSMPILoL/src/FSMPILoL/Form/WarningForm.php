@@ -55,12 +55,6 @@ class WarningForm  extends Form implements InputFilterProviderInterface {
 					array('name' => 'Int'),
 				),
 			),
-			'warning_id' => array(
-				'required' => true,
-				'filters' => array(
-					array('name' => 'Int'),
-				),
-			),
 			'comment' => array(
 				'required' => true,
 				'filters' => array(
