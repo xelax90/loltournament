@@ -217,7 +217,7 @@ class TournamentController extends AbstractActionController
 							$viewMessages['zeitmeldung_success'] .= '. WARNUNG: Sie stimmt nicht mit der eingetragenen Zeit des Gegerteams überein!';
 						}
 					}
-				} else {
+				} elseif(isset($data['anmerkung'])) {
 					if($this->validateErgebnisreport($formIndex['ergebnis'], $data)){
 						$data = $formIndex['ergebnis']->getData();
 						$uploaddir = './public/img/uploads/';
@@ -347,7 +347,7 @@ class TournamentController extends AbstractActionController
 		$form->setData($data);
 		$em = $this->getEntitymanager();
 		$identity = $this->zfcUserAuthentication()->getIdentity();
-		$player = $identity->getPlayer($tournament);
+		$player = $identity->getPlayer($this->getTournament());
 		$team = $player->getTeam();
 		$group = $team->getGroup();
 		
@@ -359,7 +359,7 @@ class TournamentController extends AbstractActionController
 		}
 
 		if(empty($data['match_id'])){
-			$time->setMessages(array("Match nicht gewählt"));
+			$anmerkung->setMessages(array("Match nicht gewählt"));
 			return false;
 		} 
 		
@@ -403,11 +403,11 @@ class TournamentController extends AbstractActionController
 				return false;
 			}
 			
-			if($data[$ergebnisName] == '1-0' || $data[$ergebnisName] == '+--')
+			if ($data[$ergebnisName] == '1-0' || $data[$ergebnisName] == '+--') {
 				$sumH++;
-			elseif($data[$ergebnisName] == '0-1' || $data[$ergebnisName] == '--+')
+			} elseif ($data[$ergebnisName] == '0-1' || $data[$ergebnisName] == '--+') {
 				$sumG++;
-			
+			}
 		}
 		
 		if($sumH > $maxPoints || $sumG > $maxPoints){
@@ -422,27 +422,29 @@ class TournamentController extends AbstractActionController
 	
 	public function myteamAction(){
 		$this->authenticate();
-		$request = $this->getRequest();
-		$em = $this->getEntitymanager();
 		$tournament = $this->getTournament();
-		if(!$tournament)
+		if (!$tournament) {
 			return $this->redirect()->toRoute('teams');
-		
-		if(!$this->zfcUserAuthentication()->hasIdentity())
+		}
+
+		if (!$this->zfcUserAuthentication()->hasIdentity()) {
 			return $this->redirect()->toRoute('teams');
-		
+		}
+
 		$identity = $this->zfcUserAuthentication()->getIdentity();
 		$player = $identity->getPlayer($tournament);
 		
 		if($player){
 			$team = $player->getTeam();
-			if($team)
+			if ($team) {
 				$group = $team->getGroup();
+			}
 		}
 		
-		if(!$player | !$team | !$group)
+		if (!$player | !$team | !$group) {
 			return $this->redirect()->toRoute('teams');
-		
+		}
+
 		$this->setAPIData();
 		
 		return new ViewModel(array('tournament' => $tournament, 'team' => $team));
