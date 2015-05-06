@@ -199,10 +199,10 @@ class TournamentController extends AbstractActionController
 						$isConflict = false;
 						if($isHome){
 							$match->setTimeHome($date);
-							$isComplete = !empty($match->getTimeGuest());
+							$isComplete = !empty($match->getTimeGuest()) && $match->getTimeGuest()->format('Y') > 0;
 						} else {
 							$match->setTimeGuest($date);
-							$isComplete = !empty($match->getTimeHome());
+							$isComplete = !empty($match->getTimeHome()) && $match->getTimeHome()->format('Y') > 0;
 						}
 						
 						if($isComplete){
