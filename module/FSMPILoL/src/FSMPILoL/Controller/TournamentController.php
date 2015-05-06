@@ -164,6 +164,11 @@ class TournamentController extends AbstractActionController
 						$data['time'] = $match->$timeGetter()->format('Y-m-d\TH:i:s');
 					$zeitForm->setData($data);
 					
+					if($isHome){
+						$anmerkungGetter = 'getAnmerkungHome';
+					} else {
+						$anmerkungGetter = 'getAnmerkungGuest';
+					}
 					$ergebnisForm = new ErgebnismeldungForm($match, $team);
 					$data = array('match_id' => $match->getId());
 					foreach($match->getGames() as $game){
@@ -171,6 +176,9 @@ class TournamentController extends AbstractActionController
 							$data['ergebnis_'.$game->getId()] = $game->getMeldungHome();
 						} elseif(!$isHome && !empty($game->getMeldungGuest()) ) {
 							$data['ergebnis_'.$game->getId()] = $game->getMeldungGuest();
+						}
+						if(!empty($game->$anmerkungGetter())){
+							$data['anmerkung'] = $game->$anmerkungGetter();
 						}
 					}
 					$ergebnisForm->setData($data);
@@ -223,14 +231,21 @@ class TournamentController extends AbstractActionController
 						$uploaddir = './public/img/uploads/';
 						$match = $em->getRepository('FSMPILoL\Entity\Match')->find((int)$data['match_id']);
 						$isHome = $team == $match->getTeamHome();
+						$anmerkungSet = false;
 						foreach($match->getGames() as $game){
 							$ergebnis = $data['ergebnis_'.$game->getId()];
+							if(!$anmerkungSet){
+								if($isHome){
+									$game->setAnmerkungHome($data['anmerkung']);
+								} else {
+									$game->setAnmerkungGuest($data['anmerkung']);
+								}
+								$anmerkungSet = true;
+							}
 							if($isHome){
 								$game->setMeldungHome($ergebnis);
-								$game->setAnmerkungHome($data['anmerkung']);
 							} else {
 								$game->setMeldungGuest($ergebnis);
-								$game->setAnmerkungGuest($data['anmerkung']);
 							}
 							$split = explode('-', $ergebnis);
 							
