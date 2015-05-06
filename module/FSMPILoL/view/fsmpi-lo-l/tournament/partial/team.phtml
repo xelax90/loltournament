@@ -50,7 +50,7 @@
 			<?= $this->showScore ? '('.$team->getScore().')' : '' ?> 
 			<?= $this->showFarberwartung ? $team->getData()->getFarberwartung() : '' ?>
 			<?php foreach($warnings as $warning): ?>
-			<img src="<?= $this->basePath() ?>/img/control/yellowcard.png" alt="<?= $warning->getComment(); ?>" title="<?= $warning->getComment(); ?>">
+			<img src="<?= $this->basePath() ?>/img/control/yellowcard.png" alt="<?= $warning->getComment(); ?>" title="<?= $warning->getComment(); ?>" style="height: 20px; vertical-align: top;">
 			<?php endforeach; ?>
 		</div>
 		<div class="players" <?= $playersId ?>>
