@@ -13,7 +13,7 @@
 
 $form = $this->form;
 $form->prepare();
-$form->setAttribute('action', $this->url('zfcadmin/teams/anmerkung', array('team_id' => $this->id)));
+$form->setAttribute('action', $this->url('zfcadmin/teams/warn', array('team_id' => $this->team->getId())));
 $form->setAttribute('method', 'post');
 ?>
 
