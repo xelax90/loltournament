@@ -126,6 +126,7 @@ class TeamAdminController extends AbstractTournamentAdminController{
 				$warning = new Warning();
 				$warning->setTeam($team);
 				$warning->setComment($data['comment']);
+				$em->persist($warning);
 				$em->flush();
 				return $this->_redirectToTeams();
 			}
@@ -156,6 +157,7 @@ class TeamAdminController extends AbstractTournamentAdminController{
 				$warning = new Warning();
 				$warning->setPlayer($player);
 				$warning->setComment($data['comment']);
+				$em->persist($warning);
 				$em->flush();
 				return $this->_redirectToTeams();
 			}
