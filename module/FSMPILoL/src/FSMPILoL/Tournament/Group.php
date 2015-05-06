@@ -5,7 +5,7 @@ use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use FSMPILoL\Entity\Group AS GroupEntity;
 use DateTime;
-use FSMPILoL\Riot\RiotAPi;
+use FSMPILoL\Riot\RiotAPI;
 use FSMPILoL\Tournament\Summonerdata;
 
 class Group {
@@ -30,7 +30,7 @@ class Group {
 	/** @var array */
 	protected $summoners;
 	
-	/** @var RiotAPi */
+	/** @var RiotAPI */
 	protected $api;
 	
 	protected function getServiceLocator(){

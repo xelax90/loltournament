@@ -5,7 +5,7 @@ use FSMPILoL\Options\APIOptions;
 use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class RiotAPi {
+class RiotAPI {
 	private static $apiProtocol = 'https';
 	private static $apiUrl = "api.pvp.net";
 	private static $requestCount = 0;
