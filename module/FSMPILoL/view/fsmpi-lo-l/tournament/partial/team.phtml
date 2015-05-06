@@ -50,7 +50,7 @@
 			<?= $this->showScore ? '('.$team->getScore().')' : '' ?> 
 			<?= $this->showFarberwartung ? $team->getData()->getFarberwartung() : '' ?>
 			<?php foreach($warnings as $warning): 
-				$warnJs = "if(confirm('Verwarnung löschen?')){ window.location='".$this->url('zfcadmin/teams/deleteWarning', array('team_id' => $team->getId(), 'warning_id' => $warning->getId()))."'; }";
+				$warnJs = "if(confirm('Verwarnung löschen?')){ window.location='".$this->url($this->deleteWarningRoute, array('team_id' => $team->getId(), 'warning_id' => $warning->getId()))."'; }";
 			?>
 			<img onclick="<?= $warnJs ?>" src="<?= $this->basePath() ?>/img/control/yellowcard.png" alt="<?= $warning->getComment(); ?>" title="<?= $warning->getComment(); ?>" style="height: 20px; vertical-align: top;">
 			<?php endforeach; ?>
