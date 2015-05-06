@@ -1,8 +1,21 @@
 <?php 
 /** @var $player \FSMPILoL\Entity\Player */
 $player = $this->player; 
+
+$iconId = 0;
+$rankedWins = 0;
+$level = 0;
+$tier = 'Unranked';
+$normalWins = 0;
+if(!empty($player->getAnmeldung()->getSummonerdata())){
+	$iconId = $player->getAnmeldung()->getSummonerdata()->getProfileIconId();
+	$rankedWins = $player->getAnmeldung()->getSummonerdata()->getRankedWins();
+	$level = $player->getAnmeldung()->getSummonerdata()->getLevel();
+	$normalWins = $player->getAnmeldung()->getSummonerdata()->getNormalWins();
+	$tier = $player->getAnmeldung()->getSummonerdata()->getTier();
+}
 ?>
-<div class="player" style="margin: 0  0 10px 0; background-image: url('<?= $this->fsmpiLoLDDragon()->profileIcon($player->getAnmeldung()->getSummonerdata()->getProfileIconId()) ?>'); <?= $this->addStyles ?: '' ?>">
+<div class="player" style="margin: 0  0 10px 0; background-image: url('<?= $this->fsmpiLoLDDragon()->profileIcon($iconId) ?>'); <?= $this->addStyles ?: '' ?>">
 	<?php if(($player->getIsCaptain() && $this->showCaptainContact) || $this->showAllContacts) : ?>
 	<div class="player_summonername <?= $player->getIsCaptain() && $this->showCaptain ? 'captain' : '' ?>"><?= $player->getAnmeldung()->getName() ?></div>
 	<div class="<?= $this->showEmailRight ? 'player_rankedWins' : 'player_level' ?>">
@@ -18,13 +31,13 @@ $player = $this->player;
 	<div class="player_summonername <?= $player->getIsCaptain() && $this->showCaptain ? 'captain' : '' ?>"><?= $player->getAnmeldung()->getSummonerName() ?></div>
 	
 	<?php if($this->showWins) : ?>
-	<div class="player_rankedWins">Ranked: <?= $player->getAnmeldung()->getSummonerdata()->getRankedWins() ?> Siege</div>
+	<div class="player_rankedWins">Ranked: <?= $rankedWins ?> Siege</div>
 	<?php endif; ?>
 	
-	<div class="player_level">Level <?= $player->getAnmeldung()->getSummonerdata()->getLevel() ?>, <?= $player->getAnmeldung()->getSummonerdata()->getTier() ?></div>
+	<div class="player_level">Level <?= $level ?>, <?= $tier ?></div>
 	
 	<?php if($this->showWins) : ?>
-	<div class="player_normalWins">Normal: <?= $player->getAnmeldung()->getSummonerdata()->getNormalWins() ?> Siege</div>
+	<div class="player_normalWins">Normal: <?= $normalWins ?> Siege</div>
 	<?php endif; ?>
 	
 	<?php if($player->getIsCaptain() && $this->showCaptain) : ?>
