@@ -315,6 +315,44 @@ return array(
 									)
 				                ),
 							),
+							'warn' => array(
+				                'type' => 'literal',
+				                'options' => array(
+				                    'route'    => '/warn',
+									'defaults' => array(
+										'controller' => 'teamadmin',
+										'action' => 'warn',
+									)
+				                ),
+							),
+							'warnPlayer' => array(
+				                'type' => 'segment',
+				                'options' => array(
+				                    'route'    => '/warnPlayer/:player_id',
+									'defaults' => array(
+										'controller' => 'teamadmin',
+										'action' => 'warnPlayer',
+										'player_id' => 0,
+									),
+									'constraints' => array(
+										'player_id'         => '[0-9]*',
+									),
+				                ),
+							),
+							'deleteWarning' => array(
+				                'type' => 'segment',
+				                'options' => array(
+				                    'route'    => '/deleteWarning/:warning_id',
+									'defaults' => array(
+										'controller' => 'teamadmin',
+										'action' => 'deleteWarning',
+										'warning_id' => 0,
+									),
+									'constraints' => array(
+										'warning_id'         => '[0-9]*',
+									),
+				                ),
+							),
 						),
 					),
 					'myteams' => array(
