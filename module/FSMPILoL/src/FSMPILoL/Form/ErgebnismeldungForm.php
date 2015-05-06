@@ -97,7 +97,7 @@ class ErgebnismeldungForm extends Form implements InputFilterProviderInterface{
 					array('name' => 'StripTags')
 				),
 				'validators' => array(
-					array('name' => 'InArray', array('haystack' => $this->ergebnisse)),
+					array('name' => 'InArray', 'options' => array('haystack' => $this->ergebnisse)),
 				)
 			);
 			

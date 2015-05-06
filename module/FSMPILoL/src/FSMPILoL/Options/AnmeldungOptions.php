@@ -6,7 +6,7 @@ use Zend\Stdlib\AbstractOptions;
 class AnmeldungOptions extends AbstractOptions
 {
 	protected $iconDir = './public/img/teamIcons/';
-	protected $tournamentId = 4;
+	protected $tournamentId = 6;
  
 	public function getIconDir() { return $this->iconDir; }
     public function setIconDir($iconDir) { $this->iconDir = $iconDir; }
