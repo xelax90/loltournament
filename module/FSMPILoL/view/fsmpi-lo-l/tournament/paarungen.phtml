@@ -5,9 +5,7 @@ $tournament = $this->tournament;
 $identity = $this->zfcUserIdentity();
 $isAdmin = !empty($identity) && $identity->getRole() <= User::ROLE_ADMIN;
 $debug = false;
-
-		if(!$identity || $identity->getRole() <= User::ROLE_MODERATOR || true) :
-		?>
+?>
 		<div class="anmeldung ergebnisse">
 			<div class="content">
 				<ul class="paarungen">
@@ -56,7 +54,7 @@ $debug = false;
 													'playerOptions' => array(
 														'addStyles' => '',
 														'showCaptain' => true,
-														'showCaptainContact' => false,
+														'showCaptainContact' => !empty($identity->getPlayer($tournament)) && !empty($identity->getPlayer($tournament)->getTeam()),
 														'showAllContacts' => false,
 														'showWins' => false
 													)
@@ -75,4 +73,3 @@ $debug = false;
 				</ul>
 			</div>
 		</div>
-<?php endif;
