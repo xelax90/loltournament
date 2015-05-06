@@ -59,6 +59,11 @@ class Player implements InputFilterAwareInterface, JsonSerializable
 	 */
 	protected $user;
 	
+	/**
+     * @ORM\OneToMany(targetEntity="Warning", mappedBy="player")
+	 */
+	protected $warnings;
+	
 	// Data loaded by api
 	protected $level;
 	protected $tier;
@@ -132,6 +137,15 @@ class Player implements InputFilterAwareInterface, JsonSerializable
 		return $this->getAnmeldung()->getSummonerdata()->getScore($refresh);
 	}
 	
+	public function getWarnings() {
+		return $this->warnings;
+	}
+
+	public function setWarnings($warnings) {
+		$this->warnings = $warnings;
+		return $this;
+	}
+
 	/**
 	 * Populate from an array.
 	 *

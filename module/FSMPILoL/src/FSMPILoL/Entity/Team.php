@@ -76,6 +76,11 @@ class Team implements InputFilterAwareInterface, JsonSerializable
 	 */
 	protected $players;
 	
+	/**
+     * @ORM\OneToMany(targetEntity="Warning", mappedBy="team")
+	 */
+	protected $warnings;
+	
 	protected $data;
 
 	public function getId(){
@@ -124,6 +129,15 @@ class Team implements InputFilterAwareInterface, JsonSerializable
 
 	public function setIcon($icon){
 		$this->icon = $icon;
+	}
+	
+	public function getWarnings() {
+		return $this->warnings;
+	}
+	
+	public function setWarnings($warnings) {
+		$this->warnings = $warnings;
+		return $this;
 	}
 	
 	/**

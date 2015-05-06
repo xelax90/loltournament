@@ -38,9 +38,21 @@
 			$playersId = ' id="'.$playersId.'" ';
 		}
 		
+		$warnings = array();
+		if(!empty($this->showWarnings)){
+			$warnings = $team->getWarnings();
+		}
 	?>
 	<div class="team <?= $teamSide ?>" style="background-image: url('<?= $this->basePath() ?>/img/teamIcons/<?= $team->getIcon() ?>')">
-		<div class="teamname" <?= $js ?>><?= $team->getName() ?> (<?= $team->getData()->getPoints() ?>) <?= $this->showScore ? '('.$team->getScore().')' : '' ?> <?= $this->showFarberwartung ? $team->getData()->getFarberwartung() : '' ?></div>
+		<div class="teamname" <?= $js ?>>
+			<?= $team->getName() ?> 
+			(<?= $team->getData()->getPoints() ?>) 
+			<?= $this->showScore ? '('.$team->getScore().')' : '' ?> 
+			<?= $this->showFarberwartung ? $team->getData()->getFarberwartung() : '' ?>
+			<?php foreach($warnings as $warning): ?>
+			<img src="<?= $this->basePath() ?>/img/control/yellowcard.png" alt="<?= $warning->getComment(); ?>" title="<?= $warning->getComment(); ?>">
+			<?php endforeach; ?>
+		</div>
 		<div class="players" <?= $playersId ?>>
 	<?php
 		foreach($team->getPlayers() as $player):
