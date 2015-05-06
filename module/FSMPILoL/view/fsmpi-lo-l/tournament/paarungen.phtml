@@ -54,7 +54,7 @@ $debug = false;
 													'playerOptions' => array(
 														'addStyles' => '',
 														'showCaptain' => true,
-														'showCaptainContact' => !empty($identity->getPlayer($tournament)) && !empty($identity->getPlayer($tournament)->getTeam()),
+														'showCaptainContact' => !empty($identity) && !empty($identity->getPlayer($tournament)) && !empty($identity->getPlayer($tournament)->getTeam()),
 														'showAllContacts' => false,
 														'showWins' => false
 													)
