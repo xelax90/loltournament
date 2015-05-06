@@ -27,7 +27,7 @@ class WarningForm  extends Form implements InputFilterProviderInterface {
 		
 		$this->add(array(
 			'name' => 'comment',
-			'type' => 'Text',
+			'type' => 'Textarea',
 			'options' => array(
 				'label' => 'Comment',
 			),

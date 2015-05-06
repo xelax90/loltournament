@@ -38,7 +38,7 @@ class Warning implements InputFilterAwareInterface, JsonSerializable
  	
 	/**
      * @ORM\ManyToOne(targetEntity="Player")
-	 * @ORM\JoinColumn(name="team_id", referencedColumnName="id", onDelete="SET NULL")
+	 * @ORM\JoinColumn(name="player_id", referencedColumnName="id", onDelete="SET NULL")
 	 */
 	protected $player;
  	
