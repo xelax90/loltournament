@@ -37,18 +37,18 @@ abstract class AbstractAdminController extends AbstractActionController
 	 * @return boolean
 	 */
 	protected function authenticate(){
-		if($this->zfcUserAuthentication()->hasIdentity()){
-			return $this->zfcUserAuthentication()->getIdentity()->getRole() <= User::ROLE_MODERATOR;
+		if(!$this->zfcUserAuthentication()->hasIdentity()){
+			$adapter = $this->zfcUserAuthentication()->getAuthAdapter();
+			$adapter->prepareForAuthentication($this->getRequest());
+			$this->zfcUserAuthentication()->getAuthService()->authenticate($adapter);
 		}
 		
-        $adapter = $this->zfcUserAuthentication()->getAuthAdapter();
-        $adapter->prepareForAuthentication($this->getRequest());
-        $this->zfcUserAuthentication()->getAuthService()->authenticate($adapter);
-		
-		if($this->zfcUserAuthentication()->hasIdentity()){
-			return $this->zfcUserAuthentication()->getIdentity()->getRole() <= User::ROLE_MODERATOR;
+		if(!$this->zfcUserAuthentication()->hasIdentity()){
+			$this->redirect()->toRoute('zfcuser/login');
+			return false;
 		}
-		return false;
+		
+		return true;
 	}
 
 }

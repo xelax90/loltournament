@@ -68,7 +68,7 @@ foreach($groups as $group):
 							);
 						}
 						
-						if($this->zfcUserIdentity()->getRole() <= \FSMPILoL\Entity\User::ROLE_ADMIN){
+						if($this->isAllowed('route/zfcadmin/runden/edit/delete')){
 							$buttons[] = array(
 								'title' => "L&ouml;schen",
 								'route' => 'zfcadmin/runden/edit/delete',

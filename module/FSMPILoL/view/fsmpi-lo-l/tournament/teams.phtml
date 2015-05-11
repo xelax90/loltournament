@@ -1,15 +1,3 @@
-<?php
-use FSMPILoL\Entity\User;
-
-$identity = $this->zfcUserIdentity();
-
-$isAdmin = false;
-$isModerator = false;
-if(!empty($identity)){
-	$isAdmin = $identity->getRole() <= User::ROLE_ADMIN;
-	$isModerator = $identity->getRole() <= User::ROLE_MODERATOR;
-}
-?>
 <div class="anmeldung teams">
 	<div class="content">
 		<ul>
@@ -19,25 +7,15 @@ if(!empty($identity)){
 				foreach($tournament->getGroups() as $group) : 
 					$c = 0;
 					foreach($group->getTeams() as $team):
-						if($team->getIsBlocked())
+						if($team->getIsBlocked()){
 							continue;
-						// If ID is set
-						$isIDAnmeldungTeam = false;
-						/* TODO
-						if(!empty($idAnmeldung)){
-							foreach($team->players as $player){
-								if($player->urlid == $idAnmeldung){
-									$isIDAnmeldungTeam = true;
-								}
-							}
 						}
-						*/
-						
+						$showContacts = $this->fsmpiLoLTournamentPermission()->isAllowed('viewContacts', $team);
 				?>
-				<li style="margin-right: <?= (1 - $c % 2) * 20 ?>px; <?= empty($identity) || $isAdmin ? '' : "width: 920px; margin-right: 0px;" ?> ">
-					<div class="header" <?= $isModerator && $team->hasCaptain() ? 'style="border-color: green;"' : '' ?>>
+				<li style="margin-right: <?= (1 - $c % 2) * 20 ?>px; <?= $showContacts ? '' : "width: 920px; margin-right: 0px;" ?> ">
+					<div class="header" <?= $this->isAllowed('tournament', 'debug/moderator') && $team->hasCaptain() ? 'style="border-color: green;"' : '' ?>>
 						<b><img style="width: 52px; vertical-align: middle; margin-right: 10px;" src="<?= $this->basePath() ?>/img/teamIcons/<?= $team->getIcon() ?>"><?php echo $team->getName() ?></b>
-						<?= $isAdmin ? '<div style="clear: left">'.$team->getAnsprechpartner().'</div>' : ''; ?>
+						<?= $this->isAllowed('tournament', 'debug/moderator') ? '<div style="clear: left">'.$team->getAnsprechpartner().'</div>' : ''; ?>
 					</div>
 					<div class="article">
 						<div class="players">
@@ -47,10 +25,10 @@ if(!empty($identity)){
 								foreach($players as $player){
 									echo $this->partial('fsmpi-lo-l/tournament/partial/player.phtml', array(
 										'player' => $player,
-										'addStyles' => empty($identity) ? '' : "min-height: 57px; padding-top: 0px;",
+										'addStyles' => $showContacts ? '' : "min-height: 57px; padding-top: 0px;",
 										'showCaptain' => true,
-										'showCaptainContact' => !empty($identity),
-										'showAllContacts' => $isAdmin,
+										'showCaptainContact' => $this->fsmpiLoLTournamentPermission()->isAllowed('viewCaptain', $team),
+										'showAllContacts' => $showContacts,
 										'showWins' => true,
 										'showEmailRight' => true
 									));
@@ -76,7 +54,7 @@ if(!empty($identity)){
 								'addStyles' => 'margin: 0  0 10px 0; ',
 								'showCaptain' => false,
 								'showCaptainContact' => false,
-								'showAllContacts' => !empty($identity),
+								'showAllContacts' => $this->fsmpiLoLTournamentPermission()->isAllowed('viewSubContacts', $tournament),
 								'showWins' => true,
 								'showEmailRight' => true
 							));

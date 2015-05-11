@@ -148,7 +148,7 @@ class Group {
 		$cache = $this->getCache();
 		
 		$cacheKey = $this->getCacheKey();
-		if($cache->hasItem($cacheKey) && !$cache->itemHasExpired($cacheKey)){
+		if($cache->hasItem($cacheKey) && !$cache->itemHasExpired($cacheKey) || true){
 			$teamdata = unserialize($cache->getItem($cacheKey));
 			$teams = $this->getGroup()->getTeams();
 			foreach($teamdata as $r => $data){
@@ -308,7 +308,7 @@ class Group {
 		
 		$cache = $this->getServiceLocator()->get('FSMPILoL\SummonerdataCache');
 		$cacheKey = $this->getSummonerCacheKey();
-		if($cache->hasItem($cacheKey) && !$cache->itemHasExpired($cacheKey)){
+		if($cache->hasItem($cacheKey) && !$cache->itemHasExpired($cacheKey) || true){
 			$summonerdata = unserialize($cache->getItem($cacheKey));
 		} else {
 			$summoners = $this->getTournamentSummoners();

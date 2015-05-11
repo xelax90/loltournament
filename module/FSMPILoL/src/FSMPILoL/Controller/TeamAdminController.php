@@ -77,8 +77,7 @@ class TeamAdminController extends AbstractTournamentAdminController{
 			return $this->_redirectToTeams();
 		}
 		
-		$identity = $this->zfcUserAuthentication()->getIdentity();
-		if($identity->getRole() <= User::ROLE_ADMIN || $team->getAnsprechpartner() == $identity){
+		if($this->fsmpiLoLTournamentPermission()->isAllowed('edit', $team)){
 			$team->setIsBlocked(true);
 			$em->flush();
 		}
@@ -98,8 +97,10 @@ class TeamAdminController extends AbstractTournamentAdminController{
 			return $this->_redirectToTeams();
 		}
 		
-		$team->setIsBlocked(false);
-		$em->flush();
+		if($this->fsmpiLoLTournamentPermission()->isAllowed('edit', $team)){
+			$team->setIsBlocked(false);
+			$em->flush();
+		}
 		return $this->_redirectToTeams();
 	}
 	
@@ -119,7 +120,7 @@ class TeamAdminController extends AbstractTournamentAdminController{
 		
         /** @var $request \Zend\Http\Request */
         $request = $this->getRequest();
-		if ($request->isPost()) {
+		if ($request->isPost() && $this->fsmpiLoLTournamentPermission()->isAllowed('edit', $team)) {
 			$form->setData($request->getPost());
 			if ($form->isValid()) {
 				$data = $form->getData();
@@ -150,7 +151,7 @@ class TeamAdminController extends AbstractTournamentAdminController{
 		
         /** @var $request \Zend\Http\Request */
         $request = $this->getRequest();
-		if ($request->isPost()) {
+		if ($request->isPost() && $this->fsmpiLoLTournamentPermission()->isAllowed('edit', $player->getTeam())) {
 			$form->setData($request->getPost());
 			if ($form->isValid()) {
 				$data = $form->getData();
@@ -172,13 +173,15 @@ class TeamAdminController extends AbstractTournamentAdminController{
 		}
         $warning_id = $this->getEvent()->getRouteMatch()->getParam('warning_id');
 		$em = $this->getEntityManager();
-		/* @var $team \FSMPILoL\Entity\Warning */
+		/* @var $warning \FSMPILoL\Entity\Warning */
 		$warning = $em->getRepository('FSMPILoL\Entity\Warning')->find((int)$warning_id);
 		if(!$warning){
 			return $this->_redirectToTeams();
 		}
-		$em->remove($warning);
-		$em->flush();
+		if($this->fsmpiLoLTournamentPermission()->isAllowed('edit', $warning->getTeam())){
+			$em->remove($warning);
+			$em->flush();
+		}
 		return $this->_redirectToTeams();
 	}
 }

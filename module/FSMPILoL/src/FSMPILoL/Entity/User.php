@@ -15,48 +15,30 @@ use FSMPILoL\Entity\Tournament;
  */
 class User extends ZfcUserEntity implements JsonSerializable
 {
-	const ROLE_ADMIN = 10;
-	const ROLE_MODERATOR = 20;
-	const ROLE_STREAMER = 25;
-	const ROLE_REPORTER = 30;
-	
-	public static function getRoles(){
-		return self::$roles;
-	}
-	
-	protected static $roles = array(
-		self::ROLE_ADMIN => 'Admin', 
-		self::ROLE_MODERATOR => 'Moderator', 
-		self::ROLE_STREAMER => 'Streamer', 
-		self::ROLE_REPORTER => 'Reporter'
-	);
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     * @ORM\ManyToMany(targetEntity="Role")
+     * @ORM\JoinTable(name="user_role_linker",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="user_id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
+     * )
+     */
+    protected $roles;
 
 	/**
-	 * @ORM\Column(type="integer")
+	 * @ORM\Column(type="string", nullable=true)
 	 */
-	public $role;
+	protected $jabber;
 
 	/**
-	 * @ORM\Column(type="string")
+	 * @ORM\Column(type="string", nullable=true)
 	 */
-	public $jabber;
-
-	/**
-	 * @ORM\Column(type="string")
-	 */
-	public $phone;
+	protected $phone;
 	
 	/**
 	 * @ORM\OneToMany(targetEntity="Player", mappedBy="user")
 	 */
 	protected $players;
-	
-    /**
-     * Get role.
-     *
-     * @return int
-     */
-	public function getRole(){ return $this->role; }
 
     /**
      * Get role name.
@@ -64,9 +46,15 @@ class User extends ZfcUserEntity implements JsonSerializable
      * @return string
      */
 	public function getRoleName(){ 
-		if(array_key_exists($this->role, self::$roles)) 
-			return self::$roles[$this->role]; 
-		return "";
+		$res = "";
+		$roles = $this->getRoles();
+		foreach($roles as $role){
+			if(!empty($res)){
+				$res .= ", ";
+			}
+			$res .= $role->getRoleId();
+		}
+		return $res;
 	}
 
     /**
@@ -82,14 +70,6 @@ class User extends ZfcUserEntity implements JsonSerializable
      * @return string
      */
 	public function getPhone(){ return $this->phone; }
-
-    /**
-     * Set role.
-     *
-     * @param int $role
-     * @return UserInterface
-     */
-	public function setRole($role){ $this->role = $role; return $this; }
 
     /**
      * Set jabber.
@@ -116,6 +96,28 @@ class User extends ZfcUserEntity implements JsonSerializable
 		return null;
 	}
 	
+    /**
+     * Get roles
+     *
+     * @return array
+     */
+    public function getRoles()
+    {
+        return $this->roles->getValues();
+    }
+
+    /**
+     * Add a role to the user.
+     *
+     * @param Role $role
+     *
+     * @return void
+     */
+    public function addRole($role)
+    {
+        $this->roles[] = $role;
+    }
+	
 	public function getArrayCopy(){
 		return $this->jsonSerialize();
 	}
@@ -135,8 +137,8 @@ class User extends ZfcUserEntity implements JsonSerializable
 			'username' => $this->getUsername(),
 			'email' => $this->getEmail(),
 			'displayname' => $this->getDisplayName(),
+			'roles' => $this->getRoles(),
 			'state' => $this->getState(),
-			'role' => $this->getRole(),
 			'jabber' => $this->getJabber(),
 			'phone' => $this->getPhone(),
 		);

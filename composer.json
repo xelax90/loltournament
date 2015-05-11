@@ -17,10 +17,11 @@
 		"articus/zf2-bower-module" : "dev-master",
 		"doctrine/doctrine-module" : "*",
 		"doctrine/doctrine-orm-module": "*",
-        "doctrine/data-fixtures": "*",
-        "hounddog/doctrine-data-fixture-module": "*",
 		"zf-commons/zfc-user": "1.*",
 		"zf-commons/zfc-user-doctrine-orm": "dev-master",
+        "bjyoungblood/bjy-authorize": "*",
+        "doctrine/data-fixtures": "dev-master",
+        "hounddog/doctrine-data-fixture-module": "dev-master",
 		"zf-commons/zfc-admin" : "dev-master",
 		"danielss89/zfc-user-admin" : "dev-master",
 		"xelax90/zf2-filter-htmlpurifier" : "*"

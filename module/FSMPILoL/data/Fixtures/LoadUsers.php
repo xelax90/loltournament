@@ -102,8 +102,10 @@ class LoadUsers extends AbstractFixture implements FixtureInterface, ServiceLoca
 			),
 		);
 		
+		$role = $this->getReference('admin-role');
+		
+		
         $zfcUserOptions = $this->getZfcUserOptions();
-		// create user schurix@gmx.de with password schurix
 		foreach($users as $user){
 			$u = new User();
 			$u->setId($user['id']);
@@ -111,7 +113,7 @@ class LoadUsers extends AbstractFixture implements FixtureInterface, ServiceLoca
 			$u->setEmail($user['email']);
 			$u->setDisplayName($user['name']);
 			$u->setUsername(null);
-			$u->setRole(User::ROLE_ADMIN);
+			$u->addRole($role);
 			$u->setState(1);
 
 			$bcrypt = new Bcrypt;
@@ -140,7 +142,7 @@ class LoadUsers extends AbstractFixture implements FixtureInterface, ServiceLoca
 	}
 
 	public function getDependencies() {
-		return array('SkelletonApplication\Fixtures\LoadUserRoles');
+		return array('FSMPILoL\Fixtures\LoadUserRoles');
 	}
 
 }

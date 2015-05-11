@@ -1,6 +1,8 @@
 <?php
 namespace FSMPILoL;
 
+use Zend\ServiceManager\AbstractPluginManager;
+
 return array(
     'controllers' => array(
         'invokables' => array(
@@ -445,6 +447,109 @@ return array(
         ),
     ),
     
+	'bjyauthorize' => array(
+		// resource providers provide a list of resources that will be tracked
+        // in the ACL. like roles, they can be hierarchical
+        'resource_providers' => array(
+            "BjyAuthorize\Provider\Resource\Config" => array(
+                'user' => array(),
+				'tournament' => array(),
+            ),
+        ),
+
+		
+		'rule_providers' => array(
+			"BjyAuthorize\Provider\Rule\Config" => array(
+                'allow' => array(
+					// config for navigation
+                    [['user'],  'user', 'profile'],
+                    [['user'],  'user', 'logout'],
+                    [['user'],  'user', 'changepassword'],
+                    [['guest'], 'user', 'login'],
+                    [['guest'], 'user', 'register'],
+                    [['moderator'],     'tournament', 'round/viewHidden'],
+                    [['moderator'],     'tournament', 'debug/moderator'],
+                    [['administrator'], 'tournament', 'debug/administrator'],
+                ),
+
+                // Don't mix allow/deny rules if you are using role inheritance.
+                // There are some weird bugs.
+                'deny' => array(
+                    // ...
+                ),
+            )
+		),
+		
+		'guards' => array(
+			'BjyAuthorize\Guard\Route' => array(
+				// user
+				['route' => 'zfcuser',                  'roles' => ['guest', 'user'] ],
+				['route' => 'zfcuser/login',            'roles' => ['guest', 'user'] ],
+				['route' => 'zfcuser/register',         'roles' => [] ],
+				['route' => 'zfcuser/authenticate',     'roles' => ['guest'] ],
+				['route' => 'zfcuser/logout',           'roles' => ['guest', 'user'] ],
+				['route' => 'zfcuser/changepassword',   'roles' => ['user'] ],
+				['route' => 'zfcuser/changeemail',      'roles' => ['user'] ],
+				
+				// webpage
+				['route' => 'home',                     'roles' => ['guest', 'user'] ],
+				['route' => 'info',                     'roles' => ['guest', 'user'] ],
+				['route' => 'kontakt',                  'roles' => ['guest', 'user'] ],
+				['route' => 'ergebnisse',               'roles' => ['guest', 'user'] ],
+				['route' => 'paarungen',                'roles' => ['guest', 'user'] ],
+				['route' => 'meldung',                  'roles' => ['user'] ],
+				['route' => 'teams',                    'roles' => ['guest', 'user'] ],
+				['route' => 'myteam',                   'roles' => ['user'] ],
+				['route' => 'anmeldung',                'roles' => ['guest', 'user'] ],
+				['route' => 'anmeldung/form',           'roles' => ['guest', 'user'] ],
+				
+				// modules
+				['route' => 'doctrine_orm_module_yuml', 'roles' => ['administrator'] ],
+				
+				// admin
+				['route' => 'zfcadmin',                      'roles' => ['moderator']],
+				// paarung
+				['route' => 'zfcadmin/paarungen',            'roles' => ['moderator']],
+				['route' => 'zfcadmin/paarungen/block',      'roles' => ['moderator']],
+				['route' => 'zfcadmin/paarungen/unblock',    'roles' => ['moderator']],
+				['route' => 'zfcadmin/paarungen/comment',    'roles' => ['moderator']],
+				['route' => 'zfcadmin/paarungen/setresult',  'roles' => ['moderator']],
+				// runden
+				['route' => 'zfcadmin/runden',               'roles' => ['moderator']],
+				['route' => 'zfcadmin/runden/create',        'roles' => ['administrator']],
+				['route' => 'zfcadmin/runden/setpreset',     'roles' => ['administrator']],
+				['route' => 'zfcadmin/runden/edit',          'roles' => ['administrator']],
+				// teams
+				['route' => 'zfcadmin/teams',                'roles' => ['moderator']],
+				['route' => 'zfcadmin/teams/anmerkung',      'roles' => ['moderator']],
+				['route' => 'zfcadmin/teams/block',          'roles' => ['moderator']],
+				['route' => 'zfcadmin/teams/unblock',        'roles' => ['moderator']],
+				['route' => 'zfcadmin/teams/warn',           'roles' => ['moderator']],
+				['route' => 'zfcadmin/teams/warnPlayer',     'roles' => ['moderator']],
+				['route' => 'zfcadmin/teams/deleteWarning',  'roles' => ['moderator']],
+				// myteams
+				['route' => 'zfcadmin/myteams/block',        'roles' => ['moderator']],
+				['route' => 'zfcadmin/myteams/unblock',      'roles' => ['moderator']],
+				['route' => 'zfcadmin/myteams/warn',         'roles' => ['moderator']],
+				['route' => 'zfcadmin/myteams/warnPlayer',   'roles' => ['moderator']],
+				['route' => 'zfcadmin/myteams/deleteWarning','roles' => ['moderator']],
+				['route' => 'zfcadmin/myteams/anmerkung',    'roles' => ['moderator']],
+			)
+		)
+		
+	),
+	
+	'skelleton_application' => array(
+		'roles' => array(
+			'guest' => array(),
+			'user' => array(
+				'moderator' => array(
+					'administrator' => array() // Admin role must be leaf and must contain 'admin'
+				)
+			)
+		)
+	),
+	
     'service_manager' => array(
         'abstract_factories' => array(
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
@@ -523,6 +628,13 @@ return array(
                 $config = $sm->get('Config');
                 return new Options\RoundCreatorOptions(isset($config['fsmpilol_roundcreator']) ? $config['fsmpilol_roundcreator'] : array());
             },
+			'FSMPILoL\Tournament\Permission' => function($sm){
+				return new Service\Tournament\Permission();
+			},
+			'SkelletionApplication\Options\Application' => function (\Zend\ServiceManager\ServiceManager $sm) {
+                $config = $sm->get('Config');
+                return new Options\SkelletonOptions(isset($config['skelleton_application']) ? $config['skelleton_application'] : array());
+            },
 		),
     ),
     
@@ -553,10 +665,30 @@ return array(
             __DIR__ . '/../view',
         ),
     ),
-
+					
+	'controller_plugins' => array(
+		'factories' => array(
+			'fsmpiLoLTournamentPermission' => function (AbstractPluginManager $pluginManager) {
+				$serviceLocator = $pluginManager->getServiceLocator();
+				$helper = new Controller\Plugin\TournamentPermissionPlugin();
+				$permission = $serviceLocator->get('FSMPILoL\Tournament\Permission');
+				$helper->setPermission($permission);
+				return $helper;
+			},
+		),
+	),
 	'view_helpers' => array(
 		'invokables'=> array(
-			'fsmpiLoLDDragon' => 'FSMPILoL\View\Helper\DDragonHelper'
+			'fsmpiLoLDDragon' => 'FSMPILoL\View\Helper\DDragonHelper',
+		), 
+		'factories' => array(
+			'fsmpiLoLTournamentPermission' => function (AbstractPluginManager $pluginManager) {
+				$serviceLocator = $pluginManager->getServiceLocator();
+				$helper = new View\Helper\TournamentPermissionHelper();
+				$permission = $serviceLocator->get('FSMPILoL\Tournament\Permission');
+				$helper->setPermission($permission);
+				return $helper;
+			}
 		)
 	),
 	'navigation' => array(
@@ -600,6 +732,11 @@ return array(
 					__NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
 				)
 			)
+		),
+		
+		// Fixtures to create admin user and default roles
+		'fixture' => array(
+			'FSMPILoL_fixture' => __DIR__ . '/../data/Fixtures',
 		)
 	),
 	

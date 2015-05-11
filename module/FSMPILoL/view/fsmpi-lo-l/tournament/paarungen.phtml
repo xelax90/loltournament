@@ -1,10 +1,5 @@
 <?php
-use FSMPILoL\Entity\User;
-
 $tournament = $this->tournament;
-$identity = $this->zfcUserIdentity();
-$isAdmin = !empty($identity) && $identity->getRole() <= User::ROLE_ADMIN;
-$debug = false;
 ?>
 		<div class="anmeldung ergebnisse">
 			<div class="content">
@@ -14,7 +9,7 @@ $debug = false;
 					$groupCount = count($tournament->getGroups());
 					foreach($tournament->getGroups() as $group) :
 						foreach($group->getRounds() as $round) : 
-							if($round->getIsHidden() && !$isAdmin){
+							if($round->getIsHidden() && !$this->isAllowed('tournament', 'round/viewHidden')){
 								continue;
 							}
 						?>
@@ -54,7 +49,7 @@ $debug = false;
 													'playerOptions' => array(
 														'addStyles' => '',
 														'showCaptain' => true,
-														'showCaptainContact' => !empty($identity) && !empty($identity->getPlayer($tournament)) && !empty($identity->getPlayer($tournament)->getTeam()),
+														'showCaptainContact' => $this->fsmpiLoLTournamentPermission()->isAllowed('viewCaptain', $match->getTeamHome()) || $this->fsmpiLoLTournamentPermission()->isAllowed('viewCaptain', $match->getTeamGuest()),
 														'showAllContacts' => false,
 														'showWins' => false
 													)

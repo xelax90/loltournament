@@ -1,5 +1,4 @@
 <?php
-$identity = $this->zfcUserIdentity();
 $team = $this->team;
 ?>
 <div class="anmeldung teams">
@@ -19,7 +18,7 @@ $team = $this->team;
 									'addStyles' => '',
 									'showCaptain' => true,
 									'showCaptainContact' => true,
-									'showAllContacts' => true,
+									'showAllContacts' => $this->fsmpiLoLTournamentPermission()->isAllowed('viewContacts', $team),
 									'showWins' => true,
 									'showEmailRight' => true
 								));
@@ -40,7 +39,7 @@ $team = $this->team;
 								'addStyles' => 'margin: 0  0 10px 0; ',
 								'showCaptain' => false,
 								'showCaptainContact' => false,
-								'showAllContacts' => true,
+								'showAllContacts' => $this->fsmpiLoLTournamentPermission()->isAllowed('viewSubContacts', $team),
 								'showWins' => true,
 								'showEmailRight' => true
 							));

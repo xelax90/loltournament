@@ -8,6 +8,7 @@ use FSMPILoL\Entity\User;
 
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerInterface;
+use Zend\View\Helper\Navigation;
 
 class Module
 {
@@ -16,10 +17,17 @@ class Module
 		$eventManager = $app->getEventManager(); 
 		$sm = $app->getServiceManager();
 		
-		$this->protectViewsLogin($e);
-		
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
+		
+		if(!\Zend\Console\Console::isConsole()) {
+			// Add ACL information to the Navigation view helper
+			$authorize = $sm->get('BjyAuthorizeServiceAuthorize');
+			$acl = $authorize->getAcl();
+			$role = $authorize->getIdentity();
+			Navigation::setDefaultAcl($acl);
+			Navigation::setDefaultRole($role);		
+		}
 
 		$this->extendUserRegistrationForm($eventManager);	
 		
@@ -110,20 +118,6 @@ class Module
 					)
 				)
 			);
-
-			$form->add(
-				array(
-					'name' => 'role',
-					'type' => 'Select',
-					'options' => array(
-						'label' => 'Role',
-						'options' => User::getRoles(),
-					),
-					'attributes' => array(
-						'id' => 'user_role',
-					)
-				)
-			);
 		};
 		
 		$sharedEvents->attach(
@@ -189,57 +183,8 @@ class Module
 						),
 					),
 				));
- 				
-				// Custom field role                    
-				$filter->add(array(
-					'name'      => 'role',
-					'required'  => true,
-					'filters'  => array(
-						array('name' => 'Int'),
-					),
-					'validators' => array(
-						array(
-							'name' => 'InArray',
-							'options' => array(
-								'haystack' => array_keys(User::getRoles()),
-								'strict' => 'false'
-							)
-						),
-					),
-				)); 
 			}
 		);
-	}
-	
-	protected function protectViewsLogin(MvcEvent $e){
-		$app = $e->getApplication();
-		$sm  = $app->getServiceManager();
-		$eventManager = $app->getEventManager();
-		$auth = $sm->get('zfcuser_auth_service');
-		$eventManager->attach(
-			MvcEvent::EVENT_ROUTE,
-			function($e) use ($auth) {
-				$routeMatch = $e->getRouteMatch();
-				$routeName = $routeMatch->getMatchedRouteName();
-				$routeSplit = explode('/', $routeName);
-				if(!$auth->hasIdentity() || ($auth->hasIdentity() && $auth->getIdentity()->getRole() > User::ROLE_MODERATOR)){
-					if(strtolower($routeSplit[0]) === 'zfcadmin'){
-						$response = $e->getResponse();
-						$response->getHeaders()->addHeaderLine(
-							'Location',
-							$e->getRouter()->assemble(
-								array(),
-								array('name' => 'home')
-							)
-						);
-						$response->setStatusCode(302);
-						return $response;
-					}
-				}
-				return;
-			},
-			-100
-		);		
 	}
 	
 }

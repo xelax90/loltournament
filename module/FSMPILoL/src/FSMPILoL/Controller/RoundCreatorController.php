@@ -173,10 +173,6 @@ class RoundCreatorController extends AbstractTournamentAdminController{
 
 	
 	public function deleteAction(){
-		if($this->zfcUserAuthentication()->getIdentity()->getRole() > User::ROLE_ADMIN){
-			return $this->_redirectToRunden();
-		}
-		
 		$em = $this->getEntityManager();
 		
 		$group_id = $this->getEvent()->getRouteMatch()->getParam('group_id');

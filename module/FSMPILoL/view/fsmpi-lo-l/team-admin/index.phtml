@@ -1,7 +1,6 @@
 <?php
 $tournament = $this->tournament;
 /* @var $tournament FSMPILoL\Entity\Tournament */
-$identity = $this->identity;
 $groups = $tournament->getGroups();
 foreach($groups as $group):
 	/* @var $group FSMPILoL\Entity\Group */
@@ -63,11 +62,11 @@ foreach($groups as $group):
 					<a class="btn btn-xs" title="Ersatzspieler permanent hinzuf&uuml;gen" href="<?= $this->url('zfcadmin/teams', array('team_id' => $team->getId())) ?>">
 						<i class="fa fa-plus"></i>
 					</a>
-					<?php if($team->getIsBlocked()) : ?>
+					<?php if($team->getIsBlocked() && $this->fsmpiLoLTournamentPermission()->isAllowed('edit', $team)) : ?>
 					<a class="btn btn-xs" title="Aktivieren" href="<?= $this->url('zfcadmin/teams/unblock', array('team_id' => $team->getId())) ?>">
 						<i class="fa fa-check"></i>
 					</a>
-					<?php elseif($identity->getRole() <= \FSMPILoL\Entity\User::ROLE_ADMIN || $team->getAnsprechpartner() == $identity): ?>
+					<?php elseif($this->fsmpiLoLTournamentPermission()->isAllowed('edit', $team)): ?>
 					<a class="btn btn-xs" title="Blockieren" href="<?= $this->url('zfcadmin/teams/block', array('team_id' => $team->getId())) ?>">
 						<i class="fa fa-ban"></i>
 					</a>

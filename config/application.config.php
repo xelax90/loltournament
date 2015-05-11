@@ -1,13 +1,15 @@
 <?php
-return array(
+$config = array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
 		'BowerModule',
 		'DoctrineModule',
 		'DoctrineORMModule',
+		'DoctrineDataFixtureModule',
 		'ZfcBase',
 		'ZfcUser',
 		'ZfcUserDoctrineORM',
+		'BjyAuthorize',
 		'ZfcAdmin',
 		'ZfcUserAdmin',
 		'XelaxHTMLPurifier',
@@ -71,3 +73,11 @@ return array(
    // Should be compatible with Zend\ServiceManager\Config.
    // 'service_manager' => array(),
 );
+
+if (\Zend\Console\Console::isConsole()) {
+	if(($key = array_search('BjyAuthorize', $config['modules'])) !== false) {
+		unset($config['modules'][$key]);
+	}
+}
+
+return $config;

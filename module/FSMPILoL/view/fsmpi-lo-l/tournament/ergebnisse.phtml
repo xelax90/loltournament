@@ -1,5 +1,4 @@
 <?php
-	define('DEBUG', false);
 	$tournament = $this->tournament;
 ?>
 
@@ -35,11 +34,11 @@
 								<?php
 									echo $this->partial('fsmpi-lo-l/tournament/partial/team.phtml', array(
 										'team' => $team,
-										'showFarberwartung' => false,
+										'showFarberwartung' => $this->isAllowed('tournament', 'debug/administrator'),
 										'playerOptions' => array(
 											'addStyles' => '',
-											'showCaptain' => false,
-											'showCaptainContact' => false,
+											'showCaptain' => true,
+											'showCaptainContact' => $this->fsmpiLoLTournamentPermission()->isAllowed('viewCaptain', $team),
 											'showAllContacts' => false,
 											'showWins' => true
 										),
