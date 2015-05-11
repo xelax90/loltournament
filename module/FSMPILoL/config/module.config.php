@@ -497,9 +497,9 @@ return array(
 				['route' => 'kontakt',                  'roles' => ['guest', 'user'] ],
 				['route' => 'ergebnisse',               'roles' => ['guest', 'user'] ],
 				['route' => 'paarungen',                'roles' => ['guest', 'user'] ],
-				['route' => 'meldung',                  'roles' => ['user'] ],
+				['route' => 'meldung',                  'roles' => ['user', 'guest'] ],
 				['route' => 'teams',                    'roles' => ['guest', 'user'] ],
-				['route' => 'myteam',                   'roles' => ['user'] ],
+				['route' => 'myteam',                   'roles' => ['user', 'guest'] ],
 				['route' => 'anmeldung',                'roles' => ['guest', 'user'] ],
 				['route' => 'anmeldung/form',           'roles' => ['guest', 'user'] ],
 				
