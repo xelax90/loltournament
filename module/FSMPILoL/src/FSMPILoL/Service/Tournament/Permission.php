@@ -44,6 +44,9 @@ class Permission implements ServiceLocatorAwareInterface {
 	 * @param Team|Tournament $team
 	 */
 	protected function sameTournament($user, $team){
+		if(empty($user) || empty($team)){
+			return false;
+		}
 		if($team instanceof Tournament){
 			$tournament = $team;
 		} else {
