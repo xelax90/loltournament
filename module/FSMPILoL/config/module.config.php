@@ -508,6 +508,12 @@ return array(
 				
 				// admin
 				['route' => 'zfcadmin',                      'roles' => ['moderator']],
+				// user admin
+				['route' => 'zfcadmin/zfcuseradmin',         'roles' => ['administrator']],
+				['route' => 'zfcadmin/zfcuseradmin/list',    'roles' => ['administrator']],
+				['route' => 'zfcadmin/zfcuseradmin/create',  'roles' => ['administrator']],
+				['route' => 'zfcadmin/zfcuseradmin/edit',    'roles' => ['administrator']],
+				['route' => 'zfcadmin/zfcuseradmin/delete',  'roles' => ['administrator']],
 				// paarung
 				['route' => 'zfcadmin/paarungen',            'roles' => ['moderator']],
 				['route' => 'zfcadmin/paarungen/block',      'roles' => ['moderator']],
@@ -528,6 +534,7 @@ return array(
 				['route' => 'zfcadmin/teams/warnPlayer',     'roles' => ['moderator']],
 				['route' => 'zfcadmin/teams/deleteWarning',  'roles' => ['moderator']],
 				// myteams
+				['route' => 'zfcadmin/myteams',              'roles' => ['moderator']],
 				['route' => 'zfcadmin/myteams/block',        'roles' => ['moderator']],
 				['route' => 'zfcadmin/myteams/unblock',      'roles' => ['moderator']],
 				['route' => 'zfcadmin/myteams/warn',         'roles' => ['moderator']],

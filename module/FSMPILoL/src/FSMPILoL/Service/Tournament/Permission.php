@@ -50,7 +50,7 @@ class Permission implements ServiceLocatorAwareInterface {
 			$tournament = $team->getGroup()->getTournament();
 		}
 		$player = $user->getPlayer($tournament);
-		return empty($player);
+		return !empty($player);
 	}
 	
 	/**
@@ -156,10 +156,10 @@ class Permission implements ServiceLocatorAwareInterface {
 	/**
 	 * Check if current user is allowed to access $ressource for $team
 	 * @param string $ressource
-	 * @param Team $team Team to check for. If empty, returns access for all teams.
+	 * @param Team|Tournament $team Team to check for. If empty, returns access for all teams.
 	 * @return boolean
 	 */
-	public function isAllowed($ressource, Team $team = null) {
+	public function isAllowed($ressource, $team = null) {
 		if(empty($this->ressources[$ressource])){
 			return false;
 		}

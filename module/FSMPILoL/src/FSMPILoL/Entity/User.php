@@ -1,6 +1,7 @@
 <?php
 namespace FSMPILoL\Entity;
 
+use BjyAuthorize\Provider\Role\ProviderInterface;
 use ZfcUser\Entity\User as ZfcUserEntity;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
@@ -13,7 +14,7 @@ use FSMPILoL\Entity\Tournament;
  * @ORM\Entity
  * @ORM\Table(name="user")
  */
-class User extends ZfcUserEntity implements JsonSerializable
+class User extends ZfcUserEntity implements JsonSerializable, ProviderInterface
 {
     /**
      * @var \Doctrine\Common\Collections\Collection

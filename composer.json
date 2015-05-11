@@ -25,5 +25,9 @@
 		"zf-commons/zfc-admin" : "dev-master",
 		"danielss89/zfc-user-admin" : "dev-master",
 		"xelax90/zf2-filter-htmlpurifier" : "*"
+    },
+    "require-dev": {
+        "zendframework/zftool": "dev-master",
+        "zendframework/zend-developer-tools": "dev-master"
     }
 }

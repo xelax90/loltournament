@@ -39,6 +39,12 @@ $tournament = $this->tournament;
 											//if($result != " - ")
 											//	$result = '<a href="gameinfo.html?gameid='.$game->gameID.'">'.$result.'</a>';
 											
+											$captainAllowed = $this->fsmpiLoLTournamentPermission()->isAllowed('viewCaptain', $match->getTeamHome()) || $this->fsmpiLoLTournamentPermission()->isAllowed('viewCaptain', $match->getTeamGuest());
+											$showCaptainContact = false;
+											if($captainAllowed){
+												$showCaptainContact = $this->fsmpiLoLTournamentPermission()->isAllowed('viewContacts', $match->getTeamHome()) || $this->fsmpiLoLTournamentPermission()->isAllowed('viewContacts', $match->getTeamGuest());
+											}
+											
 											echo $this->partial('fsmpi-lo-l/tournament/partial/paarung.phtml', array(
 												'match' => $match,
 												'position' => $position,
@@ -49,7 +55,7 @@ $tournament = $this->tournament;
 													'playerOptions' => array(
 														'addStyles' => '',
 														'showCaptain' => true,
-														'showCaptainContact' => $this->fsmpiLoLTournamentPermission()->isAllowed('viewCaptain', $match->getTeamHome()) || $this->fsmpiLoLTournamentPermission()->isAllowed('viewCaptain', $match->getTeamGuest()),
+														'showCaptainContact' => $showCaptainContact,
 														'showAllContacts' => false,
 														'showWins' => false
 													)
