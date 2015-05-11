@@ -148,7 +148,7 @@ class Group {
 		$cache = $this->getCache();
 		
 		$cacheKey = $this->getCacheKey();
-		if($cache->hasItem($cacheKey) && !$cache->itemHasExpired($cacheKey) || true){
+		if($cache->hasItem($cacheKey) && !$cache->itemHasExpired($cacheKey)){
 			$teamdata = unserialize($cache->getItem($cacheKey));
 			$teams = $this->getGroup()->getTeams();
 			foreach($teamdata as $r => $data){
