@@ -2,10 +2,6 @@
 namespace FSMPILoL\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilterAwareInterface;
-use Zend\InputFilter\InputFilterInterface; 
 use Zend\Json\Json;
 use JsonSerializable;
 
@@ -20,7 +16,7 @@ use JsonSerializable;
  * @property boolean $isCaptain
  * @property int $summonerId
  */
-class Player implements InputFilterAwareInterface, JsonSerializable
+class Player implements JsonSerializable
 {
 	protected $inputFilter;
  	
@@ -32,7 +28,7 @@ class Player implements InputFilterAwareInterface, JsonSerializable
 	protected $id;
  	
 	/**
-     * @ORM\OneToOne(targetEntity="Anmeldung", inversedBy="player")
+     * @ORM\OneToOne(targetEntity="Anmeldung", inversedBy="player", cascade={"persist"})
 	 * @ORM\JoinColumn(name="anmeldung_id", referencedColumnName="id")
 	 */
 	protected $anmeldung;
@@ -162,52 +158,7 @@ class Player implements InputFilterAwareInterface, JsonSerializable
 		if(!empty($data['summonerId']))
 			$this->setSummonerId($data['summonerId']);
 	}
- 
-	public function setInputFilter(InputFilterInterface $inputFilter){
-		throw new \Exception("Not used");
-	}
- 
-	/**
-	 * Returns input filters for this entity
-	 * @return \Zend\InputFilter\InputFilter
-	 */
-	public function getInputFilter(){
-		if (!$this->inputFilter) {
-			$inputFilter = new InputFilter();
- 
-			$factory = new InputFactory();
- 
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'id',
-				'required'   => true,
-				'filters' => array(
-					array('name'    => 'Int'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'isCaptain',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'Boolean'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'summonerId',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'Int'),
-				),
-			)));
-			
-			
-			$this->inputFilter = $inputFilter;        
-		}
-
-		return $this->inputFilter;
-	}
-
+	
 	/**
 	 * Returns json String
 	 * @return string

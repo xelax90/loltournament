@@ -8,46 +8,58 @@
 
 namespace FSMPILoL\Form;
 
-use FSMPILoL\Entity\Anmeldung;
-use Zend\Form\InputFilterProviderFieldset;
-use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use DoctrineModule\Persistence\ObjectManagerAwareInterface;
+use Doctrine\Common\Persistence\ObjectManager;
+use FSMPILoL\Entity\Anmeldung;
+use FSMPILoL\Tournament\TournamentAwareInterface;
 
 /**
  * Description of AnmeldungForm
  *
  * @author schurix
  */
-class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface{
+class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface, ObjectManagerAwareInterface, TournamentAwareInterface{
+	protected $objectManager;
+	
+	protected $tournament;
 	
 	public function __construct($name = "", $options = array()){
 		if($name == ""){
 			$name = 'anmeldung';
 		}
 		parent::__construct($name, $options);
-		
-		$this//->setHydrator(new ClassMethodsHydrator(false))
+	}
+	
+	public function init(){
+		$this->setHydrator(new DoctrineHydrator($this->getObjectManager()))
 				->setObject(new Anmeldung());
 		
 		$this->addUserfields();
-		//$this->setFilters();
 	}
 	
 	public function setOptions($options) {
 		parent::setOptions($options);
 		
 		if(isset($options['showSub']) && !$options['showSub']){
-			$this->remove('isSub');
+			if($this->has('isSub')){
+				$this->remove('isSub');
+			}
 		}
 		
 		if(isset($options['showAnmerkungen']) && !$options['showAnmerkungen']){
-			$this->remove('anmerkung');
+			if($this->has('anmerkung')){
+				$this->remove('anmerkung');
+			}
 		}
 		
 	}
 	
 	protected function addUserfields() {
+		$options = $this->getOptions();
+		
 		$this->add(array(
 			'name' => 'name',
 			'type' => 'Text',
@@ -55,6 +67,10 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 				'label' => 'Name<sup>*</sup>',
 				'label_options' => array(
 					'disable_html_escape' => true,
+				),
+				'column-size' => 'sm-10',
+				'label_attributes' => array(
+					'class' => 'col-sm-2',
 				),
 			),
 			'attributes' => array(
@@ -71,6 +87,10 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 				'label_options' => array(
 					'disable_html_escape' => true,
 				),
+				'column-size' => 'sm-10',
+				'label_attributes' => array(
+					'class' => 'col-sm-2',
+				),
 			),
 			'attributes' => array(
 				'class' => 'input_container',
@@ -83,6 +103,10 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 			'type' => 'Text',
 			'options' => array(
 				'label' => 'Facebook',
+				'column-size' => 'sm-10',
+				'label_attributes' => array(
+					'class' => 'col-sm-2',
+				),
 			),
 			'attributes' => array(
 				'class' => 'input_container',
@@ -95,6 +119,10 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 			'type' => 'Text',
 			'options' => array(
 				'label' => 'Weitere Kontaktdaten',
+				'column-size' => 'sm-10',
+				'label_attributes' => array(
+					'class' => 'col-sm-2',
+				),
 			),
 			'attributes' => array(
 				'class' => 'input_container',
@@ -110,6 +138,10 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 				'label_options' => array(
 					'disable_html_escape' => true,
 				),
+				'column-size' => 'sm-10',
+				'label_attributes' => array(
+					'class' => 'col-sm-2',
+				),
 			),
 			'attributes' => array(
 				'class' => 'input_container',
@@ -117,31 +149,43 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 			)
 		));
 		
-		$this->add(array(
-			'name' => 'isSub',
-			'type' => 'Select',
-			'options' => array(
-				'label' => 'Ersatzspieler<sup>*</sup>',
-				'options' => array('-1' => 'Bitte Wählen', '2' => 'Ja, ich möchte NUR Ersatzspieler sein', '1' => 'Ja, ich könnte auch Ersatzspieler sein', '0' => "Nein, ich möchte kein Ersatzspieler sein."),
-				'label_options' => array(
-					'disable_html_escape' => true,
+		if(!isset($options['showSub']) || $options['showSub']){
+			$this->add(array(
+				'name' => 'isSub',
+				'type' => 'Select',
+				'options' => array(
+					'label' => 'Ersatzspieler<sup>*</sup>',
+					'options' => array('-1' => 'Bitte Wählen', '2' => 'Ja, ich möchte NUR Ersatzspieler sein', '1' => 'Ja, ich könnte auch Ersatzspieler sein', '0' => "Nein, ich möchte kein Ersatzspieler sein."),
+					'label_options' => array(
+						'disable_html_escape' => true,
+					),
+					'column-size' => 'sm-10',
+					'label_attributes' => array(
+						'class' => 'col-sm-2',
+					),
 				),
-			),
-			'attributes' => array(
-				'id' => "",
-			)
-		));
+				'attributes' => array(
+					'id' => "",
+				)
+			));
+		}
 		
-		$this->add(array(
-			'name' => 'anmerkung',
-			'type' => 'Textarea',
-			'options' => array(
-				'label' => 'Anmerkungen',
-			),
-			'attributes' => array(
-				'id' => "",
-			)
-		));
+		if(!isset($options['showAnmerkungen']) || $options['showAnmerkungen']){
+			$this->add(array(
+				'name' => 'anmerkung',
+				'type' => 'Textarea',
+				'options' => array(
+					'label' => 'Anmerkungen',
+					'column-size' => 'sm-10',
+					'label_attributes' => array(
+						'class' => 'col-sm-2',
+					),
+				),
+				'attributes' => array(
+					'id' => "",
+				)
+			));
+		}
 	}
 	
 	/**
@@ -169,6 +213,28 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 			);
 		}
 		
+		$filters['email']['validators'] = array(
+			array(
+				'name' => 'FSMPILoL\Validator\NoObjectExistsInTournament',
+				'options' => array(
+					'object_repository' => $this->getObjectManager()->getRepository(Anmeldung::class),
+					'tournament' => $this->getTournament(),
+					'fields' => 'email'
+				)
+			)
+		);
+		
+		$filters['summonerName']['validators'] = array(
+			array(
+				'name' => 'FSMPILoL\Validator\NoObjectExistsInTournament',
+				'options' => array(
+					'object_repository' => $this->getObjectManager()->getRepository(Anmeldung::class),
+					'tournament' => $this->getTournament(),
+					'fields' => 'summonerName'
+				)
+			)
+		);
+		
 		$filters['isSub'] = array(
 			'required' => false,
 			'filters' => array(
@@ -181,4 +247,22 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 		
 		return $filters;
 	}
+
+	public function getObjectManager() {
+		return $this->objectManager;
+	}
+
+	public function setObjectManager(ObjectManager $objectManager) {
+		$this->objectManager = $objectManager;
+		return $this;
+	}
+
+	public function getTournament() {
+		return $this->tournament;
+	}
+
+	public function setTournament(\FSMPILoL\Entity\Tournament $tournament) {
+		$this->tournament = $tournament;
+	}
+
 }

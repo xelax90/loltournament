@@ -2,6 +2,28 @@
 namespace FSMPILoL;
 
 use Zend\ServiceManager\AbstractPluginManager;
+use DoctrineModule\Persistence\ObjectManagerAwareInterface;
+
+$xelaxConfig = array(
+	/*
+	 * Configure your list controllers. Routes are generated automatically, but
+	 * you can also create your own routes. Route names must correspond with 
+	 * controller names.
+	 */
+	'list_controller' => array(
+		'player' => array(
+			'name' => 'Player',
+			'controller_class' => 'FSMPILoL\Controller\PlayerController', 
+			'base_namespace' => 'FSMPILoL',
+			'list_columns' => array('Id' => 'id', 'Name' => 'name', 'Summoner Name' => 'summonerName', 'EMail' => 'email'),
+			'route_base' => 'zfcadmin/teams/player', 
+			'rest_enabled' => false,
+			'list_route' => array(
+				//'route' => 'zfcadmin/teams'
+			),
+		),
+	),
+);
 
 return array(
     'controllers' => array(
@@ -14,10 +36,12 @@ return array(
 			'teamadmin' => 'FSMPILoL\Controller\TeamAdminController',
 			'myteamadmin' => 'FSMPILoL\Controller\MyTeamAdminController',
 			'anmeldung' => 'FSMPILoL\Controller\AnmeldungController',
+			'FSMPILoL\Controller\PlayerController' => 'FSMPILoL\Controller\PlayerController',
         ),
     ),
     
     
+    'xelax' => $xelaxConfig,
     'router' => array(
         'routes' => array(
             'home' => array(
@@ -355,6 +379,13 @@ return array(
 									),
 				                ),
 							),
+							'player' => array(
+								'type' => 'XelaxAdmin\Router\ListRoute',
+								'options' => array(
+									// the config key of the options
+									'controller_options_name' => 'player',
+								),
+							),
 						),
 					),
 					'myteams' => array(
@@ -533,6 +564,7 @@ return array(
 				['route' => 'zfcadmin/teams/warn',           'roles' => ['moderator']],
 				['route' => 'zfcadmin/teams/warnPlayer',     'roles' => ['moderator']],
 				['route' => 'zfcadmin/teams/deleteWarning',  'roles' => ['moderator']],
+				['route' => 'zfcadmin/teams/player',         'roles' => ['moderator']],
 				// myteams
 				['route' => 'zfcadmin/myteams',              'roles' => ['moderator']],
 				['route' => 'zfcadmin/myteams/block',        'roles' => ['moderator']],
@@ -556,6 +588,8 @@ return array(
 			)
 		)
 	),
+	
+	
 	
     'service_manager' => array(
         'abstract_factories' => array(
@@ -717,7 +751,28 @@ return array(
 			
 		)
 	),
-    
+	
+	'form_elements' => array(
+		'initializers' => array(
+			'ObjectManagerInitializer' => function ($element, $formElements) {
+				if ($element instanceof ObjectManagerAwareInterface) {
+					$services      = $formElements->getServiceLocator();
+					$entityManager = $services->get('Doctrine\ORM\EntityManager');
+					$element->setObjectManager($entityManager);
+				}
+			},
+			'TournamentInitializer' => function($element, $formElements){
+				if($element instanceof Tournament\TournamentAwareInterface){
+					$services      = $formElements->getServiceLocator();
+					$options       = $services->get('FSMPILoL\Options\Anmeldung');
+					$tournamentId  = $options->getTournamentId();
+					$em            = $services->get('Doctrine\ORM\EntityManager');
+					$tournament    = $em->getRepository('FSMPILoL\Entity\Tournament')->find($tournamentId);
+					$element->setTournament($tournament);
+				}
+			}
+		),
+	),
     
 	'console' => array(
         'router' => array(

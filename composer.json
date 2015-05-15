@@ -24,7 +24,10 @@
         "hounddog/doctrine-data-fixture-module": "dev-master",
 		"zf-commons/zfc-admin" : "dev-master",
 		"danielss89/zfc-user-admin" : "dev-master",
-		"xelax90/zf2-filter-htmlpurifier" : "*"
+        "xelax90/xelax-admin": "dev-master",
+		"neilime/zf2-twb-bundle" : "dev-master",
+		"xelax90/xelax-twb-unmask": "dev-master",
+		"xelax90/zf2-filter-htmlpurifier": "*"
     },
     "require-dev": {
         "zendframework/zftool": "dev-master",

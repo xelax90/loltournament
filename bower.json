@@ -27,6 +27,7 @@
 		"jquery" : "1.*",
 		"bootstrap" : "3.*",
 		"html5shiv" : "*",
+		"fontawesome" : "*",
 		"respond" : "*",
 		"bootflat" : "*",
 		"Selecter" : "*",

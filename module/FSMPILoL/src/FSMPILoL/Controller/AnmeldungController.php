@@ -54,14 +54,23 @@ class AnmeldungController extends AbstractActionController
 		return $this->tournament;
 	}
 
+	/**
+	 * Creates form with name $name
+	 * @param string $name
+	 * @return \Zend\Form\Form
+	 */
+	protected function getForm($name){
+		$form = $this->getServiceLocator()->get('FormElementManager')->get($name);
+		return $form;
+	}
 
 	public function formAction(){
 		$request = $this->getRequest();
-		$singleForm = new AnmeldungSingleForm();
+		$singleForm = $this->getForm('FSMPILoL\Form\AnmeldungSingleForm');
 		$anmeldungEntity = new AnmeldungEntity();
 		$singleForm->bind($anmeldungEntity);
 		
-		$teamForm = new AnmeldungTeamForm();
+		$teamForm = $this->getForm('FSMPILoL\Form\AnmeldungTeamForm');
 		$teamForm->prepare();
 		$anmeldungCollection = $teamForm->get('anmeldungen');
 		/* @var $anmeldungCollection \Zend\Form\Element\Collection */

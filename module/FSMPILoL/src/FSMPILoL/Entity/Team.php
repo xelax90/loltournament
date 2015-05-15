@@ -12,7 +12,7 @@ use JsonSerializable;
 /**
  * A Team
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="FSMPILoL\Model\TeamRepository")
  * @ORM\Table(name="team")
  * @property int $id
  * @property string $name
@@ -173,6 +173,10 @@ class Team implements InputFilterAwareInterface, JsonSerializable
 	
 	public function setData($data){
 		$this->data = $data;
+	}
+	
+	public function getGroupName(){
+		return 'Gruppe '.$this->getGroup()->getNumber();
 	}
 	
 	public function getScore(){

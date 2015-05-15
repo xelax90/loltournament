@@ -38,7 +38,7 @@ class Anmeldung implements InputFilterAwareInterface, JsonSerializable
 	protected $id;
  	
 	/**
-	 * @ORM\Column(type="string");
+	 * @ORM\Column(type="string", nullable=true);
 	 */
 	protected $teamName;
  	
@@ -78,7 +78,7 @@ class Anmeldung implements InputFilterAwareInterface, JsonSerializable
 	protected $anmerkung;
  	
 	/**
-	 * @ORM\Column(type="string");
+	 * @ORM\Column(type="string", nullable=true);
 	 */
 	protected $icon;
 	

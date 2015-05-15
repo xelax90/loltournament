@@ -2,6 +2,7 @@
 $config = array(
     // This should be an array of module namespaces used in the application.
     'modules' => array(
+		'ZendDeveloperTools',
 		'BowerModule',
 		'DoctrineModule',
 		'DoctrineORMModule',
@@ -10,8 +11,11 @@ $config = array(
 		'ZfcUser',
 		'ZfcUserDoctrineORM',
 		'BjyAuthorize',
+		'TwbBundle',
+        'XelaxTwbUnmask',
 		'ZfcAdmin',
 		'ZfcUserAdmin',
+		'XelaxAdmin',
 		'XelaxHTMLPurifier',
         'FSMPILoL',
     ),
@@ -76,6 +80,12 @@ $config = array(
 
 if (\Zend\Console\Console::isConsole()) {
 	if(($key = array_search('BjyAuthorize', $config['modules'])) !== false) {
+		unset($config['modules'][$key]);
+	}
+}
+
+if(strtolower(getenv('APPLICATION_ENV')) != 'development'){
+	if(($key = array_search('ZendDeveloperTools', $config['modules'])) !== false) {
 		unset($config['modules'][$key]);
 	}
 }
