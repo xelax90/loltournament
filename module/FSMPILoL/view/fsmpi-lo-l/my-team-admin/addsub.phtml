@@ -1,0 +1,12 @@
+<?php
+$form = $this->form;
+$form->prepare();
+$form->setAttribute('action', $this->url('zfcadmin/myteams/addsub', array('team_id' => $this->id)));
+
+?>
+
+<h1><?php echo $this->translate('Ersatzspieler permanent hinzufügen') ?></h1>
+
+<?php
+	echo $this->twbForm($form)
+?>

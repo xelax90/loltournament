@@ -1,0 +1,22 @@
+<?php
+/** 
+ * @var string $title Page Title
+ * @var string $list_route Route to this list
+ * @var int $id Id of currentliy editing element
+ * @var string $edit_route Route to edit entry
+ * @var string $edit_param_name Parameter name for edit route. Default: id
+ * @var string $delete_route Route to delete entry
+ * @var string $delete_param_name Parameter name for delete route. Default: id
+ * @var string $delete_warning_text Text to show before deleting
+ * @var Form $form Creation form
+ */
+
+$form = $this->form;
+$form->prepare();
+$form->setAttribute('action', $this->url('zfcadmin/myteams/warn', array('team_id' => $this->team->getId())));
+$form->setAttribute('method', 'post');
+?>
+
+<h1><?php echo $this->translate('Team verwarnen') ?></h1>
+
+<?php echo $this->form($form);
