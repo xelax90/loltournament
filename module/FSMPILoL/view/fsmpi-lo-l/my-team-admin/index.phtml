@@ -33,6 +33,23 @@ foreach($groups as $group):
 					'emailWithLink' => true,
 					'showWins' => true,
 					'showEmailRight' => true,
+					'controls' => array(
+						'makeSub' => array(
+							'route' => 'zfcadmin/myteams/makesub',
+							'routeParams' => array('team_id' => $team->getId()),
+							'routeParamName' => 'player_id',
+							'icon' => 'fa fa-user-times',
+							'title' => 'Aus Team entfernen',
+							'warning' => 'Spieler %s wirklich zum Ersatzspieler machen?'
+						),
+						'edit' => array(
+							'route' => 'zfcadmin/myteams/player',
+							'routeParams' => array('team_id' => $team->getId(), 'route' => 'myPlayer/edit'),
+							'routeParamName' => 'player_id',
+							'title' => 'Bearbeiten',
+							'icon' => 'fa-pencil',
+						),
+					),
 				)
 			);
 			
