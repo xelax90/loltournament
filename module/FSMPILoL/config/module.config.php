@@ -513,6 +513,30 @@ return array(
 									'controller_options_name' => 'myPlayer',
 								),
 							),
+							'addsub' => array(
+				                'type' => 'literal',
+				                'options' => array(
+				                    'route'    => '/addsub',
+									'defaults' => array(
+										'controller' => 'teamadmin',
+										'action' => 'addsub',
+									)
+				                ),
+							),
+							'makesub' => array(
+				                'type' => 'segment',
+				                'options' => array(
+				                    'route'    => '/makesub/:player_id',
+									'defaults' => array(
+										'controller' => 'teamadmin',
+										'action' => 'makesub',
+										'player_id' => 0,
+									),
+									'constraints' => array(
+										'player_id'         => '[0-9]*',
+									),
+				                ),
+							),
 						),
 					),
 				),
@@ -618,6 +642,8 @@ return array(
 				['route' => 'zfcadmin/myteams/deleteWarning','roles' => ['moderator']],
 				['route' => 'zfcadmin/myteams/anmerkung',    'roles' => ['moderator']],
 				['route' => 'zfcadmin/myteams/player',       'roles' => ['moderator']],
+				['route' => 'zfcadmin/myteams/addsub',       'roles' => ['moderator']],
+				['route' => 'zfcadmin/myteams/makesub',      'roles' => ['moderator']],
 			)
 		)
 		
