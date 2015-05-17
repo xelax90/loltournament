@@ -22,6 +22,17 @@ $xelaxConfig = array(
 				//'route' => 'zfcadmin/teams'
 			),
 		),
+		'myPlayer' => array(
+			'name' => 'Player',
+			'controller_class' => 'FSMPILoL\Controller\PlayerController', 
+			'base_namespace' => 'FSMPILoL',
+			'list_columns' => array('Id' => 'id', 'Name' => 'name', 'Summoner Name' => 'summonerName', 'EMail' => 'email'),
+			'route_base' => 'zfcadmin/myteams/player', 
+			'rest_enabled' => false,
+			'list_route' => array(
+				//'route' => 'zfcadmin/teams'
+			),
+		),
 	),
 );
 
@@ -386,6 +397,30 @@ return array(
 									'controller_options_name' => 'player',
 								),
 							),
+							'addsub' => array(
+				                'type' => 'literal',
+				                'options' => array(
+				                    'route'    => '/addsub',
+									'defaults' => array(
+										'controller' => 'teamadmin',
+										'action' => 'addsub',
+									)
+				                ),
+							),
+							'makesub' => array(
+				                'type' => 'segment',
+				                'options' => array(
+				                    'route'    => '/makesub/:player_id',
+									'defaults' => array(
+										'controller' => 'teamadmin',
+										'action' => 'makesub',
+										'player_id' => 0,
+									),
+									'constraints' => array(
+										'player_id'         => '[0-9]*',
+									),
+				                ),
+							),
 						),
 					),
 					'myteams' => array(
@@ -470,6 +505,13 @@ return array(
 										'warning_id'         => '[0-9]*',
 									),
 				                ),
+							),
+							'player' => array(
+								'type' => 'XelaxAdmin\Router\ListRoute',
+								'options' => array(
+									// the config key of the options
+									'controller_options_name' => 'myPlayer',
+								),
 							),
 						),
 					),
@@ -565,6 +607,8 @@ return array(
 				['route' => 'zfcadmin/teams/warnPlayer',     'roles' => ['moderator']],
 				['route' => 'zfcadmin/teams/deleteWarning',  'roles' => ['moderator']],
 				['route' => 'zfcadmin/teams/player',         'roles' => ['moderator']],
+				['route' => 'zfcadmin/teams/addsub',         'roles' => ['moderator']],
+				['route' => 'zfcadmin/teams/makesub',        'roles' => ['moderator']],
 				// myteams
 				['route' => 'zfcadmin/myteams',              'roles' => ['moderator']],
 				['route' => 'zfcadmin/myteams/block',        'roles' => ['moderator']],
@@ -573,6 +617,7 @@ return array(
 				['route' => 'zfcadmin/myteams/warnPlayer',   'roles' => ['moderator']],
 				['route' => 'zfcadmin/myteams/deleteWarning','roles' => ['moderator']],
 				['route' => 'zfcadmin/myteams/anmerkung',    'roles' => ['moderator']],
+				['route' => 'zfcadmin/myteams/player',       'roles' => ['moderator']],
 			)
 		)
 		

@@ -308,7 +308,7 @@ class Group {
 		
 		$cache = $this->getServiceLocator()->get('FSMPILoL\SummonerdataCache');
 		$cacheKey = $this->getSummonerCacheKey();
-		if($cache->hasItem($cacheKey) && (!$cache->itemHasExpired($cacheKey) || true)){
+		if($cache->hasItem($cacheKey) && (!$cache->itemHasExpired($cacheKey) || true)){
 			$summonerdata = unserialize($cache->getItem($cacheKey));
 		} else {
 			$summoners = $this->getTournamentSummoners();

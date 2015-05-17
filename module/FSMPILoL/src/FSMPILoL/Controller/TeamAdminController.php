@@ -13,6 +13,7 @@ use FSMPILoL\Form\CommentPaarungForm;
 use FSMPILoL\Form\WarningForm;
 use FSMPILoL\Entity\User;
 use FSMPILoL\Entity\Warning;
+use FSMPILoL\Form\AddSubToTeamForm;
 
 /**
  * Description of TeamAdminController
@@ -182,6 +183,98 @@ class TeamAdminController extends AbstractTournamentAdminController{
 			$em->remove($warning);
 			$em->flush();
 		}
+		return $this->_redirectToTeams();
+	}
+	
+	protected $addsubSuccessFormat = 'Spieler %s erfolgreich zu Team %s hinzugefügt.';
+	protected $playerNotFoundFormat = 'Spieler %s nicht gefunden.';
+	protected $teamNotFoundFormat = 'Team %s nicht gefunden.';
+	protected $playerNotInTeamFormat = 'Spieler %s ist nicht im Team %s.';
+	protected $cannotEditTeamFormat = 'Du darfst das Team %s nicht bearbeiten';
+	protected $makeSubSuccessFormat = 'Der Spieler %s ist jetzt ein Ersatzspieler';
+	
+	public function addsubAction(){
+		$tournament = $this->getTournament();
+		if(!$tournament){
+			return $this->_redirectToTeams();
+		}
+        $team_id = $this->getEvent()->getRouteMatch()->getParam('team_id');
+		$em = $this->getEntityManager();
+		/* @var $team \FSMPILoL\Entity\Team */
+		$team = $em->getRepository('FSMPILoL\Entity\Team')->find((int)$team_id);
+		if(!$team){
+			return $this->_redirectToTeams();
+		}
+		/* @var $form \FSMPILoL\Form\AddSubToTeamForm */
+		$form = $this->getServiceLocator()->get('FormElementManager')->get(AddSubToTeamForm::class);
+		$data = array(
+			'team' => $team->getId()
+		);
+		$form->setData($data);
+		$form->get('team')->setAttribute('disabled', 'disabled');
+		
+        /** @var $request \Zend\Http\Request */
+        $request = $this->getRequest();
+		if ($request->isPost()) {
+			$data = $request->getPost();
+			$data['team'] = $team->getId();
+			$form->setData($data);
+			if ($form->isValid()) {
+				$data = $form->getData();
+				$player = $em->getRepository('FSMPILoL\Entity\Player')->find((int)$data['player']);
+				if(empty($player)){
+					$form->get('player')->setMessages(array(
+						'Spieler nicht gefunden'
+					));
+				} elseif(!empty($player->getTeam())){
+					$form->get('player')->setMessages(array(
+						'Spieler ist kein Ersatzspieler'
+					));
+				} else {
+					$player->setTeam($team);
+					$em->flush();
+					$this->flashMessenger()->addSuccessMessage(sprintf($this->addsubSuccessFormat, $player->getAnmeldung()->getSummonerName(), $team->getName()));
+					return $this->_redirectToTeams();
+				}
+			}
+        }
+		return new ViewModel(array('id' => $team->getId(), 'form' => $form));
+	}
+	
+	public function makesubAction(){
+		$tournament = $this->getTournament();
+		if(!$tournament){
+			return $this->_redirectToTeams();
+		}
+        $team_id = $this->getEvent()->getRouteMatch()->getParam('team_id');
+		$em = $this->getEntityManager();
+		/* @var $team \FSMPILoL\Entity\Team */
+		$team = $em->getRepository('FSMPILoL\Entity\Team')->find((int)$team_id);
+		if(!$team){
+			$this->flashMessenger()->addErrorMessage(sprintf($this->teamNotFoundFormat, $team_id));
+			return $this->_redirectToTeams();
+		}
+
+        $player_id = $this->getEvent()->getRouteMatch()->getParam('player_id');
+		$player = $em->getRepository('FSMPILoL\Entity\Player')->find((int)$player_id);
+		if(!$player){
+			$this->flashMessenger()->addErrorMessage(sprintf($this->playerNotFoundFormat, $player_id));
+			return $this->_redirectToTeams();
+		}
+		
+		if($player->getTeam() != $team){
+			$this->flashMessenger()->addErrorMessage(sprintf($this->playerNotInTeamFormat, $player->getAnmeldung()->getSummonerName(), $team->getName()));
+			return $this->_redirectToTeams();
+		}
+		
+		if(!$this->fsmpiLoLTournamentPermission()->isAllowed('edit', $team)){
+			$this->flashMessenger()->addErrorMessage(sprintf($this->cannotEditTeamFormat, $team->getName()));
+			return $this->_redirectToTeams();
+		}
+		
+		$player->setTeam(null);
+		$em->flush();
+		$this->flashMessenger()->addSuccessMessage(sprintf($this->makeSubSuccessFormat, $player->getAnmeldung()->getSummonerName()));
 		return $this->_redirectToTeams();
 	}
 }

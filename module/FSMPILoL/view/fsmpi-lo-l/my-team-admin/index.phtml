@@ -1,4 +1,7 @@
 <?php
+
+echo $this->partial('partial/flashmessenger.phtml');
+
 $tournament = $this->tournament;
 /* @var $tournament FSMPILoL\Entity\Tournament */
 $groups = $tournament->getGroups();
@@ -53,6 +56,9 @@ foreach($groups as $group):
 					</a>
 					<a class="btn btn-xs" title="Team verwarnen" href="<?= $this->url('zfcadmin/myteams/warn', array('team_id' => $team->getId())) ?>">
 						<i class="fa fa-gavel"></i>
+					</a>
+					<a class="btn btn-xs" title="Spieler bearbeiten" href="<?= $this->url('zfcadmin/myteams/player', array('team_id' => $team->getId())) ?>">
+						<i class="fa fa-users"></i>
 					</a>
 					<a class="btn btn-xs" title="Ersatzspieler permanent hinzuf&uuml;gen" href="<?= $this->url('zfcadmin/myteams', array('team_id' => $team->getId())) ?>">
 						<i class="fa fa-plus"></i>

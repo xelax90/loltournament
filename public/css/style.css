@@ -83,6 +83,15 @@ body {
     position: relative;
     overflow: auto;
 }
+
+.player .player-controls{
+	float: right;
+	width: 8%;
+	line-height: 24px;
+	text-align: center;
+	margin-top: 15px;
+}
+
 .player .player_summonername,
 .player .player_level{
     float: left;

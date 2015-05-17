@@ -1,4 +1,7 @@
 <?php
+
+echo $this->partial('partial/flashmessenger.phtml');
+
 $tournament = $this->tournament;
 /* @var $tournament FSMPILoL\Entity\Tournament */
 $groups = $tournament->getGroups();
@@ -35,6 +38,23 @@ foreach($groups as $group):
 					'emailWithLink' => true,
 					'showWins' => true,
 					'showEmailRight' => true,
+					'controls' => array(
+						'makeSub' => array(
+							'route' => 'zfcadmin/teams/makesub',
+							'routeParams' => array('team_id' => $team->getId()),
+							'routeParamName' => 'player_id',
+							'icon' => 'fa fa-user-times',
+							'title' => 'Aus Team entfernen',
+							'warning' => 'Spieler %s wirklich zum Ersatzspieler machen?'
+						),
+						'edit' => array(
+							'route' => 'zfcadmin/teams/player',
+							'routeParams' => array('team_id' => $team->getId(), 'route' => 'player/edit'),
+							'routeParamName' => 'player_id',
+							'title' => 'Bearbeiten',
+							'icon' => 'fa-pencil',
+						),
+					),
 				)
 			);
 			
@@ -62,7 +82,7 @@ foreach($groups as $group):
 					<a class="btn btn-xs" title="Spieler bearbeiten" href="<?= $this->url('zfcadmin/teams/player', array('team_id' => $team->getId())) ?>">
 						<i class="fa fa-users"></i>
 					</a>
-					<a class="btn btn-xs" title="Ersatzspieler permanent hinzuf&uuml;gen" href="<?= $this->url('zfcadmin/teams', array('team_id' => $team->getId())) ?>">
+					<a class="btn btn-xs" title="Ersatzspieler permanent hinzuf&uuml;gen" href="<?= $this->url('zfcadmin/teams/addsub', array('team_id' => $team->getId())) ?>">
 						<i class="fa fa-plus"></i>
 					</a>
 					<?php if($team->getIsBlocked() && $this->fsmpiLoLTournamentPermission()->isAllowed('edit', $team)) : ?>

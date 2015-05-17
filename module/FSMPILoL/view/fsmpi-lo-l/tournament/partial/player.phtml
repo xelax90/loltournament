@@ -14,34 +14,47 @@ if(!empty($player->getAnmeldung()->getSummonerdata())){
 	$normalWins = $player->getAnmeldung()->getSummonerdata()->getNormalWins();
 	$tier = $player->getAnmeldung()->getSummonerdata()->getTier();
 }
+
+$showControls = !empty($this->controls);
+
 ?>
 <div class="player" style="margin: 0  0 10px 0; background-image: url('<?= $this->fsmpiLoLDDragon()->profileIcon($iconId) ?>'); <?= $this->addStyles ?: '' ?>">
-	<?php if(($player->getIsCaptain() && $this->showCaptainContact) || $this->showAllContacts) : ?>
-	<div class="player_summonername <?= $player->getIsCaptain() && $this->showCaptain ? 'captain' : '' ?>"><?= $player->getAnmeldung()->getName() ?></div>
-	<div class="<?= $this->showEmailRight ? 'player_rankedWins' : 'player_level' ?>">
-		<?php if($this->emailWithLink): ?>
-		<a href="mailto:<?= rawurlencode($player->getAnmeldung()->getName() . " <".$player->getAnmeldung()->getEmail().">") ?>">
-		<?php endif;?>
-			<?= $player->getAnmeldung()->getEmail() ?>
-		<?php if($this->emailWithLink): ?>
-		</a>
-		<?php endif;?>
+	<?php if($showControls): ?>
+	<div class="player-controls">
+		<?php foreach($this->controls as $control): ?>
+			<?php $js = empty($control['warning']) ? '' : "return confirm('".sprintf($control['warning'], $player->getAnmeldung()->getSummonerName())."');" ?>
+			<a class="btn btn-xs" <?= empty($js) ? '' : 'onclick="'.$js.'"'; ?> href="<?= $this->url($control['route'], array($control['routeParamName'] => $player->getId()) + $control['routeParams']) ?>" title="<?= $control['title'] ?>"><i class="fa <?= $control['icon'] ?>"></i></a>
+		<?php endforeach; ?>
 	</div>
 	<?php endif; ?>
-	<div class="player_summonername <?= $player->getIsCaptain() && $this->showCaptain ? 'captain' : '' ?>"><?= $player->getAnmeldung()->getSummonerName() ?></div>
-	
-	<?php if($this->showWins) : ?>
-	<div class="player_rankedWins">Ranked: <?= $rankedWins ?> Siege</div>
-	<?php endif; ?>
-	
-	<div class="player_level">Level <?= $level ?>, <?= $tier ?></div>
-	
-	<?php if($this->showWins) : ?>
-	<div class="player_normalWins">Normal: <?= $normalWins ?> Siege</div>
-	<?php endif; ?>
-	
-	<?php if($player->getIsCaptain() && $this->showCaptain) : ?>
-	<div class="player_subborder"></div>
-	<?php endif; ?>
-	<div style="clear: both"></div>
+	<div class="player-data" style="<?= $showControls ? 'float: left; width: 90%' : ''?>">
+		<?php if(($player->getIsCaptain() && $this->showCaptainContact) || $this->showAllContacts) : ?>
+		<div class="player_summonername <?= $player->getIsCaptain() && $this->showCaptain ? 'captain' : '' ?>"><?= $player->getAnmeldung()->getName() ?></div>
+		<div class="<?= $this->showEmailRight ? 'player_rankedWins' : 'player_level' ?>">
+			<?php if($this->emailWithLink): ?>
+			<a href="mailto:<?= rawurlencode($player->getAnmeldung()->getName() . " <".$player->getAnmeldung()->getEmail().">") ?>">
+			<?php endif;?>
+				<?= $player->getAnmeldung()->getEmail() ?>
+			<?php if($this->emailWithLink): ?>
+			</a>
+			<?php endif;?>
+		</div>
+		<?php endif; ?>
+		<div class="player_summonername <?= $player->getIsCaptain() && $this->showCaptain ? 'captain' : '' ?>"><?= $player->getAnmeldung()->getSummonerName() ?></div>
+
+		<?php if($this->showWins) : ?>
+		<div class="player_rankedWins">Ranked: <?= $rankedWins ?> Siege</div>
+		<?php endif; ?>
+
+		<div class="player_level">Level <?= $level ?>, <?= $tier ?></div>
+
+		<?php if($this->showWins) : ?>
+		<div class="player_normalWins">Normal: <?= $normalWins ?> Siege</div>
+		<?php endif; ?>
+
+		<?php if($player->getIsCaptain() && $this->showCaptain) : ?>
+		<div class="player_subborder"></div>
+		<?php endif; ?>
+		<div style="clear: both"></div>
+	</div>
 </div>

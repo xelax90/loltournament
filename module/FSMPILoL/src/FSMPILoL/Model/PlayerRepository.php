@@ -6,6 +6,25 @@ use Doctrine\ORM\EntityRepository;
 
 class PlayerRepository extends EntityRepository{
 	
+	public function getSubsForTournament($tournament){
+		$query = $this->createQueryBuilder('p')
+			->join('p.anmeldung', 'a')
+			->andWhere('p.team IS NULL')
+			->andWhere('a.tournament = ?1')
+			->setParameter(1, $tournament)
+			->orderBy('a.summonerName', 'ASC');
+		return $query->getQuery()->getResult();
+	}
+	
+	public function getPlayersForTournament($tournament){
+		$query = $this->createQueryBuilder('p')
+			->join('p.anmeldung', 'a')
+			->andWhere('a.tournament = ?1')
+			->setParameter(1, $tournament)
+			->orderBy('a.summonerName', 'ASC');
+		return $query->getQuery()->getResult();
+	}
+	
 	public function getPlayerByEmail($mail, $tournament){
 		$query = $this->createQueryBuilder('p')
 			->join('p.anmeldung', 'a')

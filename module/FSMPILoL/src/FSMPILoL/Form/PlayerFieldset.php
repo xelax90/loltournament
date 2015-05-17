@@ -26,11 +26,31 @@ class PlayerFieldset  extends Fieldset implements InputFilterProviderInterface, 
 		parent::__construct($name, $options);
 	}
 	
+	public function setOptions($options) {
+		parent::setOptions($options);
+		
+		if(!empty($options['forEdit'])){
+			$this->setOption('forEdit', $options['forEdit']);
+		}
+	}
+	
+	public function setOption($key, $value) {
+		parent::setOption($key, $value);
+		if($key == 'forEdit'){
+			if($this->has('anmeldung')){
+				$this->get('anmeldung')->setOption('validateSummonerNameTournament', $value);
+				$this->get('anmeldung')->setOption('validateEmailTournament', $value);
+			}
+		}
+	}
+	
 	public function init(){
 		$tournament = $this->getTournament();
 		if(empty($tournament)){
 			throw new \RuntimeException('Tournament cannot be empty');
 		}
+		
+		$forEdit = !empty($this->getOption('forEdit'));
 		
 		$this->setHydrator(new DoctrineHydrator($this->getObjectManager()))
 			 ->setObject(new Player());
@@ -75,8 +95,8 @@ class PlayerFieldset  extends Fieldset implements InputFilterProviderInterface, 
             'options' => array(
 				'showSub' => false,
 				'showAnmerkungen' => true,
-				'validateSummonerNameTournament' => true,
-				'validateEmailTournament' => true,
+				'validateSummonerNameTournament' => $forEdit,
+				'validateEmailTournament' => $forEdit,
 				'validateSummonerNameExists' => false,
 				'validateEmailExists' => false,
             ),

@@ -22,6 +22,7 @@ namespace FSMPILoL\Controller;
 
 use XelaxAdmin\Controller\ListController;
 use ReflectionClass;
+use FSMPILoL\Form\PlayerForm;
 
 /**
  * Description of PlayerController
@@ -85,6 +86,12 @@ class PlayerController extends ListController {
 			}
 		}
 		return $res;
+	}
+	
+	protected function getEditForm() {
+		$frmCls = PlayerForm::class;
+		$form = $this->getServiceLocator()->get('FormElementManager')->get($frmCls, array('forEdit' => true));
+		return $form;
 	}
 	
 	public function createGetter($param) {

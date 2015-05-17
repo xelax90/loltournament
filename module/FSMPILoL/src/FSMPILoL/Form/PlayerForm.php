@@ -23,6 +23,16 @@ class PlayerForm extends Form implements ObjectManagerAwareInterface{
 		$this->setAttribute('method', 'post');
 	}
 	
+	public function setOptions($options) {
+		parent::setOptions($options);
+		
+		if(!empty($options['forEdit'])){
+			if($this->has('player')){
+				$this->get('player')->setOption('forEdit', $options['forEdit']);
+			}
+		}
+	}
+	
 	public function init() {
 		$this->setHydrator(new DoctrineObject($this->getObjectManager()))
              ->setInputFilter(new InputFilter());
@@ -32,6 +42,7 @@ class PlayerForm extends Form implements ObjectManagerAwareInterface{
             'type' => 'FSMPILoL\Form\PlayerFieldset',
             'options' => array(
                 'use_as_base_fieldset' => true,
+				'forEdit' => empty($this->getOption('forEdit')),
             ),
         ));
 		
