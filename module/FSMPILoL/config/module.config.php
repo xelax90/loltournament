@@ -544,7 +544,7 @@ return array(
 				['route' => 'zfcadmin/zfcuseradmin/list',    'roles' => ['administrator']],
 				['route' => 'zfcadmin/zfcuseradmin/create',  'roles' => ['administrator']],
 				['route' => 'zfcadmin/zfcuseradmin/edit',    'roles' => ['administrator']],
-				['route' => 'zfcadmin/zfcuseradmin/delete',  'roles' => ['administrator']],
+				['route' => 'zfcadmin/zfcuseradmin/remove',  'roles' => ['administrator']],
 				// paarung
 				['route' => 'zfcadmin/paarungen',            'roles' => ['moderator']],
 				['route' => 'zfcadmin/paarungen/block',      'roles' => ['moderator']],

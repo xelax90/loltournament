@@ -4,17 +4,16 @@ namespace FSMPILoL;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
-use FSMPILoL\Entity\User;
-
 use Zend\EventManager\EventManager;
-use Zend\EventManager\EventManagerInterface;
 use Zend\View\Helper\Navigation;
+use FSMPILoL\Listener\UserListener;
 
 class Module
 {
     public function onBootstrap(MvcEvent $e){
 		$app = $e->getApplication();
-		$eventManager = $app->getEventManager(); 
+		$eventManager = $app->getEventManager();
+		$eventManager->attach(new UserListener());
 		$sm = $app->getServiceManager();
 		
         $moduleRouteListener = new ModuleRouteListener();

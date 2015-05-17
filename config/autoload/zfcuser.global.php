@@ -24,6 +24,8 @@ $settings = array(
     'user_entity_class' => 'FSMPILoL\Entity\User',
 	'enable_default_entities' => false,
 
+	'new_user_default_role' => 'user',
+	'role_entity_class' => 'FSMPILoL\Entity\Role',
     /**
      * Enable registration
      *

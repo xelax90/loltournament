@@ -42,7 +42,7 @@ class ObjectExistsInTournament extends ObjectExists {
 		$value['tournament'] = $this->tournament;
         $match = $this->objectRepository->findBy($value);
 
-        if (count($match) > 0) {
+        if (is_object($match)) {
             return true;
         }
 

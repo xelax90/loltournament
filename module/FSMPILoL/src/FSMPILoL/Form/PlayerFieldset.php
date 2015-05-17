@@ -75,6 +75,10 @@ class PlayerFieldset  extends Fieldset implements InputFilterProviderInterface, 
             'options' => array(
 				'showSub' => false,
 				'showAnmerkungen' => true,
+				'validateSummonerNameTournament' => true,
+				'validateEmailTournament' => true,
+				'validateSummonerNameExists' => false,
+				'validateEmailExists' => false,
             ),
 			'attributes' => array(
 				'class' => 'anmeldung_single_fieldset',

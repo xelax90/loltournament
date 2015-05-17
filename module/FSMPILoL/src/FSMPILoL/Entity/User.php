@@ -40,7 +40,11 @@ class User extends ZfcUserEntity implements JsonSerializable, ProviderInterface
 	 * @ORM\OneToMany(targetEntity="Player", mappedBy="user")
 	 */
 	protected $players;
-
+	
+	public function __construct() {
+		$this->roles = new \Doctrine\Common\Collections\ArrayCollection();
+	}
+	
     /**
      * Get role name.
      *

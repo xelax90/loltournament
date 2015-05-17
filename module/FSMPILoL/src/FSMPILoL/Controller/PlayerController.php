@@ -102,27 +102,49 @@ class PlayerController extends ListController {
 		};
 	}
 	
+	protected function _showCreateForm($params) {
+		/* @var $form \FSMPILoL\Form\PlayerForm */
+		$form = $params['form'];
+		if(!empty($this->getTeam())){
+			$data = array(
+				'player' => array(
+					'team' => $this->getTeam()
+				)
+			);
+			$form->setData($data);
+			$form->get('player')->get('team')->setAttribute('disabled', 'disabled');
+		}
+		return parent::_showCreateForm($params);
+	}
+	
 	protected function _preCreate($item) {
 		$item->getAnmeldung()->setTournament($this->getTournament());
 		$item->getAnmeldung()->setIsSub(0);
-		$em = $this->getEntityManager();
-		$repo = $em->getRepository(get_class($this->zfcUserAuthentication()->getIdentity()));
-		$user = $repo->findOneBy(array('email' => $item->getAnmeldug()->getEmail()));
+		
+		if(!empty($this->getTeam())){
+			$item->setTeam($this->getTeam());
+		}
+		
+		/* @var $userService \ZfcUser\Service\User */
+		$userService = $this->getUserService();
+		$userMapper = $userService->getUserMapper();
+		$user = $userMapper->findByEmail($item->getAnmeldung()->getEmail());
 		if(is_object($user)){
 			$item->setUser($user);
 		} else {
-			/* @var $userService \ZfcUser\Service\User */
-			$userService = $this->getUserService();
+			/* @var $pwGen \Hackzilla\PasswordGenerator\Generator\PasswordGeneratorInterface */
+			$pwGen = $this->getServiceLocator()->get('XelaxPasswordGenerator\Default');
+			$pw = $pwGen->generatePassword();
 			$data = array(
 				'email' => $item->getAnmeldung()->getEmail(),
 				'username' => $item->getAnmeldung()->getEmail(),
-				'displayName' => $item->getAnmeldung()->getName(),
-				'password' => bin2hex(openssl_random_pseudo_bytes(20)), // TODO
+				'display_name' => $item->getAnmeldung()->getName(),
+				'password' => $pw,
+				'passwordVerify' => $pw,
 			);
 			$user = $userService->register($data);
 			$item->setUser($user);
-			// TODO
-			mail($user->getEmail(), 'Anmeldung beim LoL Turnier', 'Hallo '.$user->getDisplayName().", \n\ndu bist nun auf der LoL Webseite registriert und dein Passwort lautet \n ".$data['password'].'. \n\nViele Grüße,\nDas LoL Team');
+			$this->flashMessenger()->addInfoMessage('Benutzer mit Email '.$data['email'].' und Passwort '.$pw.' wurde angelegt');
 		}
 	}
 
@@ -132,6 +154,14 @@ class PlayerController extends ListController {
 			$this->userService = $this->getServiceLocator()->get('zfcuser_user_service');
 		}
 		return $this->userService;
+	}
+	
+	public function buildRouteParams($action = 'list') {
+		$params = parent::buildRouteParams($action);
+		if(!empty($this->getTeam())){
+			$params['team_id'] = $this->getTeam()->getId();
+		}
+		return $params;
 	}
 
 }

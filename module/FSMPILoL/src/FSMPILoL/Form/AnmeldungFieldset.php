@@ -15,6 +15,7 @@ use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use FSMPILoL\Entity\Anmeldung;
 use FSMPILoL\Tournament\TournamentAwareInterface;
+use FSMPILoL\Entity\Player;
 
 /**
  * Description of AnmeldungForm
@@ -210,30 +211,51 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 					array('name' => 'StripTags'),
 					array('name' => 'XelaxHTMLPurifier\Filter\HTMLPurifier'),
 				),
+				'validators' => array(),
 			);
 		}
 		
-		$filters['email']['validators'] = array(
-			array(
+		if(!isset($this->options['validateEmailExists']) || $this->getOption('validateEmailExists')){
+			$filters['email']['validators'][] = array(
 				'name' => 'FSMPILoL\Validator\NoObjectExistsInTournament',
 				'options' => array(
 					'object_repository' => $this->getObjectManager()->getRepository(Anmeldung::class),
 					'tournament' => $this->getTournament(),
 					'fields' => 'email'
 				)
-			)
-		);
+			);
+		} elseif(!empty($this->options['validateEmailTournament'])){
+			$filters['email']['validators'][] = array(
+				'name' => 'FSMPILoL\Validator\PlayerEmail',
+				'options' => array(
+					'object_repository' => $this->getObjectManager()->getRepository(Player::class),
+					'tournament' => $this->getTournament(),
+					'fields' => 'email'
+				)
+			);
+		}
 		
-		$filters['summonerName']['validators'] = array(
-			array(
+		
+		
+		if(!isset($this->options['validateSummonerNameExists']) || $this->getOption('validateSummonerNameExists')){
+			$filters['summonerName']['validators'][] = array(
 				'name' => 'FSMPILoL\Validator\NoObjectExistsInTournament',
 				'options' => array(
 					'object_repository' => $this->getObjectManager()->getRepository(Anmeldung::class),
 					'tournament' => $this->getTournament(),
 					'fields' => 'summonerName'
 				)
-			)
-		);
+			);
+		} elseif(!empty($this->options['validateSummonerNameTournament'])){
+			$filters['summonerName']['validators'][] = array(
+				'name' => 'FSMPILoL\Validator\PlayerSummonerName',
+				'options' => array(
+					'object_repository' => $this->getObjectManager()->getRepository(Player::class),
+					'tournament' => $this->getTournament(),
+					'fields' => 'email'
+				)
+			);
+		}
 		
 		$filters['isSub'] = array(
 			'required' => false,

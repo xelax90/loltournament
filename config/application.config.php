@@ -17,6 +17,7 @@ $config = array(
 		'ZfcUserAdmin',
 		'XelaxAdmin',
 		'XelaxHTMLPurifier',
+		'XelaxPasswordGeneratorModule',
         'FSMPILoL',
     ),
 

@@ -33,8 +33,8 @@ class NoObjectExistsInTournament extends ObjectExistsInTournament
 		$value['tournament'] = $this->tournament;
         $match = $this->objectRepository->findOneBy($value);
 
-        if (count($match) > 0) {
-            $this->error(self::ERROR_OBJECT_FOUND, $value);
+        if (is_object($match)) {
+            $this->error(self::ERROR_OBJECT_FOUND, $value['email']);
 
             return false;
         }
