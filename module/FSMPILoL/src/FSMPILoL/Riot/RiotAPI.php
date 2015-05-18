@@ -121,8 +121,10 @@ class RiotAPI {
 				
 				if(empty($id))
 					$anmeldung->getPlayer()->setSummonerId($summoners[$name]->id);
-				else
+				else{
+					$summoners[$id] = $summonersID[$id];
 					$anmeldung->setSummonerName($summonersID[$id]->name);
+				}
 			}
 		}
 		$this->getEntityManager()->flush();

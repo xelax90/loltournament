@@ -313,11 +313,12 @@ class Group {
 		} else {
 			$summoners = $this->getTournamentSummoners();
 			foreach($anmeldungen as $anmeldung){
+				/* @var $anmeldung FSMPILoL\Entity\Anmeldung */
 				$standardname = RiotAPI::getStandardName($anmeldung->getSummonerName());
 				if(!empty($summoners[$standardname])){
 					$summoner = $summoners[$standardname];
-				} else {
-					// TODO try to get summoner directly and detect name changes
+				} elseif(!empty($anmeldung->getPlayer()) && !empty($summoners[$anmeldung->getPlayer()->getSummonerId()])) {
+					$summoner = $summoners[$anmeldung->getPlayer()->getSummonerId()];
 				}
 				$summonerdata[$anmeldung->getId()] = new Summonerdata($api, $anmeldung, $summoner);
 			}
