@@ -93,6 +93,10 @@ class Anmeldung implements InputFilterAwareInterface, JsonSerializable
 	 */
 	protected $player;
 	
+	/**
+	 *
+	 * @var \FSMPILoL\Tournament\Summonerdata
+	 */
 	protected $summonerdata;
 	
 	public function getId(){

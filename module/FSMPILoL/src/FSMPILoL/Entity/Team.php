@@ -182,8 +182,13 @@ class Team implements InputFilterAwareInterface, JsonSerializable
 	public function getScore(){
 		$score = 0;
 		if($this->getPlayers()){
+			$count = 0;
 			foreach($this->getPlayers() as $player){
+				$count++;
 				$score += $player->getScore();
+			}
+			if($count > 0){
+				$score = $score / $count * 5;
 			}
 		}
 		return $score;
