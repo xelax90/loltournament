@@ -11,9 +11,10 @@ namespace FSMPILoL\Controller;
 use Zend\View\Model\ViewModel;
 use FSMPILoL\Form\CommentPaarungForm;
 use FSMPILoL\Form\WarningForm;
-use FSMPILoL\Entity\User;
+use FSMPILoL\Entity\Team;
 use FSMPILoL\Entity\Warning;
 use FSMPILoL\Form\AddSubToTeamForm;
+use FSMPILoL\Form\TeamForm;
 
 /**
  * Description of TeamAdminController
@@ -277,4 +278,64 @@ class TeamAdminController extends AbstractTournamentAdminController{
 		$this->flashMessenger()->addSuccessMessage(sprintf($this->makeSubSuccessFormat, $player->getAnmeldung()->getSummonerName()));
 		return $this->_redirectToTeams();
 	}
+	
+	function createAction() {
+		$form = $this->getServiceLocator()->get('FormElementManager')->get(TeamForm::class);
+ 		$em = $this->getEntityManager();
+		$request = $this->getRequest();
+		
+        /** @var $request \Zend\Http\Request */
+        if ($request->isPost()) {
+			$item = new Team();
+			$data = $request->getPost();
+	        $form->bind($item);
+	        $form->setData($data);
+			if ($form->isValid()) {
+				$em->persist($item);
+				$em->flush();
+				$this->flashMessenger()->addSuccessMessage('The Team was created');
+				return $this->_redirectToTeams();
+			}
+        }
+		
+		$params = array(
+			'form' => $form,
+		);
+		
+		return new ViewModel($params);
+	}
+	
+	
+	function editAction() {
+		$id = $this->getEvent()->getRouteMatch()->getParam('team_id');
+		$em = $this->getEntityManager();
+		$item = $em->getRepository(Team::class)->find((int)$id);
+		if(empty($item)){
+			$this->flashMessenger()->addErrorMessage(sprintf($this->teamNotFoundFormat, $id));
+			$this->_redirectToTeams();
+		}
+		$form = $this->getServiceLocator()->get('FormElementManager')->get(TeamForm::class);
+		
+		$form->setBindOnValidate(false);
+		$form->bind($item);
+		
+        /** @var $request \Zend\Http\Request */
+        $request = $this->getRequest();
+		if ($request->isPost()) {
+			$data = $request->getPost();
+			$form->setData($data);
+			if ($form->isValid()) {
+				$form->bindValues();
+				$em->flush();
+				$this->flashMessenger()->addSuccessMessage('The Team was edited');
+				return $this->_redirectToTeams();
+			}
+        }
+		
+		$params = array(
+            'form' => $form,
+		);
+		return new ViewModel($params);
+	}
+	
 }

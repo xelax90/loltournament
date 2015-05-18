@@ -1,0 +1,25 @@
+<?php
+
+$form = $this->form;
+$form->prepare();
+$form->setAttribute('action', $this->url('zfcadmin/teams/edit'));
+$form->setAttribute('method', 'post');
+?>
+
+<script type="text/javascript">
+	jQuery(function($){
+		$(function(){
+			$('input[type=checkbox],input[type=radio]').each(function(){
+				if($(this).data('switch')){
+					$(this).bootstrapSwitch();
+				}
+			});
+			
+		});
+	}(jQuery));
+</script>
+
+
+<h1><?php echo $this->translate('Team bearbeiten') ?></h1>
+
+<?php echo $this->twbForm($form);

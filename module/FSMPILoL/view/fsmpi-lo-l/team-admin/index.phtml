@@ -13,8 +13,8 @@ foreach($groups as $group):
 	<div class="navbar filter-bar">
 		<div class="navbar-inner">
 			<div class="pull-right">
-				<a href="<?php echo $this->url('zfcadmin/teams') ?>" class="btn btn-primary">
-					<?php echo $this->translate('Neues Team aus Ersatzspielern') ?>
+				<a href="<?php echo $this->url('zfcadmin/teams/create') ?>" class="btn btn-primary">
+					<?php echo $this->translate('Neues Team') ?>
 				</a>
 			</div>
 		</div>
@@ -79,6 +79,11 @@ foreach($groups as $group):
 					<a class="btn btn-xs" title="Team verwarnen" href="<?= $this->url('zfcadmin/teams/warn', array('team_id' => $team->getId())) ?>">
 						<i class="fa fa-gavel"></i>
 					</a>
+					<?php if($this->fsmpiLoLTournamentPermission()->isAllowed('edit', $team)) : ?>
+					<a class="btn btn-xs" title="Team bearbeiten" href="<?= $this->url('zfcadmin/teams/edit', array('team_id' => $team->getId())) ?>">
+						<i class="fa fa-pencil"></i>
+					</a>
+					<?php endif; ?>
 					<a class="btn btn-xs" title="Spieler bearbeiten" href="<?= $this->url('zfcadmin/teams/player', array('team_id' => $team->getId())) ?>">
 						<i class="fa fa-users"></i>
 					</a>

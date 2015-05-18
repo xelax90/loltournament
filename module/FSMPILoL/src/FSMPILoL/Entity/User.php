@@ -11,7 +11,7 @@ use FSMPILoL\Entity\Tournament;
 /**
  * A User.
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="FSMPILoL\Model\UserRepository")
  * @ORM\Table(name="user")
  */
 class User extends ZfcUserEntity implements JsonSerializable, ProviderInterface

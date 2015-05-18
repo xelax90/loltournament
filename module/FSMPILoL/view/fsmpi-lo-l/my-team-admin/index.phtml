@@ -74,6 +74,9 @@ foreach($groups as $group):
 					<a class="btn btn-xs" title="Team verwarnen" href="<?= $this->url('zfcadmin/myteams/warn', array('team_id' => $team->getId())) ?>">
 						<i class="fa fa-gavel"></i>
 					</a>
+					<a class="btn btn-xs" title="Team bearbeiten" href="<?= $this->url('zfcadmin/myteams/edit', array('team_id' => $team->getId())) ?>">
+						<i class="fa fa-pencil"></i>
+					</a>
 					<a class="btn btn-xs" title="Spieler bearbeiten" href="<?= $this->url('zfcadmin/myteams/player', array('team_id' => $team->getId())) ?>">
 						<i class="fa fa-users"></i>
 					</a>

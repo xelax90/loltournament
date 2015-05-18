@@ -421,6 +421,26 @@ return array(
 									),
 				                ),
 							),
+							'create' => array(
+				                'type' => 'literal',
+				                'options' => array(
+				                    'route'    => '/create',
+									'defaults' => array(
+										'controller' => 'teamadmin',
+										'action' => 'create',
+									)
+				                ),
+							),
+							'edit' => array(
+				                'type' => 'literal',
+				                'options' => array(
+				                    'route'    => '/edit',
+									'defaults' => array(
+										'controller' => 'teamadmin',
+										'action' => 'edit',
+									)
+				                ),
+							),
 						),
 					),
 					'myteams' => array(
@@ -473,7 +493,7 @@ return array(
 				                'options' => array(
 				                    'route'    => '/warn',
 									'defaults' => array(
-										'controller' => 'teamadmin',
+										'controller' => 'myteamadmin',
 										'action' => 'warn',
 									)
 				                ),
@@ -483,7 +503,7 @@ return array(
 				                'options' => array(
 				                    'route'    => '/warnPlayer/:player_id',
 									'defaults' => array(
-										'controller' => 'teamadmin',
+										'controller' => 'myteamadmin',
 										'action' => 'warnPlayer',
 										'player_id' => 0,
 									),
@@ -497,7 +517,7 @@ return array(
 				                'options' => array(
 				                    'route'    => '/deleteWarning/:warning_id',
 									'defaults' => array(
-										'controller' => 'teamadmin',
+										'controller' => 'myteamadmin',
 										'action' => 'deleteWarning',
 										'warning_id' => 0,
 									),
@@ -518,7 +538,7 @@ return array(
 				                'options' => array(
 				                    'route'    => '/addsub',
 									'defaults' => array(
-										'controller' => 'teamadmin',
+										'controller' => 'myteamadmin',
 										'action' => 'addsub',
 									)
 				                ),
@@ -528,13 +548,23 @@ return array(
 				                'options' => array(
 				                    'route'    => '/makesub/:player_id',
 									'defaults' => array(
-										'controller' => 'teamadmin',
+										'controller' => 'myteamadmin',
 										'action' => 'makesub',
 										'player_id' => 0,
 									),
 									'constraints' => array(
 										'player_id'         => '[0-9]*',
 									),
+				                ),
+							),
+							'edit' => array(
+				                'type' => 'literal',
+				                'options' => array(
+				                    'route'    => '/edit',
+									'defaults' => array(
+										'controller' => 'myteamadmin',
+										'action' => 'edit',
+									)
 				                ),
 							),
 						),
@@ -633,6 +663,8 @@ return array(
 				['route' => 'zfcadmin/teams/player',         'roles' => ['moderator']],
 				['route' => 'zfcadmin/teams/addsub',         'roles' => ['moderator']],
 				['route' => 'zfcadmin/teams/makesub',        'roles' => ['moderator']],
+				['route' => 'zfcadmin/teams/create',         'roles' => ['administrator']],
+				['route' => 'zfcadmin/teams/edit',           'roles' => ['administrator']],
 				// myteams
 				['route' => 'zfcadmin/myteams',              'roles' => ['moderator']],
 				['route' => 'zfcadmin/myteams/block',        'roles' => ['moderator']],
