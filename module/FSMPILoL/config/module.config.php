@@ -652,6 +652,9 @@ return array(
 				['route' => 'zfcadmin/runden/create',        'roles' => ['administrator']],
 				['route' => 'zfcadmin/runden/setpreset',     'roles' => ['administrator']],
 				['route' => 'zfcadmin/runden/edit',          'roles' => ['administrator']],
+				['route' => 'zfcadmin/runden/edit/hide',     'roles' => ['administrator']],
+				['route' => 'zfcadmin/runden/edit/show',     'roles' => ['administrator']],
+				['route' => 'zfcadmin/runden/edit/delete',   'roles' => ['administrator']],
 				// teams
 				['route' => 'zfcadmin/teams',                'roles' => ['moderator']],
 				['route' => 'zfcadmin/teams/anmerkung',      'roles' => ['moderator']],
