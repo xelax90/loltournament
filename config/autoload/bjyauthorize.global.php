@@ -11,6 +11,8 @@ $bjyConfig = array(
 			'role_entity_class' => 'FSMPILoL\Entity\Role',
 		),
 	),
+	
+	'unauthorized_strategy' => 'BjyAuthorize\View\RedirectionStrategy',
 );
 
 return array(

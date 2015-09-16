@@ -11,11 +11,14 @@ $config = array(
 		'ZfcUser',
 		'ZfcUserDoctrineORM',
 		'BjyAuthorize',
-		'TwbBundle',
-        'XelaxTwbUnmask',
 		'ZfcAdmin',
 		'ZfcUserAdmin',
+		'GoalioMailService',
+		'GoalioForgotPassword',
+		'GoalioForgotPasswordDoctrineORM',
 		'XelaxAdmin',
+		'TwbBundle',
+        'XelaxTwbUnmask',
 		'XelaxHTMLPurifier',
 		'XelaxPasswordGeneratorModule',
         'FSMPILoL',
@@ -36,7 +39,7 @@ $config = array(
         // modules are loaded. These effectively override configuration
         // provided by modules themselves. Paths may use GLOB_BRACE notation.
         'config_glob_paths' => array(
-            'config/autoload/{,*.}{global,local}.php',
+            'config/autoload/{{,*.}global,{,*.}local}.php',
         ),
 
         // Whether or not to enable a configuration cache.
@@ -81,12 +84,6 @@ $config = array(
 
 if (\Zend\Console\Console::isConsole()) {
 	if(($key = array_search('BjyAuthorize', $config['modules'])) !== false) {
-		unset($config['modules'][$key]);
-	}
-}
-
-if(strtolower(getenv('APPLICATION_ENV')) != 'development'){
-	if(($key = array_search('ZendDeveloperTools', $config['modules'])) !== false) {
 		unset($config['modules'][$key]);
 	}
 }

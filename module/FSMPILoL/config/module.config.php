@@ -3,6 +3,8 @@ namespace FSMPILoL;
 
 use Zend\ServiceManager\AbstractPluginManager;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
+use FSMPILoL\Options\SkelletonOptions;
+use XelaxAdmin\Router\ListRoute;
 
 $xelaxConfig = array(
 	/*
@@ -33,6 +35,15 @@ $xelaxConfig = array(
 				//'route' => 'zfcadmin/teams'
 			),
 		),
+		'user' => array(
+			'name' => gettext_noop('User'),
+			'controller_class' => 'FSMPILoL\Controller\User', 
+			'base_namespace' => 'FSMPILoL',
+			'list_columns' => array(gettext_noop('Id') => 'id', gettext_noop('Name') => 'display_name', gettext_noop('E-Mail') => 'email', gettext_noop('State') => 'state'),
+			'list_title' => gettext_noop('Users'),
+			'route_base' => 'zfcadmin/user',
+			'rest_enabled' => true,
+		),
 	),
 );
 
@@ -48,6 +59,8 @@ return array(
 			'myteamadmin' => 'FSMPILoL\Controller\MyTeamAdminController',
 			'anmeldung' => 'FSMPILoL\Controller\AnmeldungController',
 			'FSMPILoL\Controller\PlayerController' => 'FSMPILoL\Controller\PlayerController',
+			'FSMPILoL\Controller\FrontendUser' => Controller\FrontendUserController::class,
+			'FSMPILoL\Controller\User' => Controller\UserController::class,
         ),
     ),
     
@@ -159,6 +172,23 @@ return array(
 					)
 				)
             ),
+			'zfcuser' => array(
+				'child_routes' => array(
+					'check-token' => array(
+						'type' => 'segment',
+						'options' => array(
+							'route' => '/activate/:token',
+							'defaults' => array(
+								'controller' => 'FSMPILoL\Controller\FrontendUser',
+								'action' => 'checkToken',
+							),
+							'constraints' => array(
+								'token' => '[A-F0-9]',
+							),
+						),
+					),
+				),
+			),
 			'zfcadmin' => array(
 				'options' => array(
 					'defaults' => array(
@@ -167,6 +197,7 @@ return array(
 					)
 				),
 				'child_routes' => array(
+					'user'        => array( 'type' => ListRoute::class, 'priority' => 1001, 'options' => array( 'controller_options_name' => 'user'        ) ),
 					'paarungen' => array(
 		                'type' => 'segment',
 		                'options' => array(
@@ -579,8 +610,10 @@ return array(
         // in the ACL. like roles, they can be hierarchical
         'resource_providers' => array(
             "BjyAuthorize\Provider\Resource\Config" => array(
-                'user' => array(),
-				'tournament' => array(),
+                'user',
+				'tournament',
+				'debug',
+				'administration', // navigation for administration
             ),
         ),
 
@@ -597,6 +630,14 @@ return array(
                     [['moderator'],     'tournament', 'round/viewHidden'],
                     [['moderator'],     'tournament', 'debug/moderator'],
                     [['administrator'], 'tournament', 'debug/administrator'],
+
+					[['moderator'], 'administration', 'login'],
+					[['moderator'], 'administration', 'user/list'],
+					[['moderator'], 'administration', 'user/create'],
+					[['moderator'], 'administration', 'userprofile'],
+
+					[['moderator'], 'debug', 'moderator'],
+					[['administrator'], 'debug', 'administrator'],
                 ),
 
                 // Don't mix allow/deny rules if you are using role inheritance.
@@ -612,11 +653,13 @@ return array(
 				// user
 				['route' => 'zfcuser',                  'roles' => ['guest', 'user'] ],
 				['route' => 'zfcuser/login',            'roles' => ['guest', 'user'] ],
-				['route' => 'zfcuser/register',         'roles' => [] ],
+				['route' => 'zfcuser/register',         'roles' => ['guest'] ],
 				['route' => 'zfcuser/authenticate',     'roles' => ['guest'] ],
 				['route' => 'zfcuser/logout',           'roles' => ['guest', 'user'] ],
 				['route' => 'zfcuser/changepassword',   'roles' => ['user'] ],
 				['route' => 'zfcuser/changeemail',      'roles' => ['user'] ],
+				['route' => 'zfcuser/forgotpassword',   'roles' => ['guest']],
+				['route' => 'zfcuser/resetpassword',    'roles' => ['guest']],
 				
 				// webpage
 				['route' => 'home',                     'roles' => ['guest', 'user'] ],
@@ -636,11 +679,7 @@ return array(
 				// admin
 				['route' => 'zfcadmin',                      'roles' => ['moderator']],
 				// user admin
-				['route' => 'zfcadmin/zfcuseradmin',         'roles' => ['administrator']],
-				['route' => 'zfcadmin/zfcuseradmin/list',    'roles' => ['administrator']],
-				['route' => 'zfcadmin/zfcuseradmin/create',  'roles' => ['administrator']],
-				['route' => 'zfcadmin/zfcuseradmin/edit',    'roles' => ['administrator']],
-				['route' => 'zfcadmin/zfcuseradmin/remove',  'roles' => ['administrator']],
+				['route' => 'zfcadmin/user' ,                'roles' => ['administrator']],
 				// paarung
 				['route' => 'zfcadmin/paarungen',            'roles' => ['moderator']],
 				['route' => 'zfcadmin/paarungen/block',      'roles' => ['moderator']],
@@ -692,7 +731,41 @@ return array(
 					'administrator' => array() // Admin role must be leaf and must contain 'admin'
 				)
 			)
-		)
+		),
+		'registration_notification_from' => 'Gaming Group Aachen <schurix@gmx.de>',
+		'registration_method_flag' => SkelletonOptions::REGISTRATION_METHOD_AUTO_ENABLE | SkelletonOptions::REGISTRATION_METHOD_SELF_CONFIRM,
+		'registration_moderator_email' => array(
+			'subject' => gettext_noop('[LeagueOfLegends] A new user has registered'),
+			'template' => 'skelleton-application/email/register_moderator_notification'
+		),
+		'registration_user_email_welcome ' => array(
+			'subject' => gettext_noop('[LeagueOfLegends] Welcome'),
+			'template' => 'skelleton-application/email/register_welcome'
+		),
+		'registration_user_email_welcome_confirm_mail' => array(
+			'subject' => gettext_noop('[LeagueOfLegends] Welcome. Please confirm your E-Mail'),
+			'template' => 'skelleton-application/email/register_welcome_confirm_mail'
+		),
+		'registration_user_email_double_confirm' => array(
+			'subject' => gettext_noop('[LeagueOfLegends] Welcome'),
+			'template' => 'skelleton-application/email/register_double_confirm_mail'
+		),
+		'registration_user_email_confirm_mail' => array(
+			'subject' => gettext_noop('[LeagueOfLegends] Welcome. Please confirm your E-Mail'),
+			'template' => 'skelleton-application/email/register_confirm_mail'
+		),
+		'registration_user_email_confirm_moderator' => array(
+			'subject' => gettext_noop('[LeagueOfLegends] Welcome'),
+			'template' => 'skelleton-application/email/register_confirm_moderator'
+		),
+		'registration_user_email_activated' => array(
+			'subject' => gettext_noop('[LeagueOfLegends] Your Account has been verified'),
+			'template' => 'skelleton-application/email/register_activated'
+		),
+		'registration_user_email_disabled' => array(
+			'subject' => gettext_noop('[LeagueOfLegends] Your Account has been disabled'),
+			'template' => 'skelleton-application/email/register_disabled'
+		),
 	),
 	
 	
@@ -783,6 +856,10 @@ return array(
                 return new Options\SkelletonOptions(isset($config['skelleton_application']) ? $config['skelleton_application'] : array());
             },
 		),
+		'invokables' => array(
+			'FSMPILoL\UserListener' => Listener\UserListener::class,
+			'FSMPILoL\UserService' => Service\UserService::class,
+		)
     ),
     
     'translator' => array(
@@ -793,6 +870,11 @@ return array(
                 'base_dir' => __DIR__ . '/../language',
                 'pattern'  => '%s.mo',
             ),
+			array(
+				'type'     => 'gettext',
+				'base_dir' => __DIR__ . '/../../../vendor/zf-commons/zfc-user/src/ZfcUser/language',
+				'pattern'  => '%s.mo',
+			),
         ),
     ),
     
@@ -848,6 +930,9 @@ return array(
 			array('label' => 'Kontakt', 'route' => 'kontakt'),
 		),
 		'admin' => array(
+			'zfcuseradmin' => null,
+			array('label' => gettext_noop('Home'),            'route' => 'home'),
+			array('label' => gettext_noop('Users'),           'route' => 'zfcadmin/user',        'resource' => 'administration', 'privilege' => 'user/list' ),
 			array('label' => 'Paarungen', 'route' => 'zfcadmin/paarungen'),
 			array('label' => 'Runden', 'route' => 'zfcadmin/runden'),
 			array('label' => 'Teams', 'route' => 'zfcadmin/teams'),
