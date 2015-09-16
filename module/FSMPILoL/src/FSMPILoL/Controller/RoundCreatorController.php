@@ -123,7 +123,7 @@ class RoundCreatorController extends AbstractTournamentAdminController{
         }
 		
 		$presetForm = new RoundPresetForm($this->getServiceLocator());
-		
+		$presetForm->setData(array('preset' => $preset));
 		return new ViewModel(array('group' => $group, 'form' => $form, 'presetForm' => $presetForm, 'preset' => $preset));
 	}
 	
