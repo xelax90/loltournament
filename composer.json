@@ -22,13 +22,17 @@
         "bjyoungblood/bjy-authorize": "*",
         "doctrine/data-fixtures": "dev-master",
         "hounddog/doctrine-data-fixture-module": "dev-master",
-		"zf-commons/zfc-admin" : "dev-master",
+		
+		"zf-commons/zfc-admin" : "*",
 		"danielss89/zfc-user-admin" : "dev-master",
+		
         "xelax90/xelax-admin": "dev-master",
 		"neilime/zf2-twb-bundle" : "dev-master",
 		"xelax90/xelax-twb-unmask": "dev-master",
 		"xelax90/zf2-filter-htmlpurifier": "*",
-		"xelax90/password-generator-module" : "dev-master"
+		"xelax90/password-generator-module" : "dev-master",
+		
+		"azatoth/php-pgettext" : "dev-master"
     },
     "require-dev": {
         "zendframework/zftool": "dev-master",
