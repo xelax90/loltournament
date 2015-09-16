@@ -8,6 +8,7 @@ use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface; 
 use Zend\Json\Json;
 use JsonSerializable;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * A Player
@@ -99,6 +100,10 @@ class Match implements InputFilterAwareInterface, JsonSerializable
 	 * @ORM\OneToMany(targetEntity="Game", mappedBy="match", cascade={"persist", "remove"})
 	 */
 	protected $games;
+	
+	public function __construct() {
+		$this->games = new ArrayCollection();
+	}
 	
 	public function getId(){
 		return $this->id;

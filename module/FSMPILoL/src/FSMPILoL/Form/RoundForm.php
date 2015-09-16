@@ -65,11 +65,14 @@ class RoundForm extends Form implements InputFilterProviderInterface
 			'name' => 'startDate',
 			'type' => 'DateTimeLocal',
 			'options' => array(
-				'label' => 'Startdatum',
+				'label' => gettext_noop('Startdatum'),
+				'column-size' => 'sm-10',
+				'format' => 'Y-m-d\TH:i'
 			),
 			'attributes' => array(
-				'id' => 'round_startdate',
-				'placeholder' => 'YYYY-MM-DD HH:MM',
+				'id' => "round_startdate",
+				'step' => 1,
+				'placeholder' => 'yyyy-mm-ddThh:mm',
 				'class' => 'form-control',
 			)
 		));
@@ -188,10 +191,13 @@ class RoundForm extends Form implements InputFilterProviderInterface
 				),
 			),
 			'isHidden' => array(
-				'required' => true,
+				'required' => false,
 				'filters' => array(
 					array('name' => 'Int'),
 				),
+			),
+			'startDate' => array(
+				'required' => true,
 			),
 		);
 		

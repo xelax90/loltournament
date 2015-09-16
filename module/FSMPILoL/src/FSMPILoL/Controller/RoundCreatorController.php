@@ -85,6 +85,7 @@ class RoundCreatorController extends AbstractTournamentAdminController{
 		$form->remove('number');
 		$form->remove('isHidden');
 		$form->get('submit')->setAttribute('value', 'Auslosen');
+		$form->getInputFilter()->remove('number');
 		
 		$creatorOptions = $this->getCreatorOptions();
 		$types = $creatorOptions->getRoundTypes();
