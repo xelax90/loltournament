@@ -2,7 +2,7 @@
 
 $form = $this->form;
 $form->prepare();
-$form->setAttribute('action', $this->url('zfcadmin/teams/edit'));
+$form->setAttribute('action', $this->url('zfcadmin/teams/edit', array('team_id' => $form->getObject()->getId())));
 $form->setAttribute('method', 'post');
 ?>
 
