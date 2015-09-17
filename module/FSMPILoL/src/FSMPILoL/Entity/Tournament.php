@@ -83,7 +83,7 @@ class Tournament implements InputFilterAwareInterface, JsonSerializable, Already
 	 * Setter for Name
 	 * @param string $name
 	 */
-	public function setName($id){
+	public function setName($name){
 		$this->name = $name;
 	}
 	

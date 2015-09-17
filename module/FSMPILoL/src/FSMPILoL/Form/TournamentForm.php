@@ -1,59 +1,62 @@
 <?php
+/* 
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
 namespace FSMPILoL\Form;
 
 use Zend\Form\Form;
-use Zend\InputFilter\InputFilterProviderInterface;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use Zend\InputFilter\InputFilter;
+use DoctrineModule\Persistence\ObjectManagerAwareInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 
-class TournamentForm extends Form implements InputFilterProviderInterface
-{
-	public function __construct(){
+/**
+ * TournamentForm
+ *
+ * @author schurix
+ */
+class TournamentForm extends Form implements ObjectManagerAwareInterface{
+	protected $em;
+	
+	public function __construct($name = "", $options = array()){
 		// we want to ignore the name passed
-		parent::__construct('tournament');
+		parent::__construct('TournamentForm', $options);
+		$this->setAttribute('method', 'post');
+	}
+	
+	public function init(){
+		$this->setHydrator(new DoctrineHydrator($this->getObjectManager()))
+			 ->setInputFilter(new InputFilter());
 		
 		$this->add(array(
-			'name' => 'id',
-			'type' => 'Hidden',
-		));
-		
-		$this->add(array(
-			'name' => 'name',
-			'type' => 'Text',
-			'options' => array(
-				'label' => 'Name',
-			),
-			'attributes' => array(
-				'id' => 'tournament_name',
-				'class' => 'form-control',
-			)
-		));
+			'name' => 'tournament',
+            'type' => 'FSMPILoL\Form\TournamentFieldset',
+            'options' => array(
+                'use_as_base_fieldset' => true,
+            ),
+        ));
 		
 		$this->add(array(
 			'name' => 'submit',
 			'type' => 'Submit',
 			'attributes' => array(
-				'value' => 'Go',
-				'class' => 'btn btn-success'
+				'value' => 'Save',
+				'class' => 'btn-success'
 			),
+			'options' => array(
+				'as-group' => true,
+			)
 		));
 	}
-
-	public function getInputFilterSpecification() {
-		$filter = array(
-			'id' => array(
-				'required' => false,
-				'filters' => array(
-					array('name' => 'Int'),
-				),
-			),
-			'name' => array(
-				'required' => true,
-				'filters' => array(
-					array('name' => 'StringTrim'),
-					array('name' => 'XelaxHTMLPurifier\Filter\HTMLPurifier'),
-				),
-			),
-		);
-		return $filter;
+	
+	public function getObjectManager() {
+		return $this->em;
 	}
 
+	public function setObjectManager(ObjectManager $objectManager) {
+		$this->em = $objectManager;
+	}
 }

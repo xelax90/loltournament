@@ -42,7 +42,16 @@ $xelaxConfig = array(
 			'list_columns' => array(gettext_noop('Id') => 'id', gettext_noop('Name') => 'display_name', gettext_noop('E-Mail') => 'email', gettext_noop('State') => 'state'),
 			'list_title' => gettext_noop('Users'),
 			'route_base' => 'zfcadmin/user',
-			'rest_enabled' => true,
+			'rest_enabled' => false,
+		),
+		'tournament' => array(
+			'name' => gettext_noop('Tournament'),
+			'controller_class' => 'XelaxAdmin\Controller\ListController', 
+			'base_namespace' => 'FSMPILoL',
+			'list_columns' => array(gettext_noop('Id') => 'id', gettext_noop('Name') => 'name'),
+			'list_title' => gettext_noop('Tournaments'),
+			'route_base' => 'zfcadmin/tournament',
+			'rest_enabled' => false,
 		),
 	),
 );
@@ -198,6 +207,7 @@ return array(
 				),
 				'child_routes' => array(
 					'user'        => array( 'type' => ListRoute::class, 'priority' => 1001, 'options' => array( 'controller_options_name' => 'user'        ) ),
+					'tournament'        => array( 'type' => ListRoute::class, 'options' => array( 'controller_options_name' => 'tournament'        ) ),
 					'paarungen' => array(
 		                'type' => 'segment',
 		                'options' => array(
@@ -680,6 +690,8 @@ return array(
 				['route' => 'zfcadmin',                      'roles' => ['moderator']],
 				// user admin
 				['route' => 'zfcadmin/user' ,                'roles' => ['administrator']],
+				// tournament
+				['route' => 'zfcadmin/tournament' ,          'roles' => ['administrator']],
 				// paarung
 				['route' => 'zfcadmin/paarungen',            'roles' => ['moderator']],
 				['route' => 'zfcadmin/paarungen/block',      'roles' => ['moderator']],
@@ -933,6 +945,7 @@ return array(
 			'zfcuseradmin' => null,
 			array('label' => gettext_noop('Home'),            'route' => 'home'),
 			array('label' => gettext_noop('Users'),           'route' => 'zfcadmin/user',        'resource' => 'administration', 'privilege' => 'user/list' ),
+			array('label' => gettext_noop('Tournaments'),           'route' => 'zfcadmin/tournament',        'resource' => 'tournament', 'privilege' => 'debug/administrator' ),
 			array('label' => 'Paarungen', 'route' => 'zfcadmin/paarungen'),
 			array('label' => 'Runden', 'route' => 'zfcadmin/runden'),
 			array('label' => 'Teams', 'route' => 'zfcadmin/teams'),
