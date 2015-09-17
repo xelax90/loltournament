@@ -65,10 +65,17 @@ class AnmeldungController extends AbstractActionController
 	}
 
 	public function formAction(){
+		$this->authenticate();
+		$lastPlayer = null;
+		if($this->zfcUserAuthentication()->hasIdentity()){
+			/* @var $identity \FSMPILoL\Entity\User */
+			$identity = $this->zfcUserAuthentication()->getIdentity();
+			$lastPlayer = $identity->getMostRecentPlayer();
+		}
+		
 		$request = $this->getRequest();
 		$singleForm = $this->getForm('FSMPILoL\Form\AnmeldungSingleForm');
 		$anmeldungEntity = new AnmeldungEntity();
-		$singleForm->bind($anmeldungEntity);
 		
 		$teamForm = $this->getForm('FSMPILoL\Form\AnmeldungTeamForm');
 		$teamForm->prepare();
@@ -80,12 +87,39 @@ class AnmeldungController extends AbstractActionController
 			$i++;
 		}
 		
+		if($lastPlayer && (!$request->isPost() || (!isset($data['teamName']) && !isset($data['anmeldung'])))){
+			$anmeldungEntity->setName($lastPlayer->getUser()->getDisplayName());
+			$anmeldungEntity->setEmail($lastPlayer->getUser()->getEmail());
+			$anmeldungEntity->setFacebook($lastPlayer->getAnmeldung()->getFacebook());
+			$anmeldungEntity->setOtherContact($lastPlayer->getAnmeldung()->getOtherContact());
+			$anmeldungEntity->setSummonerName($lastPlayer->getAnmeldung()->getSummonerName());
+			
+			$teamData = array();
+			if(!empty($lastPlayer->getTeam())){
+				foreach($lastPlayer->getTeam()->getPlayers() as $player){
+					$teamData[] = array(
+						'name' => $player->getUser()->getDisplayName(),
+						'email' => $player->getUser()->getEmail(),
+						'facebook' => $player->getAnmeldung()->getFacebook(),
+						'otherContact' => $player->getAnmeldung()->getOtherContact(),
+						'summonerName' => $player->getAnmeldung()->getSummonerName()
+					);
+				}
+			}
+			$teamForm->setData(array(
+				'teamName' => $lastPlayer->getTeam()->getName(),
+				'anmeldungen' => $teamData,
+			));
+		}
+		$singleForm->bind($anmeldungEntity);
+		
+		
 		$icons = $this->getAnmeldung()->getAvailableIcons();
 		
 		//$anmeldung = new AnmeldungEntity();
 		//$form->bind($anmeldung);
 
-		if ($request->isPost()) {
+		if ($request->isPost() && (isset($data['teamName']) || isset($data['anmeldung']))) {
 			$data = $request->getPost();
 			if(isset($data['teamName'])){ // team form
 				$validation = $this->validateTeamAnmeldung($teamForm, $request->getPost());
@@ -108,8 +142,16 @@ class AnmeldungController extends AbstractActionController
 				}
 			}
 		}
-
-		return new ViewModel(array( 'singleForm' => $singleForm, 'teamForm' => $teamForm, 'icons' => $icons));
+		
+		$loginForm = $this->getServiceLocator()->get('zfcuser_login_form');
+		$fm = $this->flashMessenger()->setNamespace('zfcuser-login-form')->getMessages();
+		if (isset($fm[0])) {
+			$loginForm->setMessages(
+				array('identity' => array($fm[0]))
+			);
+		}
+		
+		return new ViewModel(array( 'singleForm' => $singleForm, 'teamForm' => $teamForm, 'icons' => $icons, 'loginForm' => $loginForm));
 	}
 	
 	private function validateTeamAnmeldung(AnmeldungTeamForm $form, $data){
@@ -239,5 +281,16 @@ class AnmeldungController extends AbstractActionController
 	
 	public function readyAction() {
 		return new ViewModel();
+	}
+	
+	protected function authenticate(){
+		if($this->zfcUserAuthentication()->hasIdentity()){
+			return true;
+		}
+		
+        $adapter = $this->zfcUserAuthentication()->getAuthAdapter();
+        $result = $adapter->prepareForAuthentication($this->getRequest());
+        $auth = $this->zfcUserAuthentication()->getAuthService()->authenticate($adapter);
+		return $auth;
 	}
 }

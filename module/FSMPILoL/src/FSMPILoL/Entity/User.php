@@ -93,12 +93,27 @@ class User extends ZfcUserEntity implements JsonSerializable, ProviderInterface
 	public function setPhone($phone){ $this->phone = $phone; return $this; }
 	
 	public function getPlayer(Tournament $tournament){
-		/** @var $player \FSMPILoL\Entity\Player  */
 		foreach($this->players as $player){
+			/* @var $player Player */
 			if($player->getAnmeldung()->getTournament() == $tournament)
 				return $player;
 		}
 		return null;
+	}
+	
+	/**
+	 * @return Player
+	 */
+	public function getMostRecentPlayer(){
+		$maxId = 0;
+		$found = null;
+		foreach($this->players as $player){
+			/* @var $player Player */
+			if($player->getAnmeldung()->getTournament()->getId() >= $maxId){
+				$found = $player;
+			}
+		}
+		return $found;
 	}
 	
     /**

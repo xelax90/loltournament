@@ -9,6 +9,7 @@
 <div class="anmeldung">
 	<div class="content">
 		<ul>
+			<?php echo $this->partial('fsmpi-lo-l/tournament/partial/loginForm.phtml', array('loginForm' => $this->loginForm, 'formAction' => $this->url())) ?>
 			<li id="einzelanmeldung">
 				<div class="header">
 					<b>Einzelanmeldung zur RWTH Liga</b><span><a href="#teamanmeldung">Zur Teamanmeldung</a></span>

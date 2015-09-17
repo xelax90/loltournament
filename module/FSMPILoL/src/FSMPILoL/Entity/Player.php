@@ -96,7 +96,10 @@ class Player implements JsonSerializable
 	public function setTeam($team){
 		$this->team = $team;
 	}
-
+	
+	/**
+	 * @return Anmeldung
+	 */
 	public function getAnmeldung(){
 		return $this->anmeldung;
 	}
@@ -121,6 +124,9 @@ class Player implements JsonSerializable
 		return $this->summonerId = $summonerId;
 	}
 	
+	/**
+	 * @return User
+	 */
 	public function getUser(){
 		return $this->user;
 	}
