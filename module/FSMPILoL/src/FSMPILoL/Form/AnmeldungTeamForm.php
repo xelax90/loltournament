@@ -9,8 +9,10 @@
 namespace FSMPILoL\Form;
 
 use Zend\Form\Form;
-use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\InputFilter\InputFilter;
+use DoctrineModule\Persistence\ObjectManagerAwareInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 use Zend\InputFilter\InputFilterProviderInterface;
 
 /**
@@ -18,14 +20,18 @@ use Zend\InputFilter\InputFilterProviderInterface;
  *
  * @author schurix
  */
-class AnmeldungTeamForm extends Form implements InputFilterProviderInterface{
+class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, InputFilterProviderInterface{
+	protected $em;
 
-	public function __construct(){
+	public function __construct($name = "", $options = array()){
 		// we want to ignore the name passed
-		parent::__construct('anmeldung_team');
-		
-		$this->setAttribute('method', 'post')
-             ->setHydrator(new ClassMethodsHydrator(false));
+		parent::__construct('anmeldung_team', $options);
+		$this->setAttribute('method', 'post');
+	}
+	
+	public function init(){
+		$this->setHydrator(new DoctrineHydrator($this->getObjectManager()))
+			 ->setInputFilter(new InputFilter());
 		
 		$this->add(array(
 			'name' => 'teamName',
@@ -105,8 +111,6 @@ class AnmeldungTeamForm extends Form implements InputFilterProviderInterface{
 				'value' => 'Eingaben Prüfen',
 			),
 		));
-		
-		$this->addInputFilter();
 	}
 	
 	public function getInputFilterSpecification() {
@@ -154,4 +158,11 @@ class AnmeldungTeamForm extends Form implements InputFilterProviderInterface{
 		return $filterSpec;
 	}
 
+	public function getObjectManager() {
+		return $this->em;
+	}
+
+	public function setObjectManager(ObjectManager $objectManager) {
+		$this->em = $objectManager;
+	}
 }

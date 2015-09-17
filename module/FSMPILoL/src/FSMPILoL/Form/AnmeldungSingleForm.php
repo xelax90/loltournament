@@ -9,8 +9,10 @@
 namespace FSMPILoL\Form;
 
 use Zend\Form\Form;
-use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\InputFilter\InputFilter;
+use DoctrineModule\Persistence\ObjectManagerAwareInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 use Zend\InputFilter\InputFilterProviderInterface;
 
 /**
@@ -18,15 +20,18 @@ use Zend\InputFilter\InputFilterProviderInterface;
  *
  * @author schurix
  */
-class AnmeldungSingleForm extends Form implements InputFilterProviderInterface{
+class AnmeldungSingleForm extends Form implements ObjectManagerAwareInterface, InputFilterProviderInterface{
+	protected $em;
 
-	public function __construct(){
+	public function __construct($name = "", $options = array()){
 		// we want to ignore the name passed
-		parent::__construct('anmeldung_single');
-		
-		$this->setAttribute('method', 'post')
-             ->setHydrator(new ClassMethodsHydrator(false))
-             ->setInputFilter(new InputFilter());
+		parent::__construct('anmeldung_single', $options);
+		$this->setAttribute('method', 'post');
+	}
+	
+	public function init(){
+		$this->setHydrator(new DoctrineHydrator($this->getObjectManager()))
+			 ->setInputFilter(new InputFilter());
 		
 		$this->add(array(
 			'name' => 'anmeldung',
@@ -39,7 +44,7 @@ class AnmeldungSingleForm extends Form implements InputFilterProviderInterface{
 			'attributes' => array(
 				'class' => 'anmeldung_single_fieldset',
 			)
-        ));
+         ));
 		
 		$this->add(array(
 			'name' => 'ausschreibung_gelesen',
@@ -62,7 +67,6 @@ class AnmeldungSingleForm extends Form implements InputFilterProviderInterface{
 				'value' => 'Eingaben Prüfen',
 			),
 		));
-
 	}
 
 	public function getInputFilterSpecification() {
@@ -74,5 +78,12 @@ class AnmeldungSingleForm extends Form implements InputFilterProviderInterface{
 		
 		return $filters;
 	}
+	
+	public function getObjectManager() {
+		return $this->em;
+	}
 
+	public function setObjectManager(ObjectManager $objectManager) {
+		$this->em = $objectManager;
+	}
 }
