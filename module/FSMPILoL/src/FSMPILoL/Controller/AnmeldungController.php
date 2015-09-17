@@ -87,6 +87,11 @@ class AnmeldungController extends AbstractActionController
 			$i++;
 		}
 		
+		$data = array();
+		if($request->isPost()){
+			$data = $request->getPost();
+		}
+		
 		if($lastPlayer && (!$request->isPost() || (!isset($data['teamName']) && !isset($data['anmeldung'])))){
 			$anmeldungEntity->setName($lastPlayer->getUser()->getDisplayName());
 			$anmeldungEntity->setEmail($lastPlayer->getUser()->getEmail());
@@ -120,12 +125,12 @@ class AnmeldungController extends AbstractActionController
 		//$form->bind($anmeldung);
 
 		if ($request->isPost() && (isset($data['teamName']) || isset($data['anmeldung']))) {
-			$data = $request->getPost();
 			if(isset($data['teamName'])){ // team form
 				$validation = $this->validateTeamAnmeldung($teamForm, $request->getPost());
 				if (empty($validation)) {
-					$teamdata = $teamForm->getData();
-					var_dump($teamdata);
+					$match = $this->getEvent()->getRouteMatch()->getParams();
+					$match['action'] = 'confirm';
+					return $this->forward()->dispatch($match['controller'], $match);
 				} elseif(is_array($validation)) {
 					foreach($validation as $k => $valid){
 						if($k != 'anmeldungen'){
@@ -167,7 +172,6 @@ class AnmeldungController extends AbstractActionController
 			$summonerNames[] = $turnierAnmeldung->getSummonerName();
 			$teamNames[] = $turnierAnmeldung->getTeamName();
 		}
-		
 		
 		$form->setData($data);
 		if(!$form->isValid()){
@@ -254,8 +258,8 @@ class AnmeldungController extends AbstractActionController
 			$validation['email'] = 'Email nicht korrekt';
 		}
 
-		if(empty($player['summonername'])){
-			$validation['summonername'] = 'Beschw&ouml;rername nicht angegeben';
+		if(empty($player['summonerName'])){
+			$validation['summonerName'] = 'Beschw&ouml;rername nicht angegeben';
 		}
 		else{
 			$turnierAnmeldungen = $this->getAnmeldung()->getAll();
@@ -264,8 +268,8 @@ class AnmeldungController extends AbstractActionController
 				$summonerNames[] = $turnierAnmeldung->getSummonerName();
 			}
 			
-			if(in_array($anmeldung['summonerName'], $summonerNames)){
-				$validation['summonername'] = 'Dieser Beschwörer ist bereits angemeldet';
+			if(in_array($summonerNames, $summonerNames)){
+				$validation['summonerName'] = 'Dieser Beschwörer ist bereits angemeldet';
 			}
 		}
 		
@@ -276,6 +280,8 @@ class AnmeldungController extends AbstractActionController
 	}
 	
 	public function confirmAction(){
+		$request = $this->getRequest();
+		var_dump($request->getPost());
 		return new ViewModel();
 	}
 	

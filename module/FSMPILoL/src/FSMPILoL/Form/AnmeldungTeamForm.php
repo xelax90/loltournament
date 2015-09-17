@@ -142,18 +142,17 @@ class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, Inp
 			'ausschreibung_gelesen' => array(
 				'required' => true,
 			),
+			'anmeldungen' => array(
+				'type' => 'collection',
+			),
 		);
 		
-		/*
-		$filter = $this->get('anmeldungen')->getTargetElement()->getInputFilterSpecification();
-		$collectionFilter = $filterFactory->createInputFilter($filter);
-		$collectionFilter->get('name')->setRequired(false);
-		$collectionFilter->get('email')->setRequired(false);
-		$collectionFilter->get('summonerName')->setRequired(false);
-		$collectionContainerFilter = new \Zend\InputFilter\CollectionInputFilter();
-		$collectionContainerFilter->setInputFilter($collectionFilter);
-		$this->getInputFilter()->add($collectionContainerFilter, 'anmeldungen');
-		*/
+		// TODO warum ist das überhaupt notwendig???
+		$anmeldungFilter = $this->get('anmeldungen')->getTargetElement()->getInputFilterSpecification();
+		$anmeldungFilter['name']['required'] = false;
+		$anmeldungFilter['email']['required'] = false;
+		$anmeldungFilter['summonerName']['required'] = false;
+		$filterSpec['anmeldungen']['input_filter'] = $anmeldungFilter;
 		
 		return $filterSpec;
 	}
