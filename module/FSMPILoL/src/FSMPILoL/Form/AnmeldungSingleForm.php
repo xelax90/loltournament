@@ -44,7 +44,7 @@ class AnmeldungSingleForm extends Form implements ObjectManagerAwareInterface, I
 			'attributes' => array(
 				'class' => 'anmeldung_single_fieldset',
 			)
-         ));
+        ));
 		
 		$this->add(array(
 			'name' => 'ausschreibung_gelesen',
@@ -54,6 +54,7 @@ class AnmeldungSingleForm extends Form implements ObjectManagerAwareInterface, I
 				'label_options' => array(
 					'disable_html_escape' => true,
 				),
+				'column-size' => 'sm-10 col-sm-offset-2',
 			),
 			'attributes' => array(
 				'value' => 'Eingaben Prüfen',
@@ -66,6 +67,9 @@ class AnmeldungSingleForm extends Form implements ObjectManagerAwareInterface, I
 			'attributes' => array(
 				'value' => 'Eingaben Prüfen',
 			),
+			'options' => array(
+				'as-group' => true,
+			)
 		));
 	}
 

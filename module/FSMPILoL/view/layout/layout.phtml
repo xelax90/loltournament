@@ -19,12 +19,12 @@ endif; ?>
 
     <!-- Le styles -->
     <?php echo $this->headLink(array('rel' => 'shortcut icon', 'type' => 'image/png', 'href' => $this->basePath() . '/img/rwthgg_icon.png'))
+                    ->prependStylesheet($this->basePath() . '/css/frontend.css')
                     ->prependStylesheet($this->basePath() . '/css/style.css')
-                    ->prependStylesheet($this->basePath() . '/css/iconselect.css')
-                    ->prependStylesheet($this->basePath() . '/css/template.css') ?>
+                    ->prependStylesheet($this->basePath() . '/css/iconselect.css') ?>
 
     <!-- Scripts -->
-	<?php $this->bower('main', \BowerModule\View\Helper\Bower::CONTAINER_HEAD); ?>
+	<?php $this->bower('frontend', \BowerModule\View\Helper\Bower::CONTAINER_HEAD); ?>
 	<?php $this->bower('ieLT9', \BowerModule\View\Helper\Bower::CONTAINER_HEAD); ?>
 	<?php echo $this->headScript()->appendFile($this->basePath() . '/js/iconselect.js'); ?> 
 </head>

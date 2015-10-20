@@ -41,6 +41,10 @@ class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, Inp
 				'label_options' => array(
 					'disable_html_escape' => true,
 				),
+				'column-size' => 'sm-10',
+				'label_attributes' => array(
+					'class' => 'col-sm-2',
+				),
 			),
 			'attributes' => array(
 				'id' => "",
@@ -87,6 +91,7 @@ class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, Inp
 				'label_options' => array(
 					'disable_html_escape' => true,
 				),
+				'column-size' => 'sm-10 col-sm-offset-2',
 			),
 			'attributes' => array(
 				'id' => "",
@@ -98,6 +103,10 @@ class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, Inp
 			'type' => 'Textarea',
 			'options' => array(
 				'label' => 'Anmerkungen',
+				'column-size' => 'sm-10',
+				'label_attributes' => array(
+					'class' => 'col-sm-2',
+				),
 			),
 			'attributes' => array(
 				'id' => "",
@@ -110,6 +119,9 @@ class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, Inp
 			'attributes' => array(
 				'value' => 'Eingaben Prüfen',
 			),
+			'options' => array(
+				'as-group' => true,
+			)
 		));
 	}
 	

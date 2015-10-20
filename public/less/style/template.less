@@ -1,0 +1,1573 @@
+/*Website Template by freewebsitetemplates.com*/
+@font-face {
+	font-family: 'Philosopher-Regular';
+	src: url('../fonts/Philosopher-Regular/Philosopher-Regular.eot');
+	src: url('../fonts/Philosopher-Regular/Philosopher-Regular.woff') format('woff'), url('../fonts/Philosopher-Regular/Philosopher-Regular.ttf') format('truetype'), url('../fonts/Philosopher-Regular/Philosopher-Regular.svg') format('svg');
+}
+@font-face {
+	font-family: 'Philosopher-Bold';
+	src: url('../fonts/Philosopher-Bold/Philosopher-Bold.eot');
+	src: url('../fonts/Philosopher-Bold/Philosopher-Bold.woff') format('woff'), url('../fonts/Philosopher-Bold/Philosopher-Bold.ttf') format('truetype'), url('../fonts/Philosopher-Bold/Philosopher-Bold.svg') format('svg');
+}
+body {
+	background: url(../img/bg-body.jpg) repeat;
+	color: #727272;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	line-height: 1;
+	margin: 0;
+	min-width: 960px;
+	padding: 0;
+}
+#background {
+	background: url(../img/background-rep.png) repeat top center;
+	margin: 0;
+	padding: 0;
+}
+#header {
+	background: url(../img/bg-header2.png) repeat-x top center;
+	margin: 0;
+	padding: 0;
+	
+	& > div {
+		background: url(../img/bg-header.png) no-repeat top center;
+		margin: 0;
+		padding: 0;
+		
+		& > div{
+			height: 147px + 49px;
+			margin: 0 auto;
+			padding: 49px 0 0;
+			position: relative;
+			width: 960px;
+			z-index: 5;
+		}
+	}
+	
+	a.logo{
+		display: block;
+		margin: 0 auto;
+		padding: 0;
+		width: 841px;
+		img {
+			border: 0;
+			display: block;
+		}
+	}
+	
+	ul {
+		background: url(../img/bg-navigation.png) no-repeat center center;
+		bottom: -107px;
+		height: 98px + 2*9px;
+		left: 30px;
+		margin: 0 auto;
+		overflow: hidden;
+		padding: 9px 17px;
+		position: absolute;
+		width: 865px + 2*17px;
+		
+		li {
+			display: block;
+			float: left;
+			list-style: none;
+			margin: 0 5px;
+			padding: 0;
+			
+			a {
+				background: url(../img/menu.png) no-repeat;
+				color: #a8a8a8;
+				display: block;
+				font-family: 'Philosopher-Bold';
+				font-size: 16px;
+				font-weight: normal;
+				height: 98px;
+				letter-spacing: 0.07em;
+				line-height: 104px;
+				margin: 0;
+				padding: 0;
+				text-align: center;
+				text-decoration: none;
+				text-transform: uppercase;
+				width: 163px;
+			}
+			
+			&#menu1 {
+				&:hover{
+					background-position: 0 -113px;
+				}
+				a{
+					background-position: 0 0;
+				}				
+			}
+			
+			&#menu2 {
+				&:hover{
+					background-position: -168px -113px;
+				}
+				a{
+					background-position: -168px 0;
+				}				
+			}
+			&#menu3 {
+				&:hover{
+					background-position: -335px -113px;
+				}
+				a{
+					background-position: -335px 0;
+				}				
+			}
+			&#menu4 {
+				&:hover{
+					background-position: -502px -113px;
+				}
+				a{
+					background-position: -502px 0;
+				}				
+			}
+			&#menu5 {
+				&:hover{
+					background-position: -669px -113px;
+				}
+				a{
+					background-position: -669px 0;
+				}				
+			}
+			
+			& a:hover, &.selected a{
+				color: #fff;
+			}
+		}
+	}
+}
+
+.figure_link(){
+	border: 1px solid #22272a;
+	display: block;
+	margin: 0;
+	padding: 0;
+
+	&:hover{
+		opacity: 0.8;
+	}
+
+	img {
+		border: 1px solid #000;
+		display: block;
+	}
+}
+
+.players{
+	.player{
+		margin: 0 0 10px 0;
+		background-repeat: no-repeat;
+		background-size: 52px;
+		background-position-x: left;
+		min-height: 44px;
+		padding: 6px 2px 2px 58px;	
+		line-height: 20px;
+		position: relative;
+		overflow: auto;
+		
+		.player_summonername,
+		.player_level{
+			float: left;
+		}
+		.player_summonername,
+		.player_level{
+			clear: left;
+		}
+		.player_summonername{
+			font-weight: bold;
+			&.captain{
+				color: red;
+			}
+		}
+		.player_normalWins,
+		.player_rankedWins{
+			float: right;
+		}
+
+		.player_rankedWins{
+			clear: right;
+		}
+		.player_subborder{
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			width: 48px;
+			height: 48px;
+			border: 2px solid #FF4400;
+		}
+	}
+}
+
+.gamereport{
+	
+}
+
+.report_team{
+	overflow: auto;
+	margin-top: 30px;
+	
+	.report_teamname{
+		font-size: 17px;
+	}
+	&:first-child {
+		margin-top: 0;
+	}
+}
+
+.report_players{
+	
+}
+
+.report_player{
+	background-repeat: no-repeat;
+	height: 305px;
+	background-size: 168px 305px;
+	margin-right: 10px;
+	width: 168px;
+	float: left;
+	position: relative;
+	
+	&:last-child {
+		margin-right: 0px;
+	}
+	
+	.report_player_icon{
+		background-repeat: no-repeat;
+		background-size: 40px;
+		background-position-x: left;
+		height: 40px;
+		width: 40px;
+		position: absolute;
+		bottom: 20px;
+		left: 10px;
+	}
+
+	.report_summonername{
+		position: absolute;
+		bottom: 30px;
+		right: 15px;
+		color: white;
+	}
+
+	.report_kda {
+		color: white;
+		position: absolute;
+		bottom: 82px;
+		right: 15px;
+	}
+
+	.report_spells{
+		position: absolute;
+		bottom: 70px;
+		left: 10px;
+		
+		.report_spell {
+			background-repeat: no-repeat;
+			background-size: 40px;
+			background-position-x: left;
+			height: 40px;
+			width: 40px;
+			float: left;
+			margin-right: 6px;
+			
+			&.s_1{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerBoost.png'); }
+			&.s_2{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerClairvoyance.png'); }
+			&.s_3{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerExhaust.png'); }
+			&.s_4{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerFlash.png'); }
+			&.s_6{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerHaste.png'); }
+			&.s_7{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerHeal.png'); }
+			&.s_10{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerRevive.png'); }
+			&.s_11{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerSmite.png'); }
+			&.s_12{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerTeleport.png'); }
+			&.s_13{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerMana.png'); }
+			&.s_14{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerDot.png'); }
+			&.s_17{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerOdinGarrison.png'); }
+			&.s_21{ background-image: url('http://ddragon.leagueoflegends.com/cdn/4.19.2/img/spell/SummonerBarrier.png'); }
+		}
+	}
+
+	.report_items {
+		overflow: auto;
+		position: absolute;
+		bottom: 120px;
+		left: 10px;
+		
+		.report_item {
+			background-repeat: no-repeat;
+			background-size: 30px;
+			background-position-x: left;
+			height: 30px;
+			width: 30px;
+			float: left;
+			margin-right: 9px;
+			margin-top: 9px;	
+		}
+	}
+
+	.report_gold {
+		color: #FFF700;
+		position: absolute;
+		bottom: 200px;
+		left: 10px;
+	}
+
+	.report_level {
+		display: none;
+	}
+}
+
+
+#body {
+	background: url(../img/bg-body-header.png) no-repeat top center;
+	margin: 0 auto;
+	padding: 112px 0 0;
+	width: 960px;
+	
+	p {
+		margin: 0;
+		padding: 0;
+		
+		a{
+			color: #797979;
+			&:hover{
+				color: #a3a3a3;
+			}
+		}
+	}
+	
+	& > div {
+		background: url(../img/bg-body-footer.png) no-repeat bottom center;
+		margin: 0;
+		padding: 0 0 114px;
+		
+		& > div {
+			background: url(../img/bg-body2.png) repeat-y top center;
+			min-height: 400px;
+			margin: 0;
+			padding: 0;
+			
+			.featured {
+				height: 361px + 102px;
+				margin: 0;
+				padding-bottom: 102px;
+				position: relative;
+				width: 960px;
+				
+				img {
+					display: block;
+					left: 0;
+					position: absolute;
+					top: -112px;
+					z-index: 1;
+					-moz-transition-property: opacity;
+					-moz-transition-duration: 1s;
+					-webkit-transition-property: opacity;
+					-webkit-transition-duration: 1s;
+					transition-property: opacity;
+					transition-duration: 1s;
+					
+					&#img1{
+						opacity: 0.0;
+					}
+				}
+			}
+			
+			.section {
+				background: #0a0a0a url(../img/gradient.png) repeat-x bottom center;
+				margin: 0 auto;
+				overflow: hidden;
+				padding: 0 9px 22px 9px;
+				width: 940px + 2*9px;
+				
+				& > div {
+					background: url(../img/border.gif) repeat-x top left;
+					float: left;
+					margin: 5px 10px;
+					padding: 3px 0 0;
+					width: 920px;
+					
+					h4 {
+						background: #070707 url(../img/gradient2.png) repeat-x top center;
+						border: 1px solid #22272a;
+						color: #fff;
+						font-size: 14px;
+						line-height: 24px;
+						margin: 0 0 1px;
+						padding: 10px 19px;
+					}
+					
+					h3 {
+						background: #070707 url(../img/gradient3.png) repeat-x top center;
+						border: 1px solid #22272a;
+						color: #fff;
+						font-family: 'Philosopher-Bold';
+						font-size: 16px;
+						font-weight: normal;
+						height: 50px;
+						letter-spacing: 0.07em;
+						line-height: 50px;
+						margin: 0 0 1px;
+						padding: 0 19px;
+						text-transform: uppercase;
+					}
+					
+					
+					div {
+						background: #181818;
+						border: 1px solid #22272a;
+						margin: 0;
+						padding: 20px 19px;
+						
+						p {
+							line-height: 24px;
+							margin: 0;
+							padding: 0;
+							
+							a {
+								color: #727272;
+								
+								&:hover{
+									color: #a3a3a3;
+								}
+								
+								&.more {
+									background: url(../img/bg-more.png) no-repeat center center;
+									color: #bababa;
+									display: inline-block;
+									height: 23px;
+									font-size: 10px;
+									font-weight: normal;
+									line-height: 22px;
+									margin: 0 0 0 12px;
+									padding: 0;
+									text-align: center;
+									text-decoration: none;
+									text-transform: lowercase;
+									width: 70px;
+									
+									&:hover{
+										background: url(../img/bg-more-hover.png) no-repeat center center;
+										color: #bababa;
+									}
+								}
+
+								&.figure {
+									.figure_link();
+								}
+							}
+						}
+						
+						span {
+							background: #181a1a url(../img/gradient4.png) repeat-x bottom left;
+							border-bottom: 1px solid #22272a;
+							border-left: 1px solid #22272a;
+							border-right: 1px solid #22272a;
+							display: block;
+							height: 38px;
+							
+							a {
+								color: #a7a9ac;
+								display: block;
+								font-size: 12px;
+								line-height: 38px;
+								margin: 0;
+								padding: 0 9px;
+								text-align: center;
+								text-decoration: none;
+								
+								&:hover{
+									color: #fff;
+								}
+							}
+						}
+					}
+					
+					&:first-child{
+						width: 920px;
+						
+						div {
+							padding: 14px 19px 30px;
+							/*p {
+									width: 83.5%;
+							}*/
+						}
+					}
+					
+				}
+			}
+		}
+	}
+	
+	.media, .games, .about, .blog, .anmeldung, .kontakt{
+		margin: 0;
+		padding: 24px 0;
+	}
+	
+	.media,
+	.kontakt{
+		h3 {
+			background: #070707 url(../img/gradient3.png) repeat-x top center;
+			border: 1px solid #22272a;
+			color: #fff;
+			font-family: 'Philosopher-Bold';
+			font-size: 16px;
+			font-weight: normal;
+			height: 50px;
+			letter-spacing: 0.07em;
+			line-height: 50px;
+			margin: 0 0 1px;
+			padding: 0 19px;
+			text-transform: uppercase;
+		}
+		
+		ul {
+			background: #181818;
+			border: 1px solid #22272a;
+			margin: 0;
+			overflow: hidden;
+			padding: 0;
+			
+			li {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			}
+		}
+		
+		& > div {
+			margin: 0;
+			overflow: hidden;
+			padding: 0 10px;
+			
+			& > div {
+				background: url(../img/border.gif) repeat-x top left;
+				float: left;
+				margin: 0 10px;
+				padding: 3px 0 0;
+				width: 450px;
+			}
+		}
+	}
+	
+	.media {
+		div {
+			div {
+				ul {
+					padding: 8px;
+					li {
+						border: 1px solid #22272a;
+						display: block;
+						float: left;
+						margin: 8px 10px;
+						padding: 0;
+						width: 194px;
+						
+						a.figure{
+							.figure_link();
+						}
+						
+						span {
+							background: #181a1a url(../img/gradient4.png) repeat-x bottom left;
+							border-top: 1px solid #22272a;
+							display: block;
+							height: 38px;
+							
+							a {
+								color: #a7a9ac;
+								display: block;
+								font-size: 12px;
+								line-height: 38px;
+								margin: 0;
+								padding: 0 9px;
+								text-align: center;
+								text-decoration: none;
+								
+								&:hover {
+									color: #fff;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		.article {
+			background: url(../img/border.gif) repeat-x top left;
+			margin: 17px auto 17px;
+			padding: 3px 0 0;
+			width: 920px;
+			
+			ul {
+				padding: 0 10px;
+				
+				li {
+					display: block;
+					float: left;
+					margin: 0 9px;
+					overflow: hidden;
+					padding: 0 0 10px;
+					width: 430px;
+					
+					a.figure {
+						.figure_link();
+					}
+					
+					p {
+						font-size: 12px;
+						line-height: 17px;
+						padding: 13px 0 0;
+						
+						a {
+							color: #727272;
+							
+							&:hover{
+								color: #a3a3a3;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	.games{
+		overflow: hidden;
+		
+		h3 {
+			background: #070707 url(../img/gradient3.png) repeat-x top center;
+			border: 1px solid #22272a;
+			color: #fff;
+			font-family: 'Philosopher-Bold';
+			font-size: 16px;
+			font-weight: normal;
+			height: 50px;
+			letter-spacing: 0.07em;
+			line-height: 50px;
+			margin: 0 0 1px;
+			padding: 0 19px;
+			text-transform: uppercase;
+		}
+		
+		div {
+			margin: 0;
+			padding: 0;
+			
+			ul {
+				background: #181818;
+				border: 1px solid #22272a;
+				margin: 0;
+				padding: 0;
+				
+				li {
+					border: 1px solid #22272a;
+					list-style: none;
+					margin: 0;
+					padding: 0;
+					
+					a.figure{
+						.figure_link();
+					}
+					
+					span {
+						background: #181a1a url(../img/gradient3.png) repeat-x bottom left;
+						border-top: 1px solid #22272a;
+						display: block;
+						
+						a {
+							color: #a7a9ac;
+							display: block;
+							margin: 0;
+							padding: 0 9px;
+							text-decoration: none;
+							
+							&:hover{
+								color: #fff;
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		.content {
+			background: url(../img/border.gif) repeat-x top left;
+			float: left;
+			margin: 0 0 0 19px;
+			padding: 3px 0 0;
+			width: 445px + 19px;
+			
+			ul {
+				padding: 16px 19px 1px;
+				li {
+					margin: 0 0 20px;
+					
+					.player{
+						margin: 0 0 10px 0;
+						background-repeat: no-repeat;
+						background-size: 52px;
+						background-position-x: left;
+						min-height: 44px + 6 + 2;
+						padding: 6px 2px 2px 58px;	
+						line-height: 20px;
+						position: relative;
+						
+						.player_summonername, 
+						.player_level{
+							float: left;
+						}
+						
+						.player_level{
+							clear: left;
+						}
+						
+						.player_summonername{
+							font-weight: bold;
+						}
+						
+						.player_summonername.captain{
+							color: red;
+						}
+						
+						.player_normalWins,
+						.player_rankedWins{
+							float: right;
+						}
+						
+						.player_subborder{
+							position: absolute;
+							top: 0px;
+							left: 0px;
+							width: 48px;
+							height: 48px;
+							border: 2px solid #FFD700;
+						}
+					}
+					
+					span {
+						a {
+							font-size: 14px;
+							height: 48px;
+							line-height: 48px;
+						}
+					}
+				}
+			}
+		}
+		.aside{
+			background: url(../img/border.gif) repeat-x top left;
+			float: left;
+			margin: 0 0 0 30px;
+			padding: 3px 0 0;
+			width: 445px;
+			
+			ul {
+				padding: 16px 19px 1px;
+				li {
+					margin: 0 0 20px;
+					p {
+						margin: 0 0 10px 0;
+						background-repeat: no-repeat;
+						background-size: 52px;
+						background-position-x: left;
+						min-height: 48px;
+						padding: 2px 2px 2px 58px;	
+					}
+					
+					.team {
+						margin: 0 0 10px 0;
+						background-repeat: no-repeat;
+						background-size: 52px;
+						background-position-x: left;
+						min-height: 48px + 2 + 2;
+						padding: 2px 2px 2px 58px;	
+						
+						.team_name{
+							font-weight: bold;
+							margin: 0 0 10px 0;
+							font-size: 17px;
+						}
+						
+						.players{
+							.player {
+								margin: 0 0 10px 0;
+								background-repeat: no-repeat;
+								background-size: 52px;
+								background-position-x: left;
+								min-height: 44px + 6 + 2;
+								padding: 6px 2px 2px 58px;	
+								line-height: 20px;
+								position: relative;
+								overflow: auto;
+								
+								.player_summonername,
+								.player_level{
+									float: left;
+								}
+								.player_level{
+									clear: left;
+								}
+								.player_summonername{
+									font-weight: bold;
+									&.captain{
+										color: red;
+									}
+								}
+								.player_normalWins,
+								.player_rankedWins{
+									float: right;
+								}
+
+								.player_rankedWins{
+									clear: right;
+								}
+								.player_subborder{
+									position: absolute;
+									top: 0px;
+									left: 0px;
+									width: 48px;
+									height: 48px;
+									border: 2px solid #FFD700;
+								}
+							}
+						}
+					}
+					
+					span {
+						a {
+							font-size: 14px;
+							height: 48px;
+							line-height: 48px;
+						}
+					}
+				}
+			}
+		}
+		.article {
+			clear: both;
+			float: left;
+			width: 960px;
+			
+			p {
+				font-size: 12px;
+				line-height: 24px;
+				padding: 11px 20px 0;
+				
+				a {
+					color: #797979;
+					&:hover{
+						color: #a3a3a3;
+					}
+				}
+			}
+		}
+	}
+	
+	.about {
+		overflow: hidden;
+		
+		ul {
+			margin: 0;
+			padding: 0;
+			
+			li {
+				background: url(../img/border.gif) repeat-x top left;
+				list-style: none;
+				margin: 0 0 20px;
+				padding: 3px 0 0;
+				
+				h3 {
+					background: #070707 url(../img/gradient3.png) repeat-x top center;
+					border: 1px solid #22272a;
+					color: #fff;
+					font-family: 'Philosopher-Regular';
+					font-size: 24px;
+					font-weight: normal;
+					height: 55px;
+					line-height: 55px;
+					margin: 0 0 1px;
+					padding: 0 19px;
+					text-transform: capitalize;
+				}
+				
+				div {
+					background: #181818;
+					border: 1px solid #22272a;
+					margin: 0;
+					min-height: 250px + 2*11;
+					padding: 11px 19px;
+					
+					p {
+						line-height: 24px;
+						padding: 0 0 28px;
+						
+						span {
+							font-size: 16px;
+							text-transform: uppercase;
+						}
+					}
+					
+					& > span {
+						text-transform: uppercase;
+						line-height: 24px;
+					}
+				}
+			}
+		}
+		
+		.content {
+			float: left;
+			margin: 0 0 0 20px;
+			padding: 0;
+			width: 560px;
+		}
+		
+		.aside {
+			float: left;
+			margin: 0 0 0 20px;
+			padding: 0;
+			width: 340px;
+		}
+	}
+	
+	.blog, 
+	.anmeldung{
+		overflow: hidden;
+		ul {
+			margin: 0;
+			padding: 0;
+			
+			li {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			}
+		}
+		
+		.content {
+			background: url(../img/border.gif) repeat-x top left;
+			float: left;
+			margin: 0 0 0 20px;
+			padding: 3px 0 0;
+			width: 610px;
+			
+			ul {
+				li {
+					padding: 0 0 20px;
+					.header{
+						background: #070707 url(../img/gradient5.png) repeat-x top center;
+						border: 1px solid #22272a;
+						color: #fff;
+						font-size: 14px;
+						line-height: 24px;
+						margin: 0 0 1px;
+						overflow: hidden;
+						padding: 10px 18px 15px;
+						
+						b {
+							display: inline;
+							float:left;
+							line-height: 24px;
+							margin: 0;
+							padding: 0;
+							
+							a {
+								color: #fff;
+								
+								&:hover{
+									color: #727272;
+								}
+							}
+						}
+						
+						span {
+							background: #181818;
+							border: 1px solid #22272a;
+							border-radius: 4px;
+							display: inline;
+							float: left;
+							margin: 0 0 0 34px;
+							overflow: hidden;
+							padding: 0;
+							
+							a {
+								color: #bababa;
+								display: block;
+								float: left;
+								font-size: 10px;
+								height: 23px;
+								line-height: 23px;
+								margin: 0;
+								padding: 0 15px;
+								text-align: center;
+								text-decoration: none;
+								text-transform: capitalize;
+								
+								&:first-child{
+									border-right: 1px solid #22272a;
+								}
+								
+								&:hover{
+									color: #fff;
+								}
+							}
+						}
+					}
+					
+					.article {
+						background: #181818;
+						border: 1px solid #22272a;
+						margin: 0;
+						overflow: hidden;
+						padding: 14px 19px 19px;
+						
+						a.figure{
+							.figure_link();
+							float: left;
+							margin: 6px 20px 0 0;
+						}
+						
+						p {
+							line-height: 18px;
+							margin-bottom: 8px;
+							
+							a{
+								&.more{
+									background: url("../img/bg-more.png") no-repeat center center;
+									color: #bababa;
+									display: inline-block;
+									font-size: 10px;
+									font-weight: normal;
+									height: 23px;
+									line-height: 22px;
+									margin: 0;
+									padding: 0;
+									text-align: center;
+									text-decoration: none;
+									text-transform: lowercase;
+									width: 70px;
+									
+									&:hover{
+										color: #fff;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		.sidebar{
+			background: url(../img/border.gif) repeat-x top left;
+			float: left;
+			margin: 0 0 0 30px;
+			padding: 3px 0 0;
+			width: 280px;
+			
+			div {
+				background: #070707 url(../img/gradient3.png) repeat-x top center;
+				border: 1px solid #22272a;
+				height: 48px;
+				margin: 0 0 1px;
+				overflow: hidden;
+				padding: 0;
+				
+				span {
+					display: block;
+					float: left;
+					margin: 0;
+					padding: 8px 16px;
+					width: 107px + 2*16;
+					
+					&:first-child{
+						background: url(../img/border2.gif) repeat-y right top;
+					}
+					
+					a {
+						color: #727272;
+						display: block;
+						font-size: 14px;
+						font-weight: bold;
+						height: 30px;
+						line-height: 28px;
+						text-align: center;
+						text-decoration: none;
+						text-transform: capitalize;
+						width: 103px;
+						
+						&:hover{
+							color: #fff;
+						}
+						
+						&.selected{
+							color: #fff;
+							background: #000;
+							border: 1px solid #22272a;
+							border-radius: 6px;
+						}
+					}
+				}
+			}
+			
+			ul {
+				border: 1px solid #22272a;
+				background: #181818;
+				
+				li {
+					background: url(../img/border2.gif) repeat-x top left;
+					padding: 9px 19px 11px;
+					
+					&:first-child{
+						background: none;
+					}
+					
+					& > a {
+						color: #727272;
+						display: block;
+						line-height: 24px;
+						padding: 0 0 5px;
+						text-decoration: none;
+						
+						&:hover{
+							color: #a3a3a3
+						}
+					}
+					
+					span {
+						background: #181818;
+						border: 1px solid #22272a;
+						border-radius: 4px;
+						display: inline-block;
+						margin: 0;
+						overflow: hidden;
+						padding: 0;
+						
+						a {
+							color: #bababa;
+							display: block;
+							float: left;
+							font-size: 10px;
+							height: 23px;
+							line-height: 23px;
+							margin: 0;
+							padding: 0 15px;
+							text-align: center;
+							text-decoration: none;
+							text-transform: capitalize;
+							
+							&:first-child{
+								border-right: 1px solid #22272a;
+							}
+							
+							&:hover{
+								color: #fff;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	.anmeldung {
+		.content{
+			width: 920px;
+			
+			input[type=text],
+			input[type=password],
+			input[type=email],
+			input[type=file],
+			input[type=datetime-local],
+			select,
+			textarea{
+				border: 1px solid #22272a;
+				background-color: #7e7e7e;
+			}
+
+			input[type=file]{
+				background-color: transparent;
+				height: auto;
+			}
+
+			label{
+				sup{
+					color: #900;
+				}
+			}
+
+			input[type=submit],
+			button{
+				float: right;
+				background-color: #7e7e7e;
+				border: 1px solid #22272a;
+				margin: 0;
+				padding-left: 30px;
+				padding-right:30px;
+				color: #333;
+			}
+			
+			fieldset{
+				border: 1px solid #22272a;
+				margin: 5px 0;
+				clear: both;
+				padding: 10px;
+				
+				&#teamanmeldung_spieler,
+				&.anmeldung_single_fieldset{
+					border:none;
+					padding:0;
+					margin:0;
+					& > legend{
+						display:none;
+					}
+				}
+				
+				legend{
+					float: left;
+					border: none;
+					
+				}
+			}
+
+		}
+		
+		&.teams{
+			ul li {
+				float: left;
+				width: 450px;
+			}
+		}
+	}
+
+	ul li.login a{
+		&, &:hover, &:visited{
+			text-decoration: none;
+			color: #727272;
+		}
+		&:hover{
+			text-decoration: underline;
+		}
+	}
+	
+	.teams ul li.login{
+		width: 100%;
+		float: none;
+	}
+	
+	.ergebnisse{
+		ul li {
+			.article{
+				.standings{
+					.standing{
+						border-bottom: 1px solid gray;
+						padding: 4px 10px;
+						
+						&.first{
+							border-top: 1px solid gray;
+						}
+						
+						.position{
+							float: left;
+							line-height: 48px;
+							font-size: 28px;
+						}
+						
+						.team {
+							background-repeat: no-repeat;
+							background-size: 52px;
+							background-position-x: left;
+							min-height: 48px;
+							padding: 2px 2px 2px 58px;
+							margin-left: 80px;
+							
+							.teamname{
+								font-weight: bold;
+								margin: 0 0 10px 0;
+								font-size: 17px;
+								
+								&.blocked{
+									color: red;
+								}
+							}
+							
+							.players{
+								display: none;
+								
+								.player{
+									margin: 0 0 10px 0;
+									background-repeat: no-repeat;
+									background-size: 52px;
+									background-position-x: left;
+									min-height: 44px;
+									padding: 6px 2px 2px 58px;	
+									line-height: 20px;
+									position: relative;
+									overflow: auto;
+									
+									.player_summonername,
+									.player_level{
+										float: left;
+									}
+									.player_level{
+										clear: left;
+									}
+									.player_summonername{
+										font-weight: bold;
+									}
+									.player_summonername.captain{
+										color: red;
+									}
+									.player_normalWins,
+									.player_rankedWins{
+										float: right;
+									}
+
+									.player_rankedWins{
+										clear: right;
+									}
+									.player_subborder{
+										position: absolute;
+										top: 0px;
+										left: 0px;
+										width: 48px;
+										height: 48px;
+										border: 2px solid #FFD700;
+									}
+									
+								}
+							}
+						}
+						
+						.score {
+							float: right;
+							line-height: 48px;
+							font-size: 28px;
+							width: 60px;
+							text-align: right;
+						}
+						
+						.buchholz{
+							float: right;
+							line-height: 22px;
+							font-size: 13px;
+							width: 60px;
+							text-align: center;
+							margin-right: -10px;
+							padding-top: 3px;
+						}
+						
+						.matches{
+							.match{
+								border-bottom: 1px solid gray;
+								padding: 4px 10px;
+								overflow: auto;
+								
+								&.first{
+									border-top: 1px solid gray;
+								}
+								
+								.position{
+									float: left;
+									line-height: 48px;
+									font-size: 28px;
+									width: 50px;
+								}
+								
+								.gamedate{
+									float: left;
+									width: 80px;
+									padding: 9px 0;
+									line-height: 17px;
+									text-align: left;
+								}
+								
+								.team {
+									background-repeat: no-repeat;
+									background-size: 52px;
+									background-position-x: left;
+									min-height: 48px + 2 + 2;
+									padding: 2px 2px 2px 58px;
+									margin-left: 0px;
+									width: 255px;
+									float: left;
+								}
+							}
+						}
+					}
+				}
+				
+				.matches{
+					.match{
+						.team{
+							&.guest{
+								margin-left: 20px;
+							}
+							.teamname{
+								font-weight: bold;
+								margin: 0 0 10px 0;
+								font-size: 17px;
+								
+								&.blocked{
+									color: red;
+								}
+							}
+							.players{
+								display: none;
+							}
+						}
+						
+						.result{
+							float: right;
+							line-height: 48px;
+							font-size: 28px;
+							width: 75px;
+							text-align: center;
+							
+							a {
+								text-decoration: none;
+								color: #727272;
+							}
+						}
+					}
+				}
+				
+				.ergebnismeldung,
+				.tournament_codes{
+					margin-top: 20px;
+					clear: both;
+					overflow: auto;
+				}
+				
+				.tournament_codes{
+					.tournament_code{
+						margin: 5px 0 5px 10px;
+						
+						a {
+							color: #727272;
+						}
+					}
+				}
+				
+				.heading{
+					font-size: 17px;
+					font-weight: bold;
+					margin-bottom: 5px;
+				}
+				
+				.ergebnismeldung{
+					.reportresult{
+						margin: 10px 0;
+						border: 1px solid green;
+						padding: 10px;
+						
+						&.error{
+							border-color: red;
+							
+							ul {
+								padding: 0;
+								margin: 0;
+								li {
+									padding: 0;
+									margin: 0;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		&.personal ul li .article .matches .match .team{
+			width: 290px;
+		}
+	}
+}
+
+#footer {
+	background: url(../img/bg-footer2.png) repeat-x bottom left;
+	margin: 0;
+	padding: 0;
+	-webkit-text-size-adjust: none;
+	
+	& > div {
+		background: url(../img/bg-footer.png) no-repeat bottom center;
+		margin: 0;
+		text-align: center;
+		padding: 73px 0 42px;
+	}
+	
+	ul {
+		display: block;
+		margin: 0 auto;
+		padding: 0 0 41px;
+		overflow: hidden;
+		width: 400px;
+		
+		li {
+			display: block;
+			float: left;
+			list-style: none;
+			margin: 0 22px;
+			padding: 0;
+			
+			a {
+				background: url(../img/icons.png) no-repeat;
+				color: #fff;
+				display: block;
+				line-height: 73px;
+				height: 73px;
+				text-decoration: none;
+				text-indent: -99999px;
+				width: 73px;
+			}
+			
+			&#facebook a {
+				background-position: 0 0;
+				&:hover{
+					background-position: -78px 0;
+				}
+			}
+			
+			&#bitstars a {
+				background: url(../img/bitstars.png) no-repeat;
+				background-color: black;
+				padding: 0 7px;
+				border-radius: 30px;
+				background-position: 0 -9px;
+				width: 260px + 2*7;
+			}
+			
+			&#fachschaft a {
+				background: url(../img/geier3d.png) no-repeat;
+				background-size: 100%;
+			}
+			
+			&#twitter a {
+				background-position: 0 -78px;
+				&:hover{
+					background-position: -78px -78px;
+				}
+			}
+			
+			&#googleplus a {
+				background-position: 0 -156px;
+				&:hover{
+					background-position: -78px -156px;
+				}
+			}
+		}
+	}
+	
+	p {
+		color: #4e5151;
+		font-size: 12px;
+		margin: 0 auto;
+		padding: 0;
+		text-align: center;
+		/*text-transform: capitalize;*/
+		width: 700px;
+	}
+}

@@ -263,7 +263,7 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 				array('name' => 'Int'),
 			),
 			'validators' => array(
-				array('name' => 'Between', array('min' => 0, 'max' => 2))
+				array('name' => 'Between', 'options' => array('min' => 0, 'max' => 2))
 			)
 		);
 		

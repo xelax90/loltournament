@@ -14,6 +14,7 @@ use FSMPILoL\Form\AnmeldungSingleForm;
 use FSMPILoL\Form\AnmeldungTeamForm;
 use FSMPILoL\Entity\Anmeldung as AnmeldungEntity;
 use FSMPILoL\Tournament\Anmeldung;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Description of AnmeldungController
@@ -22,13 +23,14 @@ use FSMPILoL\Tournament\Anmeldung;
  */
 class AnmeldungController extends AbstractActionController
 {
+	/** @var EntityManager */
 	protected $em;
 	protected $tournament;
 	protected $anmeldung;
 	
 	public function getEntityManager(){
 		if (null === $this->em) {
-			$this->em = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+			$this->em = $this->getServiceLocator()->get(EntityManager::class);
 		}
 		return $this->em;
 	}
