@@ -8,6 +8,7 @@ use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface; 
 use Zend\Json\Json;
 use JsonSerializable;
+use SkelletonApplication\Entity\User;
 
 /**
  * A Team
@@ -65,7 +66,7 @@ class Team implements InputFilterAwareInterface, JsonSerializable
 	protected $anmerkung;
  	
 	/**
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="SkelletonApplication\Entity\User")
 	 * @ORM\JoinColumn(name="ansprechpartner_id", referencedColumnName="user_id")
 	 */
 	protected $ansprechpartner;

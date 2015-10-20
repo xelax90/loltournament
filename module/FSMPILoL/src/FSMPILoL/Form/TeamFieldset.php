@@ -10,6 +10,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use FSMPILoL\Entity\Team;
 use FSMPILoL\Entity\Tournament;
 use FSMPILoL\Tournament\TournamentAwareInterface;
+use SkelletonApplication\Entity\User;
 
 /**
  * Fieldset to add/edit players
@@ -86,7 +87,7 @@ class TeamFieldset  extends Fieldset implements InputFilterProviderInterface, Ob
 			'type' => 'DoctrineModule\Form\Element\ObjectSelect',
 			'options' => array(
 				'object_manager' => $this->getObjectManager(),
-				'target_class'   => 'FSMPILoL\Entity\User',
+				'target_class'   => User::class,
 				'label_generator' => function($user) {
 					return $user->getDisplayName();
 				},

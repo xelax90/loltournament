@@ -13,11 +13,11 @@
     "homepage": "http://lol.fsmpi.rwth-aachen.de/",
     "require": {
 		"php": ">=5.5",
-		"zendframework/zendframework": "2.3.*",
+		"zendframework/zendframework": "2.5.*",
 		"articus/zf2-bower-module" : "dev-master",
 		"doctrine/doctrine-module" : "*",
 		"doctrine/doctrine-orm-module": "*",
-		"zf-commons/zfc-user": "1.*",
+		"zf-commons/zfc-user": "*",
 		"zf-commons/zfc-user-doctrine-orm": "dev-master",
         "bjyoungblood/bjy-authorize": "*",
         "doctrine/data-fixtures": "dev-master",
@@ -27,12 +27,16 @@
 		"goalio/goalio-forgotpassword-doctrine-orm" : "*",
 		"zf-commons/zfc-admin" : "*",
 		"danielss89/zfc-user-admin" : "dev-master",
+		"eye4web/zf2-site-config" : "dev-master",
+		"zf-commons/zfc-twig" : "~1.2",
 		
         "xelax90/xelax-admin": "dev-master",
 		"neilime/zf2-twb-bundle" : "dev-master",
 		"xelax90/xelax-twb-unmask": "dev-master",
 		"xelax90/zf2-filter-htmlpurifier": "*",
 		"xelax90/password-generator-module" : "dev-master",
+		"xelax90/xelax-formgen" : "dev-master",
+		"xelax90/xelax-site-config" : "dev-master",
 		
 		"azatoth/php-pgettext" : "dev-master"
     },

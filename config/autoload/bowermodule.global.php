@@ -14,28 +14,29 @@ return array(
         ),
         'debug_mode' => true,
 		'packs' => array(
-			'main' => array(
-				'token' => 'ababababa',
+			'frontend' => array(
+				'token' => 'main',
 				'modules' => array(
 					'jquery',
 					'iscroll',
 				)
 			),
-			'admin' => array(
-				'token' => 'aababa',
+			'backend' => array(
+				'token' => 'admin',
 				'modules' => array(
 					'jquery',
 					'iscroll',
 					'bootstrap',
+					'bootstrap-switch',
 					"Selecter",
 					"Stepper",
 					"iCheck",
-					"bootstrap-switch",
 					'lightbox',
+					'select2',
 				)
 			),
 			'ieLT9' => array(
-				'token' => 'bababab',
+				'token' => 'ieLT9',
 				'modules' => array(
 					'html5shiv',
 					'respond',

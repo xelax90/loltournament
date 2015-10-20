@@ -35,6 +35,9 @@
 		"iCheck" : "*",
 		"bootstrap-switch" : "*",
 		"iscroll" : "4.2.5",
-		"lightbox" : "*"
+		"lightbox" : "*",
+		"bootstrap-lightbox" : "*",
+		"select2" : "4.*",
+		"bootstrap-languages" : "https://github.com/xelax90/bootstrap-languages.git"
 	}
 }

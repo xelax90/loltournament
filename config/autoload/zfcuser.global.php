@@ -1,9 +1,6 @@
 <?php
 /**
  * ZfcUser Configuration
- *
- * If you have a ./config/autoload/ directory set up for your project, you can
- * drop this config file in it and change the values as you wish.
  */
 $settings = array(
     /**
@@ -21,11 +18,11 @@ $settings = array(
      * instead of the default one provided. Default is ZfcUser\Entity\User.
      * The entity class should implement ZfcUser\Entity\UserInterface
      */
-    'user_entity_class' => 'FSMPILoL\Entity\User',
+    'user_entity_class' => 'SkelletonApplication\Entity\User',
 	'enable_default_entities' => false,
-
+	
 	'new_user_default_role' => 'user',
-	'role_entity_class' => 'FSMPILoL\Entity\Role',
+	'role_entity_class' => 'SkelletonApplication\Entity\Role',
     /**
      * Enable registration
      *
@@ -106,7 +103,7 @@ $settings = array(
      *
      * Accepted values: boolean true or false
      */
-    //'login_after_registration' => true,
+    'login_after_registration' => false,
 
     /**
      * Registration Form Captcha
@@ -198,7 +195,7 @@ $settings = array(
      * 
      * Should user's state be used in the registration/login process?
      */
-    //'enable_user_state' => true,
+    'enable_user_state' => true,
     
     /**
      * Default user state upon registration
@@ -206,7 +203,7 @@ $settings = array(
      * What state user should have upon registration?
      * Allowed value type: integer
      */
-    //'default_user_state' => 1,
+    'default_user_state' => 1,
     
     /**
      * States which are allowing user to login
@@ -215,7 +212,7 @@ $settings = array(
      * Include null if you want user's with no state to login as well.
      * Allowed value types: null and integer
      */
-    //'allowed_login_states' => array( null, 1 ),
+    'allowed_login_states' => array( 0b01, 0b11 ),
     
     /**
      * User table name
