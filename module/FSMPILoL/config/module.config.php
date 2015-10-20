@@ -204,9 +204,6 @@ return array(
 	
 	
     'service_manager' => array(
-        'aliases' => array(
-            'translator' => 'MvcTranslator',
-        ),
 		'factories' => array(
 			'FSMPILoL\Log' => function ($sm) {
 				$log = new Zend\Log\Logger();

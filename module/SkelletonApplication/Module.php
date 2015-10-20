@@ -19,7 +19,7 @@ class Module
 
 		$moduleRouteListener = new ModuleRouteListener();
 		$moduleRouteListener->attach($eventManager);
-		$eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'initTranslator'));
+		$eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'initTranslator'), 1000);
 		
 		// Enable BjyAuthorize when not in console mode
 		if(!\Zend\Console\Console::isConsole()) {
@@ -44,15 +44,16 @@ class Module
 			'en' => 'en_US'
 		);
 		
-		$routeMatch = $e->getRouteMatch();
-		if(!$routeMatch){
-			return;
-		}
 		/* @var $translator \Zend\I18n\Translator\Translator */
 		$translator = $e->getApplication()->getServiceManager()->get('translator');
 		
 		// add Db Loader factory
 		$translator->getPluginManager()->setFactory(I18n\Translator\Loader\Db::class, I18n\Translator\Loader\Factory\DbFactory::class);
+		
+		$routeMatch = $e->getRouteMatch();
+		if(!$routeMatch){
+			return;
+		}
 		
 		$lang = $routeMatch->getParam('locale');
 		if(!$lang || !in_array($lang, $languages)){
