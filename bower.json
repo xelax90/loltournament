@@ -1,43 +1,44 @@
 {
-  "name": "fsmpilol",
-  "version": "0.0.0",
-  "description": "Tournament Management for FSMPI LoL AK",
-  "keywords": [
-    "RWTH",
-    "FSMPI",
-    "LoL",
-    "League",
-    "Legends",
-    "Gaming",
-    "Group"
-  ],
-  "authors": [
-    "aleksandr@fsmpi.rwth-aachen.de"
-  ],
-  "license": "GPL V2",
-  "homepage": "http://lol.fsmpi.rwth-aachen.de",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
-	"dependencies" : {
-		"jquery" : "1.*",
-		"bootstrap" : "3.*",
-		"html5shiv" : "*",
-		"fontawesome" : "*",
-		"respond" : "*",
-		"bootflat" : "*",
-		"Selecter" : "*",
-		"Stepper" : "*",
-		"iCheck" : "*",
-		"bootstrap-switch" : "*",
-		"iscroll" : "4.2.5",
-		"lightbox" : "*",
-		"bootstrap-lightbox" : "*",
-		"select2" : "4.*",
-		"bootstrap-languages" : "https://github.com/xelax90/bootstrap-languages.git"
+	"name": "fsmpilol",
+	"version": "0.0.0",
+	"description": "Tournament Management for FSMPI LoL AK",
+	"keywords": [
+		"RWTH",
+		"FSMPI",
+		"LoL",
+		"League",
+		"Legends",
+		"Gaming",
+		"Group"
+	],
+	"authors": [
+		"aleksandr@fsmpi.rwth-aachen.de"
+	],
+	"license": "GPL V2",
+	"homepage": "http://lol.fsmpi.rwth-aachen.de",
+	"ignore": [
+		"**/.*",
+		"node_modules",
+		"bower_components",
+		"test",
+		"tests"
+	],
+	"dependencies": {
+		"jquery": "1.*",
+		"bootstrap": "3.*",
+		"html5shiv": "*",
+		"fontawesome": "*",
+		"respond": "*",
+		"bootflat": "*",
+		"Selecter": "*",
+		"Stepper": "*",
+		"iCheck": "*",
+		"bootstrap-switch": "*",
+		"iscroll": "4.2.5",
+		"lightbox": "*",
+		"bootstrap-lightbox": "*",
+		"select2": "4.*",
+		"bootstrap-languages": "https://github.com/xelax90/bootstrap-languages.git",
+		"jquery-sortable-lists": "*"
 	}
 }
