@@ -164,7 +164,13 @@ class UserNotificationService implements ServiceLocatorAwareInterface{
 			return null;
 		}
 		$translator = $this->getTranslator();
-		// TODO use-based language
+		
+		// set locale to user-defined language
+		$translatorLocale = $translator->getLocale();
+		if($user->getLocale()){
+			$translator->setLocale($user->getLocale());
+		}
+		
 		$options = $this->getRegistrationOptions();
 		$transport = $this->getTransport();
 		$message = $transport->createHtmlMessage(
@@ -174,6 +180,9 @@ class UserNotificationService implements ServiceLocatorAwareInterface{
 				SiteRegistrationOptions::getEmailTemplateKey($flag),
 				$parameters
 		);
+		
+		// restore locale
+		$translator->setLocale($translatorLocale);
 		return $message;
 	}
 	
@@ -214,7 +223,7 @@ class UserNotificationService implements ServiceLocatorAwareInterface{
 	 */
 	public function getTranslator(){
 		if(null === $this->translator){
-			$this->translator = $this->getServiceLocator()->get('translator');
+			$this->translator = $this->getServiceLocator()->get('MvcTranslator');
 		}
 		return $this->translator;
 	}

@@ -67,6 +67,11 @@ class User extends ZfcUserEntity implements JsonSerializable, ProviderInterface
 	 */
 	protected $players;
 	
+	/**
+	 * @ORM\Column(type="string", nullable=true)
+	 */
+	protected $locale;
+	
     /**
      * Initialies the roles variable.
      */
@@ -237,7 +242,16 @@ class User extends ZfcUserEntity implements JsonSerializable, ProviderInterface
             $this->getTokenCreatedAt()->format('U')
         ),0,15)));
 	}
-
+	
+	public function getLocale() {
+		return $this->locale;
+	}
+	
+	public function setLocale($locale) {
+		$this->locale = $locale;
+		return $this;
+	}
+	
 	/** 
 	 * @ORM\PrePersist 
 	 */  

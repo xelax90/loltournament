@@ -28,8 +28,6 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use SkelletonApplication\Options\SkelletonOptions;
-use ZfcUser\Entity\UserInterface;
-use SkelletonApplication\Options\SiteRegistrationOptions;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use SkelletonApplication\Service\UserNotificationService;
 
@@ -70,7 +68,7 @@ class UserListener extends AbstractListenerAggregate implements ServiceLocatorAw
 		/* @var $user \SkelletonApplication\Entity\User */
 		$user = $e->getParam('user');
 		
-		$config = $sm->get('config');
+		$config = $sm->get('Config');
 		$criteria = array('roleId' => $config['zfcuser']['new_user_default_role']);
 		
 		/* @var $defaultUserRole \SkelletonApplication\Entity\Role */
@@ -91,8 +89,14 @@ class UserListener extends AbstractListenerAggregate implements ServiceLocatorAw
 		$em = $sm->get(EntityManager::class);
 		/* @var $user \SkelletonApplication\Entity\User */
 		$user = $e->getParam('user');
-		/* @var $options \SkelletonApplication\Options\SkelletonOptions */
+		/* @var $options SkelletonOptions */
 		$options = $sm->get(SkelletonOptions::class);
+		/* @var $translator \Zend\Mvc\I18n\Translator */
+		$translator = $sm->get('MvcTranslator');
+		
+		if(null === $user->getLocale()){
+			$user->setLocale($translator->getLocale());
+		}
 		
 		if($user->getProfile() === null){
 			$profileEntity = $options->getUserProfileEntity();
@@ -101,8 +105,9 @@ class UserListener extends AbstractListenerAggregate implements ServiceLocatorAw
 			$profile->setUser($user);
 			$user->setProfile($profile);
 			$em->persist($profile);
-			$em->flush();
 		}
+		
+		$em->flush();
 		
 		// send user notifications
 		$notificationService = $sm->get(UserNotificationService::class);
@@ -119,7 +124,7 @@ class UserListener extends AbstractListenerAggregate implements ServiceLocatorAw
 		$em = $sm->get(EntityManager::class);
 		/* @var $user \SkelletonApplication\Entity\User */
 		$user = $e->getParam('user');
-		/* @var $options \SkelletonApplication\Options\SkelletonOptions */
+		/* @var $options SkelletonOptions */
 		$options = $sm->get(SkelletonOptions::class);
 		
 		$data = $e->getParam('data');
@@ -148,7 +153,7 @@ class UserListener extends AbstractListenerAggregate implements ServiceLocatorAw
 		/* @var $form \ZfcUser\Form\Register */
 		$form = $e->getTarget();
 		
-		$config = $sm->get('config');
+		$config = $sm->get('Config');
 		$roleEntity = $config['zfcuser']['role_entity_class'];
 		
 		$form->add(
