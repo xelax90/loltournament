@@ -160,11 +160,11 @@ class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, Inp
 		);
 		
 		// TODO warum ist das überhaupt notwendig???
-		$anmeldungFilter = $this->get('anmeldungen')->getTargetElement()->getInputFilterSpecification();
+		/*$anmeldungFilter = $this->get('anmeldungen')->getTargetElement()->getInputFilterSpecification();
 		$anmeldungFilter['name']['required'] = false;
 		$anmeldungFilter['email']['required'] = false;
 		$anmeldungFilter['summonerName']['required'] = false;
-		$filterSpec['anmeldungen']['input_filter'] = $anmeldungFilter;
+		$filterSpec['anmeldungen']['input_filter'] = $anmeldungFilter;*/
 		
 		return $filterSpec;
 	}

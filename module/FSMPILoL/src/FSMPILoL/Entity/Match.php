@@ -2,10 +2,6 @@
 namespace FSMPILoL\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilterAwareInterface;
-use Zend\InputFilter\InputFilterInterface; 
 use Zend\Json\Json;
 use JsonSerializable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -27,10 +23,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @property DateTime $time
  * @property string $foodleURL
  */
-class Match implements InputFilterAwareInterface, JsonSerializable
+class Match implements JsonSerializable
 {
-	protected $inputFilter;
- 	
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer");
@@ -218,115 +212,6 @@ class Match implements InputFilterAwareInterface, JsonSerializable
 	
 	public function setGames($games){
 		$this->games = $games;
-	}
-
-	/**
-	 * Populate from an array.
-	 *
-	 * @param array $data
-	 */
-	public function populate($data = array()){
-		if(!empty($data['id']))
-			$this->setId($data['id']);
-		if(!empty($data['number']))
-			$this->setNumber($data['number']);
-		if(!empty($data['round']))
-			$this->setRound($data['round']);
-		if(!empty($data['teamHome']))
-			$this->setTeamHome($data['teamHome']);
-		if(!empty($data['teamGuest']))
-			$this->setTeamGuest($data['teamGuest']);
-		if(isset($data['pointsHome']))
-			$this->setPointsHome($data['pointsHome']);
-		if(isset($data['pointsGuest']))
-			$this->setPointsGuest($data['pointsGuest']);
-		if(!empty($data['anmerkung']))
-			$this->setAnmerkung($data['anmerkung']);
-		if(!empty($data['isBlocked']))
-			$this->setIsBlocked($data['isBlocked']);
-		if(!empty($data['time']))
-			$this->setTime($data['time']);
-		if(!empty($data['foodleURL']))
-			$this->setFoodleUrl($data['foodleURL']);
-	}
- 
-	public function setInputFilter(InputFilterInterface $inputFilter){
-		throw new \Exception("Not used");
-	}
- 
-	/**
-	 * Returns input filters for this entity
-	 * @return \Zend\InputFilter\InputFilter
-	 */
-	public function getInputFilter(){
-		if (!$this->inputFilter) {
-			$inputFilter = new InputFilter();
- 
-			$factory = new InputFactory();
- 
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'id',
-				'required'   => true,
-				'filters' => array(
-					array('name'    => 'Int'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'number',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'Int'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'pointsHome',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'Int'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'pointsGuest',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'Int'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'anmerkung',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'isBlocked',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'Boolean'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'foodleURL',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			
-			$this->inputFilter = $inputFilter;        
-		}
-
-		return $this->inputFilter;
 	}
 
 	/**

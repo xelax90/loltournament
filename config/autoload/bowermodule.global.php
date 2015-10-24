@@ -33,6 +33,7 @@ return array(
 					"iCheck",
 					'lightbox',
 					'select2',
+					'jquery-sortable-lists',
 				)
 			),
 			'ieLT9' => array(

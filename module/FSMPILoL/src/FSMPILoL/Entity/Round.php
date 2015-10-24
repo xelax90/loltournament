@@ -4,10 +4,6 @@ namespace FSMPILoL\Entity;
 use FSMPILoL\Tournament\RoundCreator\AlreadyPlayedInterface;
 
 use Doctrine\ORM\Mapping as ORM;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilterAwareInterface;
-use Zend\InputFilter\InputFilterInterface; 
 use Zend\Json\Json;
 use JsonSerializable;
 
@@ -23,10 +19,8 @@ use JsonSerializable;
  * @property string $type
  * @property array $properties
  */
-class Round implements InputFilterAwareInterface, JsonSerializable, AlreadyPlayedInterface
+class Round implements JsonSerializable, AlreadyPlayedInterface
 {
-	protected $inputFilter;
- 	
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer");
@@ -163,85 +157,6 @@ class Round implements InputFilterAwareInterface, JsonSerializable, AlreadyPlaye
 		return $this->matches = $matches;
 	}
 
-	/**
-	 * Populate from an array.
-	 *
-	 * @param array $data
-	 */
-	public function populate($data = array()){
-		if(!empty($data['id']))
-			$this->setId($data['id']);
-		$this->setNumber($data['number']);
-		if(!empty($data['group']))
-			$this->setGroup($data['group']);
-		$this->setType($data['type']);
-		$this->setProperties($data['properties']);
-		$this->setDuration($data['duration']);
-		$this->setTimeForDates($data['timeForDates']);
-	}
- 
-	public function setInputFilter(InputFilterInterface $inputFilter){
-		throw new \Exception("Not used");
-	}
- 
-	/**
-	 * Returns input filters for this entity
-	 * @return \Zend\InputFilter\InputFilter
-	 */
-	public function getInputFilter(){
-		if (!$this->inputFilter) {
-			$inputFilter = new InputFilter();
- 
-			$factory = new InputFactory();
- 
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'id',
-				'required'   => true,
-				'filters' => array(
-					array('name'    => 'Int'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'number',
-				'required'   => true,
-				'filters' => array(
-					array('name' => 'Int'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'duration',
-				'required'   => true,
-				'filters' => array(
-					array('name' => 'Int'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'timeForDates',
-				'required'   => true,
-				'filters' => array(
-					array('name' => 'Int'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'type',
-				'required'   => true,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			
-			$this->inputFilter = $inputFilter;        
-		}
-
-		return $this->inputFilter;
-	}
-	
 	public function alreadyPlayed(Team $t1, Team $t2){
 		foreach($this->getMatches() as $match){
 			if($match->getTeamHome() == $t1 && $match->getTeamGuest() == $t2)

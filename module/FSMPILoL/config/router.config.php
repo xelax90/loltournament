@@ -104,7 +104,16 @@ $routerConfig = array(
 						'action'     => 'form',
 					),
 				),
-
+			),
+			'confirm' => array(
+				'type' => 'literal',
+				'options' => array(
+					'route'    => '/confirm',
+					'defaults' => array(
+						'controller' => Controller\AnmeldungController::class,
+						'action'     => 'confirm',
+					),
+				),
 			)
 		)
 	),

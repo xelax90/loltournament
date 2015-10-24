@@ -2,10 +2,6 @@
 namespace FSMPILoL\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilterAwareInterface;
-use Zend\InputFilter\InputFilterInterface; 
 use Zend\Json\Json;
 use JsonSerializable;
 use SkelletonApplication\Entity\User;
@@ -23,10 +19,8 @@ use SkelletonApplication\Entity\User;
  * @property string $icon
  * @property User $ansprechpartner
  */
-class Team implements InputFilterAwareInterface, JsonSerializable
+class Team implements JsonSerializable
 {
-	protected $inputFilter;
- 	
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer");
@@ -238,88 +232,6 @@ class Team implements InputFilterAwareInterface, JsonSerializable
 		return self::compare($b, $a);
 	}
 	
-	
-	/**
-	 * Populate from an array.
-	 *
-	 * @param array $data
-	 */
-	public function populate($data = array()){
-		if(!empty($data['id']))
-			$this->setId($data['id']);
-		$this->setName($data['name']);
-		if(!empty($data['group']))
-			$this->setGroup($data['group']);
-		$this->setNumber($data['number']);
-		$this->setIsBlocked($data['isBlocked']);
-		$this->setIcon($data['icon']);
-		if(!empty($data['ansprechpartner']))
-			$this->setAnsprechpartner($data['ansprechpartner']);
-	}
- 
-	public function setInputFilter(InputFilterInterface $inputFilter){
-		throw new \Exception("Not used");
-	}
- 
-	/**
-	 * Returns input filters for this entity
-	 * @return \Zend\InputFilter\InputFilter
-	 */
-	public function getInputFilter(){
-		if (!$this->inputFilter) {
-			$inputFilter = new InputFilter();
- 
-			$factory = new InputFactory();
- 
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'id',
-				'required'   => true,
-				'filters' => array(
-					array('name'    => 'Int'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'name',
-				'required'   => true,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'number',
-				'required'   => true,
-				'filters' => array(
-					array('name' => 'Int'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'isBlocked',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'Boolean'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'icon',
-				'required'   => true,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			
-			$this->inputFilter = $inputFilter;        
-		}
-
-		return $this->inputFilter;
-	}
-
 	/**
 	 * Returns json String
 	 * @return string

@@ -2,10 +2,6 @@
 namespace FSMPILoL\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilterAwareInterface;
-use Zend\InputFilter\InputFilterInterface; 
 use Zend\Json\Json;
 use JsonSerializable;
 
@@ -26,10 +22,8 @@ use JsonSerializable;
  * @property string $icon
  * @property Tournament $tournament
  */
-class Anmeldung implements InputFilterAwareInterface, JsonSerializable
+class Anmeldung implements JsonSerializable
 {
-	protected $inputFilter;
- 	
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer");
@@ -199,143 +193,6 @@ class Anmeldung implements InputFilterAwareInterface, JsonSerializable
 		return $this->summonerdata = $summonerdata;
 	}
 	
-	/**
-	 * Populate from an array.
-	 *
-	 * @param array $data
-	 */
-	public function populate($data = array()){
-		if(!empty($data['id']))
-			$this->setId($data['id']);
-		$this->setName($data['name']);
-		if(!empty($data['teamName']))
-			$this->setTeamName($data['teamName']);
-		$this->setEmail($data['email']);
-		if(!empty($data['facebook']))
-			$this->setFacebook($data['facebook']);
-		if(!empty($data['otherContact']))
-			$this->setOtherContact($data['otherContact']);
-		$this->setSummonerName($data['summonerName']);
-		$this->setIsSub($data['isSub']);
-		if(!empty($data['anmerkung']))
-			$this->setAnmerkung($data['anmerkung']);
-		if(!empty($data['icon']))
-			$this->setIcon($data['icon']);
-		if(!empty($data['tournament']))
-			$this->setTournament($data['tournament']);
-	}
- 
-	public function setInputFilter(InputFilterInterface $inputFilter){
-		throw new \Exception("Not used");
-	}
- 
-	/**
-	 * Returns input filters for this entity
-	 * @return \Zend\InputFilter\InputFilter
-	 */
-	public function getInputFilter(){
-		if (!$this->inputFilter) {
-			$inputFilter = new InputFilter();
- 
-			$factory = new InputFactory();
- 
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'id',
-				'required'   => true,
-				'filters' => array(
-					array('name'    => 'Int'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'teamName',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'name',
-				'required'   => true,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'email',
-				'required'   => true,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-				'validators' => array(
-					array( 'name' => 'EmailAddress' ),
-				)
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'facebook',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'otherContact',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'summonerName',
-				'required'   => true,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'isSub',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'Int'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'anmerkung',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'icon',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			$this->inputFilter = $inputFilter;        
-		}
-
-		return $this->inputFilter;
-	}
-
 	/**
 	 * Returns json String
 	 * @return string

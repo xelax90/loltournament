@@ -2,10 +2,6 @@
 namespace FSMPILoL\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilterAwareInterface;
-use Zend\InputFilter\InputFilterInterface; 
 use Zend\Json\Json;
 use JsonSerializable;
 
@@ -19,7 +15,7 @@ use JsonSerializable;
  * @property Team $team
  * @property string $comment
  */
-class Warning implements InputFilterAwareInterface, JsonSerializable
+class Warning implements JsonSerializable
 {
 	protected $inputFilter;
  	
@@ -82,45 +78,6 @@ class Warning implements InputFilterAwareInterface, JsonSerializable
 		$this->comment = $comment;
 		return $this;
 	}
-
-	public function setInputFilter(InputFilterInterface $inputFilter){
-		throw new \Exception("Not used");
-	}
- 
-	/**
-	 * Returns input filters for this entity
-	 * @return \Zend\InputFilter\InputFilter
-	 */
-	public function getInputFilter(){
-		if (!$this->inputFilter) {
-			$inputFilter = new InputFilter();
- 
-			$factory = new InputFactory();
- 
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'id',
-				'required'   => true,
-				'filters' => array(
-					array('name'    => 'Int'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'comment',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			
-			$this->inputFilter = $inputFilter;        
-		}
-
-		return $this->inputFilter;
-	}
-
 	/**
 	 * Returns json String
 	 * @return string

@@ -30,8 +30,7 @@ class AnmeldungSingleForm extends Form implements ObjectManagerAwareInterface, I
 	}
 	
 	public function init(){
-		$this->setHydrator(new DoctrineHydrator($this->getObjectManager()))
-			 ->setInputFilter(new InputFilter());
+		$this->setHydrator(new DoctrineHydrator($this->getObjectManager()));
 		
 		$this->add(array(
 			'name' => 'anmeldung',
@@ -45,19 +44,19 @@ class AnmeldungSingleForm extends Form implements ObjectManagerAwareInterface, I
 				'class' => 'anmeldung_single_fieldset',
 			)
         ));
-		
+
 		$this->add(array(
 			'name' => 'ausschreibung_gelesen',
 			'type' => 'Checkbox',
 			'options' => array(
 				'label' => 'Ausschreibung gelesen<sup>*</sup>',
+				'checked_value' => '1',
 				'label_options' => array(
 					'disable_html_escape' => true,
 				),
 				'column-size' => 'sm-10 col-sm-offset-2',
 			),
 			'attributes' => array(
-				'value' => 'Eingaben Prüfen',
 			),
 		));
 		
@@ -74,10 +73,25 @@ class AnmeldungSingleForm extends Form implements ObjectManagerAwareInterface, I
 	}
 
 	public function getInputFilterSpecification() {
+		
 		$filters = array(
 			'ausschreibung_gelesen' => array(
 				'required' => true,
-			)
+				'filters' => array(
+					array('name' => 'Digits'),
+				),
+				'validators' => array(
+					array(
+						'name' => 'Callback',
+						'options' => array(
+							'callback' => function($v){
+								return !empty($v);
+							},
+							'message' => 'Du musst die Ausschreibung lesen, um am Turnier teilzunehmen',
+						)
+					)
+				)
+			),
 		);
 		
 		return $filters;

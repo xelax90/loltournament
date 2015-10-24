@@ -19,8 +19,6 @@ use SkelletonApplication\Entity\User;
  */
 class Player implements JsonSerializable
 {
-	protected $inputFilter;
- 	
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer");
@@ -149,23 +147,6 @@ class Player implements JsonSerializable
 		return $this;
 	}
 
-	/**
-	 * Populate from an array.
-	 *
-	 * @param array $data
-	 */
-	public function populate($data = array()){
-		if(!empty($data['id']))
-			$this->setId($data['id']);
-		if(!empty($data['team']))
-			$this->setTeam($data['team']);
-		if(!empty($data['anmeldung']))
-			$this->setAnmeldung($data['anmeldung']);
-		$this->setIsCaptain($data['isCaptain']);
-		if(!empty($data['summonerId']))
-			$this->setSummonerId($data['summonerId']);
-	}
-	
 	/**
 	 * Returns json String
 	 * @return string

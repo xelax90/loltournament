@@ -4,10 +4,6 @@ namespace FSMPILoL\Entity;
 use FSMPILoL\Tournament\RoundCreator\AlreadyPlayedInterface;
 
 use Doctrine\ORM\Mapping as ORM;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilterAwareInterface;
-use Zend\InputFilter\InputFilterInterface; 
 use Zend\Json\Json;
 use JsonSerializable;
 
@@ -19,10 +15,8 @@ use JsonSerializable;
  * @property int $id
  * @property int $name
  */
-class Tournament implements InputFilterAwareInterface, JsonSerializable, AlreadyPlayedInterface
+class Tournament implements JsonSerializable, AlreadyPlayedInterface
 {
-	protected $inputFilter;
- 	
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer");
@@ -102,54 +96,6 @@ class Tournament implements InputFilterAwareInterface, JsonSerializable, Already
 		return $this->subs;
 	}
 	
-	/**
-	 * Populate from an array.
-	 *
-	 * @param array $data
-	 */
-	public function populate($data = array()){
-		if(!empty($data['id']))
-			$this->setId($data['id']);
-		$this->setName($data['name']);
-	}
- 
-	public function setInputFilter(InputFilterInterface $inputFilter){
-		throw new \Exception("Not used");
-	}
- 
-	/**
-	 * Returns input filters for this entity
-	 * @return \Zend\InputFilter\InputFilter
-	 */
-	public function getInputFilter(){
-		if (!$this->inputFilter) {
-			$inputFilter = new InputFilter();
- 
-			$factory = new InputFactory();
- 
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'id',
-				'required'   => true,
-				'filters' => array(
-					array('name'    => 'Int'),
-				),
-			)));
- 
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'name',
-				'required'   => true,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-
-			$this->inputFilter = $inputFilter;        
-		}
-
-		return $this->inputFilter;
-	}
-
 	public function alreadyPlayed(Team $t1, Team $t2){
 		foreach($this->getGroups() as $group){
 			if($group->alreadyPlayed($t1, $t2))

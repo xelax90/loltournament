@@ -2,10 +2,6 @@
 namespace FSMPILoL\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\Factory as InputFactory;
-use Zend\InputFilter\InputFilterAwareInterface;
-use Zend\InputFilter\InputFilterInterface; 
 use Zend\Json\Json;
 use JsonSerializable;
 
@@ -32,10 +28,8 @@ use JsonSerializable;
  * @property string $report
  * @property string $streamLink
  */
-class Game implements InputFilterAwareInterface, JsonSerializable
+class Game implements JsonSerializable
 {
-	protected $inputFilter;
- 	
 	/**
 	 * @ORM\Id
 	 * @ORM\Column(type="integer");
@@ -311,175 +305,6 @@ class Game implements InputFilterAwareInterface, JsonSerializable
 		$this->setTournamentCode($code);
 	}
 	
-	/**
-	 * Populate from an array.
-	 *
-	 * @param array $data
-	 */
-	public function populate($data = array()){
-		if(!empty($data['id']))
-			$this->setId($data['id']);
-		if(!empty($data['match']))
-			$this->setMatch($data['match']);
-		$this->setNumber($data['number']);
-		if(!empty($data['teamBlue']))
-			$this->setTeamBlue($data['teamBlue']);
-		if(!empty($data['teamPurple']))
-			$this->setTeamPurple($data['teamPurple']);
-		$this->setIsBlocked($data['isBlocked']);
-		$this->setMeldungHome($data['meldungHome']);
-		$this->setMeldungGuest($data['meldungGuest']);
-		$this->setAnmerkungHome($data['anmerkungHome']);
-		$this->setAnmerkungGuest($data['anmerkungGuest']);
-		$this->setScreenHome($data['screenHome']);
-		$this->setScreenGuest($data['screenGuest']);
-		$this->setTournamentCode($data['tournamentCode']);
-		$this->setReport($data['report']);
-		$this->setStreamLink($data['streamLink']);
-	}
- 
-	public function setInputFilter(InputFilterInterface $inputFilter){
-		throw new \Exception("Not used");
-	}
- 
-	/**
-	 * Returns input filters for this entity
-	 * @return \Zend\InputFilter\InputFilter
-	 */
-	public function getInputFilter(){
-		if (!$this->inputFilter) {
-			$inputFilter = new InputFilter();
- 
-			$factory = new InputFactory();
- 
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'id',
-				'required'   => true,
-				'filters' => array(
-					array('name'    => 'Int'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'number',
-				'required'   => true,
-				'filters' => array(
-					array('name' => 'Int'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'pointsBlue',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'Int'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'pointsPurple',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'Int'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'isBlocked',
-				'required'   => true,
-				'filters' => array(
-					array('name' => 'Boolean'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'meldungHome',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'meldungGuest',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'anmerkungHome',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'anmerkungGuest',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'screenHome',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'screenGuest',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'tournamentCode',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'report',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			$inputFilter->add($factory->createInput(array(
-				'name'       => 'streamLink',
-				'required'   => false,
-				'filters' => array(
-					array('name' => 'StripTags'),
-					array('name' => 'StringTrim'),
-				),
-			)));
-			
-			
-			$this->inputFilter = $inputFilter;        
-		}
-
-		return $this->inputFilter;
-	}
-
 	/**
 	 * Returns json String
 	 * @return string
