@@ -30,7 +30,12 @@ $form = $this->form;
 					<?php 
 						$form->setAttribute('action', $this->url('anmeldung/confirm'))
 							 ->prepare();
-						echo $this->twbForm($form, FormHelper::LAYOUT_VALUES);
+						$form->get('submit')->setValue($this->translate('Anmelden'))->setLabel($this->translate('Anmelden'));
+						$ausschreibung = $form->get('ausschreibung_gelesen');
+						$ausschreibung->setOption('column-size', 'sm-10');
+						$ausschreibung->setOption('label_attributes', array('class' => 'col-sm-2'));
+						
+						echo $this->twbForm($form, FormHelper::LAYOUT_VALUES_HIDDEN);
 					?>
 				</div>
 			</li>
