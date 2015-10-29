@@ -76,7 +76,7 @@ class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, Inp
             'name' => 'anmeldungen',
             'options' => array(
                 'label' => 'Spieler',
-                'count' => 5,
+                'count' => 2,
                 'should_create_template' => true,
 		        'template_placeholder' => '__placeholder__',
                 'allow_add' => true,
@@ -99,14 +99,14 @@ class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, Inp
 			'type' => 'Checkbox',
 			'options' => array(
 				'label' => 'Ausschreibung gelesen<sup>*</sup>',
+				'checked_value' => '1',
 				'label_options' => array(
 					'disable_html_escape' => true,
 				),
 				'column-size' => 'sm-10 col-sm-offset-2',
 			),
 			'attributes' => array(
-				'id' => "",
-			)
+			),
 		));
 		
 		$this->add(array(
@@ -158,12 +158,18 @@ class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, Inp
 						'name' => MinMaxEmailsRwth::class,
 						'options' => array(
 							'min' => 1, // use float to get percent instead of absolute limit
+							'messages'=> array(
+								MinMaxEmailsRwth::MESSAGE_NOT_ENOUGH => 'Es muss mindestens eine RWTH-Mailadresse angegeben sein',
+							)
 						),
 					),
 					array(
 						'name' => MinMaxEmailsNotRwth::class,
 						'options' => array(
 							'max' => 3, // use float to get percent instead of absolute limit
+							'messages'=> array(
+								MinMaxEmailsRwth::MESSAGE_NOT_ENOUGH => 'Es dürfen nicht mehr, als 3 externe Mailadressen angegeben sein',
+							)
 						),
 					),
 				),
@@ -196,6 +202,21 @@ class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, Inp
 			),
 			'ausschreibung_gelesen' => array(
 				'required' => true,
+				'allow_empty' => false,
+				'filters' => array(
+					array('name' => 'Digits'),
+				),
+				'validators' => array(
+					array(
+						'name' => 'Callback',
+						'options' => array(
+							'callback' => function($v){
+								return !empty($v);
+							},
+							'message' => 'Du musst die Ausschreibung lesen, um am Turnier teilzunehmen',
+						)
+					)
+				)
 			),
 		);
 		

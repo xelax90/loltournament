@@ -62,7 +62,7 @@ class Anmeldung implements JsonSerializable
 	protected $summonerName;
  	
 	/**
-	 * @ORM\Column(type="integer");
+	 * @ORM\Column(type="integer", nullable=true);
 	 */
 	protected $isSub;
  	
