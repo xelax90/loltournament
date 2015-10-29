@@ -1185,6 +1185,7 @@ body {
 			textarea{
 				border: 1px solid #22272a;
 				background-color: #7e7e7e;
+				color: black;
 			}
 
 			input[type=file]{
@@ -1242,13 +1243,19 @@ body {
 		}
 	}
 
-	ul li.login a{
-		&, &:hover, &:visited{
-			text-decoration: none;
-			color: #727272;
+	ul li.login {
+		a{
+			&, &:hover, &:visited{
+				text-decoration: none;
+				color: #727272;
+			}
+			&:hover{
+				text-decoration: underline;
+			}
 		}
-		&:hover{
-			text-decoration: underline;
+		
+		form input{
+			width: 100%
 		}
 	}
 	
