@@ -69,6 +69,47 @@ class AnmeldungController extends AbstractActionController
 		$form = $this->getServiceLocator()->get('FormElementManager')->get($name);
 		return $form;
 	}
+	
+	protected function _forwardToForm(){
+		$match = $this->getEvent()->getRouteMatch()->getParams();
+		$match['action'] = 'form';
+		return $this->forward()->dispatch($match['controller'], $match);
+	}
+	
+	protected function _forwardToConfirm(){
+		$match = $this->getEvent()->getRouteMatch()->getParams();
+		$match['action'] = 'confirm';
+		return $this->forward()->dispatch($match['controller'], $match);
+	}
+	
+	protected function _redirectToForm(){
+		$match = $this->getEvent()->getRouteMatch()->getParams();
+		$match['action'] = 'confirm';
+		return $this->redirect()->toRoute('anmeldung/form');
+	}
+	
+	protected function getFormOrRedirect(){
+		$request = $this->getRequest();
+		
+		if(!$request->isPost()){
+			return $this->_redirectToForm();
+		}
+		
+		$data = $request->getPost();
+		if(isset($data['teamName'])){
+			$form = $this->getForm(AnmeldungTeamForm::class);
+		} elseif(isset($data['anmeldung'])){
+			$form = $this->getForm(AnmeldungSingleForm::class);
+		} else {
+			return $this->_redirectToForm();
+		}
+		
+		$form->setData($data);
+		if(!$form->isValid()){
+			return $this->_forwardToForm();
+		}
+		return $form;
+	}
 
 	public function formAction(){
 		$this->authenticate();
@@ -153,47 +194,6 @@ class AnmeldungController extends AbstractActionController
 		}
 		
 		return new ViewModel(array( 'singleForm' => $singleForm, 'teamForm' => $teamForm, 'icons' => $icons, 'loginForm' => $loginForm));
-	}
-	
-	protected function _forwardToForm(){
-		$match = $this->getEvent()->getRouteMatch()->getParams();
-		$match['action'] = 'form';
-		return $this->forward()->dispatch($match['controller'], $match);
-	}
-	
-	protected function _forwardToConfirm(){
-		$match = $this->getEvent()->getRouteMatch()->getParams();
-		$match['action'] = 'confirm';
-		return $this->forward()->dispatch($match['controller'], $match);
-	}
-	
-	protected function _redirectToForm(){
-		$match = $this->getEvent()->getRouteMatch()->getParams();
-		$match['action'] = 'confirm';
-		return $this->redirect()->toRoute('anmeldung/form');
-	}
-	
-	protected function getFormOrRedirect(){
-		$request = $this->getRequest();
-		
-		if(!$request->isPost()){
-			return $this->_redirectToForm();
-		}
-		
-		$data = $request->getPost();
-		if(isset($data['teamName'])){
-			$form = $this->getForm(AnmeldungTeamForm::class);
-		} elseif(isset($data['anmeldung'])){
-			$form = $this->getForm(AnmeldungSingleForm::class);
-		} else {
-			return $this->_redirectToForm();
-		}
-		
-		$form->setData($data);
-		if(!$form->isValid()){
-			return $this->_forwardToForm();
-		}
-		return $form;
 	}
 	
 	public function confirmAction(){
