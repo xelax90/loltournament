@@ -54,6 +54,8 @@ $guardConfig = array(
 	['route' => 'myteam',                   'roles' => ['user', 'guest'] ],
 	['route' => 'anmeldung',                'roles' => ['guest', 'user'] ],
 	['route' => 'anmeldung/form',           'roles' => ['guest', 'user'] ],
+	['route' => 'anmeldung/confirm',           'roles' => ['guest', 'user'] ],
+	['route' => 'anmeldung/ready',           'roles' => ['guest', 'user'] ],
 
 	// tournament
 	['route' => 'zfcadmin/tournament' ,          'roles' => ['administrator']],

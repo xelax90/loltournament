@@ -114,6 +114,16 @@ $routerConfig = array(
 						'action'     => 'confirm',
 					),
 				),
+			),
+			'ready' => array(
+				'type' => 'literal',
+				'options' => array(
+					'route'    => '/ready',
+					'defaults' => array(
+						'controller' => Controller\AnmeldungController::class,
+						'action'     => 'ready',
+					),
+				),
 			)
 		)
 	),

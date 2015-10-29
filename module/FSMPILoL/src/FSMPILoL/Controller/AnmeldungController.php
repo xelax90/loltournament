@@ -17,6 +17,7 @@ use FSMPILoL\Tournament\Anmeldung;
 use Doctrine\ORM\EntityManager;
 use FSMPILoL\Options\AnmeldungOptions;
 use FSMPILoL\Entity\Tournament as TournamentEntity;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
 
 /**
@@ -131,27 +132,14 @@ class AnmeldungController extends AbstractActionController
 
 		if ($request->isPost() && (isset($data['teamName']) || isset($data['anmeldung']))) {
 			if(isset($data['teamName'])){ // team form
-				$validation = $this->validateTeamAnmeldung($teamForm, $data);
-				if (empty($validation)) {
+				$teamForm->setData($data);
+				if($teamForm->isValid()){
 					return $this->_forwardToConfirm();
-				} elseif(is_array($validation)) {
-					foreach($validation as $k => $valid){
-						if($k != 'anmeldungen'){
-							$teamForm->get($k)->setMessages(array_merge($teamForm->get($k)->getMessages(), array('teamvalidate' => $valid)));
-						}
-					}
 				}
-				
-			} else { // single form
-				$validation = $this->validateSingleAnmeldung($singleForm, $data);
-				if (empty($validation)) {
+			} else {
+				$singleForm->setData($data);
+				if($singleForm->isValid()){
 					return $this->_forwardToConfirm();
-				} elseif(is_array($validation)) {
-					foreach($validation as $k => $valid){
-						if($k != 'anmeldungen'){
-							$teamForm->get($k)->setMessages(array_merge($teamForm->get($k)->getMessages(), array('teamvalidate' => $valid)));
-						}
-					}
 				}
 			}
 		}
@@ -167,146 +155,6 @@ class AnmeldungController extends AbstractActionController
 		return new ViewModel(array( 'singleForm' => $singleForm, 'teamForm' => $teamForm, 'icons' => $icons, 'loginForm' => $loginForm));
 	}
 	
-	private function validateTeamAnmeldung(AnmeldungTeamForm $form, $data){
-		/*if(NOTEAMS)
-			return array('teamname' => "Teamanmeldung nicht mehr möglich");*/
-		
-		$validation = array();
-
-		$turnierAnmeldungen = $this->getAnmeldung()->getAll();
-		$summonerNames = array();
-		$teamNames = array();
-		foreach($turnierAnmeldungen as $turnierAnmeldung){
-			$summonerNames[] = $turnierAnmeldung->getSummonerName();
-			$teamNames[] = $turnierAnmeldung->getTeamName();
-		}
-		
-		$form->setData($data);
-		if(!$form->isValid()){
-			return true;
-		}
-		$teamdata = $form->getData();
-		
-		if (empty($teamdata['team_icon_text'])) {
-			$validation['team_icon_text'] = 'Team Icon nicht ausgesucht';
-		} else {
-			$icons = $this->getAnmeldung()->getAvailableIcons();
-			if (!in_array($teamdata['team_icon_text'], $icons)) {
-				$validation['team_icon_text'] = 'Team Icon bereits vergeben';
-			}
-		}
-
-		if (empty($teamdata['teamName'])) {
-			$validation['teamName'] = 'Team Name nicht angegeben';
-		} else {
-			if (in_array($teamdata['teamName'], $teamNames)) {
-				$validation['teamName'] = 'Team Name bereits vergeben';
-			}
-		}
-
-		$notRWTHCount = 0;
-		
-		$hasRWTH = false;
-		$anmeldungen = $teamdata['anmeldungen'];
-		$i = 0;
-		foreach($anmeldungen as $k => $anmeldung){
-			$anmeldungV = $this->validate_team_player($anmeldung, $i);
-			if(!empty($anmeldungV)){
-				if (empty($validation['anmeldungen'])) {
-					$validation['anmeldungen'] = array();
-				}
-				$validation['anmeldungen'][$k] = $anmeldungV;
-			}
-			if (strpos(strtolower($anmeldung['email']), 'rwth-aachen') === false && strpos(strtolower($anmeldung['email']), 'fh-aachen') === false && !empty($anmeldung['email'])) {
-				$notRWTHCount++;
-			} elseif (!empty($anmeldung['email'])) {
-				$hasRWTH = true;
-			}
-			$i++;
-		}
-		
-		if($notRWTHCount > 3){
-			if (!empty($validation['anmeldungen'][0]['email'])) {
-				$validation['anmeldungen'][0]['email'] .= '<br>';
-			} else {
-				$validation['anmeldungen'][0]['email'] = '';
-			}
-			$validation['anmeldungen'][0]['email'] .= 'Es dürfen maximal zwei nicht-RWTH/FH Adressen angegeben sein';
-		}
-		if(!$hasRWTH){
-			if (!empty($validation['anmeldungen'][0]['email'])) {
-				$validation['anmeldungen'][0]['email'] .= '<br>';
-			} else {
-				$validation['anmeldungen'][0]['email'] = '';
-			}
-			$validation['anmeldungen'][0]['email'] .= 'Es muss mindestens ein RWTH/FH Angehöriger angegeben sein';
-		}
-
-		if (empty($teamdata['ausschreibung_gelesen'])) {
-			$validation['ausschreibung_gelesen'] = 'Du musst die Ausschreibung gelesen haben.';
-		}
-
-		return $validation;
-	}
-	
-	private function validate_team_player($player, $num){
-		if (empty($player['name']) && $num > 1) {
-			return array();
-		}
-
-		$validation = array();
-		
-		if (empty($player['name'])) {
-			$validation['name'] = 'Name nicht angegeben';
-		}
-
-		if (empty($player['email'])) {
-			$validation['email'] = 'Email nicht angegeben';
-		} elseif (!filter_var($player['email'], FILTER_VALIDATE_EMAIL)) {
-			$validation['email'] = 'Email nicht korrekt';
-		}
-
-		if(empty($player['summonerName'])){
-			$validation['summonerName'] = 'Beschw&ouml;rername nicht angegeben';
-		}
-		else{
-			$turnierAnmeldungen = $this->getAnmeldung()->getAll();
-			$summonerNames = array();
-			foreach($turnierAnmeldungen as $turnierAnmeldung){
-				$summonerNames[] = $turnierAnmeldung->getSummonerName();
-			}
-			
-			if(in_array($summonerNames, $summonerNames)){
-				$validation['summonerName'] = 'Dieser Beschwörer ist bereits angemeldet';
-			}
-		}
-		
-		//if(empty($player['tier']))
-		//	$validation[$prefix.'tier'] = 'Ranked Liga nicht angegeben';
-		
-		return $validation;
-	}
-	
-	private function validateSingleAnmeldung(AnmeldungSingleForm $form, $data){
-		$form->setData($data);
-		$isValid = true;
-		if(!$form->isValid()){
-			$isValid = false;
-		}
-		/* @var $anmeldung AnmeldungEntity */
-		$anmeldung = $form->getObject();
-		
-		if(strpos(strtolower($anmeldung->getEmail()), 'rwth-aachen') === false && strpos(strtolower($anmeldung->getEmail()), 'fh-aachen') === false) {
-			$emailInput = $form->get('anmeldung')->get('email');
-			$messages = $emailInput->getMessages();
-			$messages[] = 'Du musst eine RWTH- oder FH- Adresse angeben!';
-			$emailInput->setMessages($messages);
-			$isValid = false;
-		}
-		
-		return !$isValid;
-	}
-	
 	protected function _forwardToForm(){
 		$match = $this->getEvent()->getRouteMatch()->getParams();
 		$match['action'] = 'form';
@@ -319,26 +167,41 @@ class AnmeldungController extends AbstractActionController
 		return $this->forward()->dispatch($match['controller'], $match);
 	}
 	
-	public function confirmAction(){
+	protected function _redirectToForm(){
+		$match = $this->getEvent()->getRouteMatch()->getParams();
+		$match['action'] = 'confirm';
+		return $this->redirect()->toRoute('anmeldung/form');
+	}
+	
+	protected function getFormOrRedirect(){
 		$request = $this->getRequest();
 		
 		if(!$request->isPost()){
-			return $this->_forwardToForm();
+			return $this->_redirectToForm();
 		}
+		
 		$data = $request->getPost();
 		if(isset($data['teamName'])){
 			$form = $this->getForm(AnmeldungTeamForm::class);
-			if (!empty($this->validateTeamAnmeldung($form, $data))) {
-				return $this->_forwardToForm();
-			}
 		} elseif(isset($data['anmeldung'])){
 			$form = $this->getForm(AnmeldungSingleForm::class);
-			if (!empty($this->validateSingleAnmeldung($form, $data))) {
-				return $this->_forwardToForm();
-			}
 		} else {
+			return $this->_redirectToForm();
+		}
+		
+		$form->setData($data);
+		if(!$form->isValid()){
 			return $this->_forwardToForm();
 		}
+		return $form;
+	}
+	
+	public function confirmAction(){
+		$formOrRedirect = $this->getFormOrRedirect();
+		if($formOrRedirect instanceof \Zend\Http\PhpEnvironment\Response){
+			return $formOrRedirect;
+		}
+		$form = $formOrRedirect;
 		
 		$icons = $this->getAnmeldung()->getAvailableIcons();
 		
@@ -353,8 +216,56 @@ class AnmeldungController extends AbstractActionController
 		return new ViewModel(array('form' => $form, 'icons' => $icons, 'loginForm' => $loginForm));
 	}
 	
-	public function readyAction() {
-		return new ViewModel();
+	public function readyAction(){
+		$loginForm = $this->getServiceLocator()->get('zfcuser_login_form');
+		$fm = $this->flashMessenger()->setNamespace('zfcuser-login-form')->getMessages();
+		if (isset($fm[0])) {
+			$loginForm->setMessages(
+				array('identity' => array($fm[0]))
+			);
+		}
+		
+		$params = array('loginForm' => $loginForm);
+		
+		// Run validation and get the used form
+		$formOrRedirect = $this->getFormOrRedirect();
+		if($formOrRedirect instanceof \Zend\Http\PhpEnvironment\Response){
+			return $formOrRedirect;
+		} elseif($formOrRedirect instanceof AnmeldungSingleForm){
+			$anmeldung = $formOrRedirect->getData();
+			if(!$anmeldung instanceof AnmeldungEntity){
+				return $this->_redirectToForm();
+			}
+			$anmeldung->setTournament($this->getTournament());
+			$em = $this->getEntityManager();
+			$em->persist($anmeldung);
+			$em->flush();
+			$params['anmeldung'] = $anmeldung;
+		} elseif($formOrRedirect instanceof AnmeldungTeamForm) {
+			$em = $this->getEntityManager();
+			$hydrator = new DoctrineHydrator($this->getEntityManager());
+			$data = $formOrRedirect->getData();
+			$teamName = $data['teamName'];
+			$teamIcon = $data['team_icon_text'];
+			$anmeldungen = $data['anmeldungen'];
+			$team = array();
+			foreach ($anmeldungen as $anmeldung){
+				$newAnmeldung = new AnmeldungEntity();
+				$hydrator->hydrate($anmeldung, $newAnmeldung);
+				$newAnmeldung->setTournament($this->getTournament());
+				$newAnmeldung->setTeamName($teamName);
+				$newAnmeldung->setIcon($teamIcon);
+				$em->persist($newAnmeldung);
+				$team[] = $newAnmeldung;
+			}
+			$em->flush();
+			$params['team'] = $team;
+		} else {
+			$this->flashMessenger()->addErrorMessage('Bei der Anmeldung ist ein Fehler aufgetreten. Bitte versuche es erneut oder kontaktiere die Turnierleitung.');
+			return $this->_redirectToForm();
+		}
+		
+		return new ViewModel($params);
 	}
 	
 	protected function authenticate(){

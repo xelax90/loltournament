@@ -30,11 +30,12 @@ class NoObjectExistsInTournament extends ObjectExistsInTournament
     public function isValid($value)
     {
         $value = $this->cleanSearchValue($value);
+		$key = array_keys($value)[0];
 		$value['tournament'] = $this->tournament;
         $match = $this->objectRepository->findOneBy($value);
 
         if (is_object($match)) {
-            $this->error(self::ERROR_OBJECT_FOUND, $value['email']);
+            $this->error(self::ERROR_OBJECT_FOUND, $value[$key]);
 
             return false;
         }

@@ -28,7 +28,7 @@ $form = $this->form;
 					</div>
 					<?php endif; ?>
 					<?php 
-						$form->setAttribute('action', $this->url('anmeldung/confirm'))
+						$form->setAttribute('action', $this->url('anmeldung/ready'))
 							 ->prepare();
 						$form->get('submit')->setValue($this->translate('Anmelden'))->setLabel($this->translate('Anmelden'));
 						$ausschreibung = $form->get('ausschreibung_gelesen');

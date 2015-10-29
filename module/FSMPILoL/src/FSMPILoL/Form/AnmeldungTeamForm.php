@@ -12,16 +12,27 @@ use Zend\Form\Form;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\InputFilter\InputFilter;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use DoctrineModule\Persistence\ProvidesObjectManager;
 use Zend\InputFilter\InputFilterProviderInterface;
+use FSMPILoL\Tournament\TournamentAwareInterface;
+use FSMPILoL\Validator\MinMaxEmailsRwth;
+use FSMPILoL\Validator\MinMaxEmailsNotRwth;
+use FSMPILoL\Validator\AnmeldungTeamName;
+use FSMPILoL\Validator\AnmeldungSummonerName;
+use FSMPILoL\Validator\AnmeldungIcon;
+use FSMPILoL\Entity\Anmeldung as AnmeldungEntity;
+use FSMPILoL\Validator\NoObjectExistsInTournament;
+
 
 /**
  * Description of AnmeldungSingleForm
  *
  * @author schurix
  */
-class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, InputFilterProviderInterface{
-	protected $em;
+class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, InputFilterProviderInterface, TournamentAwareInterface{
+	use ProvidesObjectManager;
+	
+	protected $tournament;
 
 	public function __construct($name = "", $options = array()){
 		// we want to ignore the name passed
@@ -134,6 +145,28 @@ class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, Inp
 					array('name' => 'StripTags'),
 					array('name' => 'XelaxHTMLPurifier\Filter\HTMLPurifier'),
 				),
+				'validators' => array(
+					array(
+						'name' => NoObjectExistsInTournament::class,
+						'options' => array(
+							'object_repository' => $this->getObjectManager()->getRepository(AnmeldungEntity::class),
+							'tournament' => $this->getTournament(),
+							'fields' => 'teamName'
+						),
+					),
+					array(
+						'name' => MinMaxEmailsRwth::class,
+						'options' => array(
+							'min' => 1, // use float to get percent instead of absolute limit
+						),
+					),
+					array(
+						'name' => MinMaxEmailsNotRwth::class,
+						'options' => array(
+							'max' => 3, // use float to get percent instead of absolute limit
+						),
+					),
+				),
 			),
 			'team_icon_text' => array(
 				'required' => true,
@@ -141,6 +174,16 @@ class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, Inp
 					array('name' => 'StringTrim'),
 					array('name' => 'StripTags'),
 					array('name' => 'XelaxHTMLPurifier\Filter\HTMLPurifier'),
+				),
+				'validators' => array(
+					array(
+						'name' => NoObjectExistsInTournament::class,
+						'options' => array(
+							'object_repository' => $this->getObjectManager()->getRepository(AnmeldungEntity::class),
+							'tournament' => $this->getTournament(),
+							'fields' => 'icon'
+						),
+					),
 				),
 			),
 			'anmerkung' => array(
@@ -154,26 +197,16 @@ class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, Inp
 			'ausschreibung_gelesen' => array(
 				'required' => true,
 			),
-			'anmeldungen' => array(
-				'type' => 'collection',
-			),
 		);
-		
-		// TODO warum ist das überhaupt notwendig???
-		/*$anmeldungFilter = $this->get('anmeldungen')->getTargetElement()->getInputFilterSpecification();
-		$anmeldungFilter['name']['required'] = false;
-		$anmeldungFilter['email']['required'] = false;
-		$anmeldungFilter['summonerName']['required'] = false;
-		$filterSpec['anmeldungen']['input_filter'] = $anmeldungFilter;*/
 		
 		return $filterSpec;
 	}
 
-	public function getObjectManager() {
-		return $this->em;
+	public function getTournament() {
+		return $this->tournament;
 	}
 
-	public function setObjectManager(ObjectManager $objectManager) {
-		$this->em = $objectManager;
+	public function setTournament(\FSMPILoL\Entity\Tournament $tournament) {
+		$this->tournament = $tournament;
 	}
 }

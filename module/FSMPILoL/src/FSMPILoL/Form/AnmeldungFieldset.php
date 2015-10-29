@@ -16,6 +16,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use FSMPILoL\Entity\Anmeldung;
 use FSMPILoL\Tournament\TournamentAwareInterface;
 use FSMPILoL\Entity\Player;
+use FSMPILoL\Validator\MinMaxEmailsRwth;
 
 /**
  * Description of AnmeldungForm
@@ -198,6 +199,15 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
     public function getInputFilterSpecification(){
 		$filters = array();
 		
+		$conditionalRequire = function($value, $context){
+			$values = array_values(array_unique(array_map('trim', $context)));
+			$noData = count($values) === 1 && empty($values[0]);
+			if($noData){
+				return true;
+			}
+			return !empty($value);
+		};
+		
 		$dataRequired = true;
 		if(isset($this->getOptions()['data_required']) && !$this->getOption('data_required')){
 			$dataRequired = false;
@@ -205,7 +215,9 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 		$textFields = array('name' => true, 'email' => true, 'facebook' => false, 'otherContact' => false, 'summonerName' => true, 'anmerkung' => false);
 		foreach($textFields as $field => $required){
 			$filters[$field] = array(
-				'required' => $required && $dataRequired,
+				'required' => $required,
+				'allow_empty' => !$required || !$dataRequired,
+				'continue_if_empty' => true,
 				'filters' => array(
 					array('name' => 'StringTrim'),
 					array('name' => 'StripTags'),
@@ -213,6 +225,15 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 				),
 				'validators' => array(),
 			);
+			if($required){
+				$filters[$field]['validators'][] = array(
+					'name' => 'callback',
+					'options' => array(
+						'callback' => $conditionalRequire,
+						'message' => 'Das Feld darf nicht leer sein',
+					),
+				);
+			}
 		}
 		
 		if(!isset($this->options['validateEmailExists']) || $this->getOption('validateEmailExists')){
@@ -235,8 +256,6 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 			);
 		}
 		
-		
-		
 		if(!isset($this->options['validateSummonerNameExists']) || $this->getOption('validateSummonerNameExists')){
 			$filters['summonerName']['validators'][] = array(
 				'name' => 'FSMPILoL\Validator\NoObjectExistsInTournament',
@@ -252,8 +271,21 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 				'options' => array(
 					'object_repository' => $this->getObjectManager()->getRepository(Player::class),
 					'tournament' => $this->getTournament(),
-					'fields' => 'email'
+					'fields' => 'summonerName'
 				)
+			);
+		}
+		
+		if(!empty($this->options['requireRWTH'])){
+			$filters['email']['validators'][] = array(
+				'name' => MinMaxEmailsRwth::class,
+				'options' => array(
+					'anmeldung_key' => '',
+					'min' => 1,
+					'messages' => array(
+						MinMaxEmailsRwth::MESSAGE_NOT_ENOUGH => 'Es muss eine RWTH- oder FH-Mailadresse angegeben sein.',
+					),
+				),
 			);
 		}
 		
@@ -266,7 +298,6 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 				array('name' => 'Between', 'options' => array('min' => 0, 'max' => 2))
 			)
 		);
-		
 		return $filters;
 	}
 

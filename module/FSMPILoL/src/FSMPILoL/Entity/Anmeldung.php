@@ -8,7 +8,7 @@ use JsonSerializable;
 /**
  * A Anmeldung
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="FSMPILoL\Model\AnmeldungRepository")
  * @ORM\Table(name="anmeldung")
  * @property int $id
  * @property string $teamName

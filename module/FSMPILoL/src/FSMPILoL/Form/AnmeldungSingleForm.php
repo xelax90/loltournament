@@ -39,6 +39,7 @@ class AnmeldungSingleForm extends Form implements ObjectManagerAwareInterface, I
                 'use_as_base_fieldset' => true,
 				'showSub' => true,
 				'showAnmerkungen' => true,
+				'requireRWTH' => true,
             ),
 			'attributes' => array(
 				'class' => 'anmeldung_single_fieldset',

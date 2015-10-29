@@ -1,0 +1,34 @@
+<?php
+use FSMPILoL\Form\AnmeldungTeamForm;
+use Zend\Mvc\Controller\Plugin\FlashMessenger as PluginFlashMessenger;
+use FSMPILoL\Entity\Anmeldung as AnmeldungEntity;
+
+?>
+
+<div class="anmeldung">
+	<div class="content">
+		<ul>
+			<?php echo $this->partial('fsmpi-lo-l/tournament/partial/loginForm.phtml', array('loginForm' => $this->loginForm, 'formAction' => $this->url())) ?>
+			<li>
+				<div class="header">
+					<?php if($this->team && is_array($this->team)) : ?>
+					<b>Teamanmeldung zur RWTH Liga</b>
+					<?php elseif($this->anmeldung && $this->anmeldung instanceof AnmeldungEntity) : ?>
+					<b>Einzelanmeldung zur RWTH Liga</b>
+					<?php else: ?>
+					<b>Fehler</b>
+					<?php endif; ?>
+				</div>
+				<div class="article">
+					<?php if($this->team && is_array($this->team)) : ?>
+					<b>Das Team <?php echo $this->team[0]->getTeamName() ?> wurde erfolgreich angemeldet</b>
+					<?php elseif($this->anmeldung && $this->anmeldung instanceof AnmeldungEntity) : ?>
+					<b>Hallo <?php echo $this->anmeldung->getName() ?> "<?php echo $this->anmeldung->getSummonerName() ?>", du hast dich erfolgreich zum Turnier angemeldet </b>
+					<?php else: ?>
+					<b>Bei der Anmeldung ist ein Fehler aufgetreten. Bitte versuche es erneut, oder kontaktiere die Turnierleitung.</b>
+					<?php endif; ?>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>

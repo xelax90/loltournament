@@ -83,6 +83,9 @@ and open the template in the editor.
      
      
      overflow:auto;
+	 
+	 z-index: 100;
+	 overflow: scroll !important;
      /*
      -webkit-overflow-scrolling: touch;
      */
