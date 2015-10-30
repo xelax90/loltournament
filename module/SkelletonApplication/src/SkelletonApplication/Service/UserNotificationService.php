@@ -145,7 +145,7 @@ class UserNotificationService implements ServiceLocatorAwareInterface{
 	protected function sendMessage($message){
 		try{
 			if($message instanceof Message){
-				//$this->getTransport()->send($message);
+				$this->getTransport()->send($message);
 				return true;
 			}
 		} catch (Exception $ex) {}
