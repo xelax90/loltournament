@@ -106,7 +106,7 @@ class LoadAdminUser extends AbstractFixture implements FixtureInterface, Service
 	}
 
 	public function getDependencies() {
-		return array('SkelletonApplication\Fixtures\LoadUserRoles');
+		return array(LoadUserRoles::class, LoadEmailTemplates::class);
 	}
 
 }
