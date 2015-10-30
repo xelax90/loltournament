@@ -332,6 +332,7 @@ return array(
 			Listener\UserListener::class => Listener\UserListener::class,
 			Service\UserService::class => Service\UserService::class,
 			Service\UserNotificationService::class => Service\UserNotificationService::class,
+			\ZfcUser\Authentication\Storage\Db::class => Authentication\Storage\Db::class,
 		),
 		'factories' => array(
 			'Navigation' => \Zend\Navigation\Service\DefaultNavigationFactory::class,
