@@ -1,4 +1,4 @@
-<?php
+e<?php
 namespace FSMPILoL\Tournament;
 
 use Doctrine\ORM\EntityManager;
@@ -61,7 +61,7 @@ class Group {
 
 	public function getAPI(){
 		if(null === $this->api){
-			$this->api = new RiotAPI($this->getServiceLocator());
+			$this->api = $this->getServiceLocator()->get(RiotAPI::class);
 		}
 		return $this->api;
 	}
@@ -308,7 +308,7 @@ class Group {
 		
 		$cache = $this->getServiceLocator()->get('FSMPILoL\SummonerdataCache');
 		$cacheKey = $this->getSummonerCacheKey();
-		if($cache->hasItem($cacheKey) && (!$cache->itemHasExpired($cacheKey) || true)){
+		if($cache->hasItem($cacheKey) && (!$cache->itemHasExpired($cacheKey))){
 			$summonerdata = unserialize($cache->getItem($cacheKey));
 		} else {
 			$summoners = $this->getTournamentSummoners();

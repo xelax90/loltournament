@@ -1,12 +1,13 @@
 <?php
 namespace FSMPILoL\Tournament;
 
-use FSMPILoL\Entity\Tournament;
+use FSMPILoL\Entity\Tournament as TournamentEntity;
 use FSMPILoL\Entity\Player;
 use FSMPILoL\Entity\Team;
 
 use FSMPILoL\Riot\RiotAPI;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
@@ -34,26 +35,26 @@ class TeamMatcher{
 	
 	public function getEntityManager(){
 		if (null === $this->entityManager) {
-			$this->entityManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+			$this->entityManager = $this->getServiceLocator()->get(EntityManager::class);
 		}
 		return $this->entityManager;
 	}
 	
 	public function getAPI(){
 		if(null === $this->api){
-			$this->api = new RiotAPI($this->getServiceLocator());
+			$this->api = $this->getServiceLocator()->get(RiotAPI::class);
 		}
 		return $this->api;
 	}
 	
 	public function getAnmeldung(){
 		if(null === $this->anmeldung){
-			$this->anmeldung = new Anmeldung($this->getTournament(), $this->ServiceLocator());
+			$this->anmeldung = $this->getServiceLocator()->get(Anmeldung::class);
 		}
 		return $this->anmeldung;
 	}
 	
-	public function __construct(Tournament $tournament, ServiceLocatorInterface $sl){
+	public function __construct(TournamentEntity $tournament, ServiceLocatorInterface $sl){
 		$this->tournament = $tournament;
 		$this->serviceLocator = $sl;
 		$api = $this->getAPI();

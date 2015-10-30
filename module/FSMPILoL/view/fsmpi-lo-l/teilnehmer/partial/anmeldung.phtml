@@ -15,6 +15,9 @@ if(!empty($anmeldung->getSummonerdata())){
 	$level = $anmeldung->getSummonerdata()->getLevel();
 	$normalWins = $anmeldung->getSummonerdata()->getNormalWins();
 	$tier = $anmeldung->getSummonerdata()->getTier();
+	if($level <= 0){
+		$noData = true;
+	}
 }
 
 ?>
@@ -37,7 +40,7 @@ if(!empty($anmeldung->getSummonerdata())){
 		<?php endif; ?>
 
 		<?php if($anmeldung->getIsSub() > 1) : ?>
-		<div class="player_subborder"></div>
+		<div class="player_subborder" style="border-color: #FF4400"></div>
 		<?php elseif($this->isAllowed('debug', 'moderator') && $anmeldung->getIsSub() > 0) : ?>
 		<div class="player_subborder" style="border-color: #FFD700"></div>
 		<?php endif; ?>

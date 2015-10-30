@@ -4,27 +4,30 @@ namespace FSMPILoL\Riot;
 use FSMPILoL\Options\APIOptions;
 use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
-class RiotAPI {
+class RiotAPI implements ServiceLocatorAwareInterface{
+	use ServiceLocatorAwareTrait;
+	
 	private static $apiProtocol = 'https';
 	private static $apiUrl = "api.pvp.net";
 	private static $requestCount = 0;
 	
-	protected $serviceLocator;
 	protected $config;
 	protected $entityManager;
 	protected $cache;
 	
 	protected function getConfig(){
 		if (null === $this->config) {
-			$this->config = $this->getServiceLocator()->get('FSMPILoL\Options\API');
+			$this->config = $this->getServiceLocator()->get(APIOptions::class);
 		}
 		return $this->config;
 	}
 	
 	protected function getEntityManager(){
 		if (null === $this->entityManager) {
-			$this->entityManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+			$this->entityManager = $this->getServiceLocator()->get(EntityManager::class);
 		}
 		return $this->entityManager;
 	}
@@ -35,15 +38,6 @@ class RiotAPI {
 		}
 		return $this->cache;
 	}
-	
-	protected function getServiceLocator(){
-		return $this->serviceLocator;
-	}
-	
-	public function __construct(ServiceLocatorInterface $sl){
-		$this->serviceLocator = $sl;
-	}
-	
 	/**
 	 * Returns array of summoners with standardized name as key.
 	 * @param $anmeldungen Array of Anmeldung
@@ -79,10 +73,16 @@ class RiotAPI {
 		// request all chunks
 		$results = array();
 		foreach($nameChunks as $names){
+			if(empty($names)){
+				continue;
+			}
 			$results[] = $this->getSummoner(implode(',', $names));
 		}
 		$idResults = array();
 		foreach($idChunks as $ids){
+			if(empty($ids)){
+				continue;
+			}
 			$idResults[] = $this->getSummonerById(implode(',', $ids));
 		}
 		
@@ -187,7 +187,8 @@ class RiotAPI {
 		
 		// new request if no cache or if expired cache and stil requests left
 		if(($contents != null && $cache->itemHasExpired($cacheKey) && self::$requestCount <= $config->getMaxRequests()) || $contents == null) {
-			@$requestContent = file_get_contents($request);
+			var_dump($request);
+			$requestContent = file_get_contents($request);
 		    // Retrieve HTTP status code
 		    list($version,$status_code,$msg) = explode(' ',$http_response_header[0], 3);
 

@@ -1,9 +1,7 @@
 <?php
 namespace FSMPILoL\Tournament;
 
-use FSMPILoL\Entity\Tournament;
 use Doctrine\ORM\EntityManager;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use FSMPILoL\Tournament\TournamentAwareInterface;
@@ -14,6 +12,7 @@ class Anmeldung implements ServiceLocatorAwareInterface, TournamentAwareInterfac
 	use ServiceLocatorAwareTrait, TournamentAwareTrait;
 	
 	protected $config;
+	protected $api;
 	
 	public function getEntityManager(){
 		if (null === $this->entityManager) {
@@ -27,6 +26,13 @@ class Anmeldung implements ServiceLocatorAwareInterface, TournamentAwareInterfac
 			$this->config = $this->getServiceLocator()->get(AnmeldungOptions::class);
 		}
 		return $this->config;
+	}
+	
+	public function getAPI(){
+		if(null === $this->api){
+			$this->api = $this->getServiceLocator()->get(RiotAPI::class);
+		}
+		return $this->api;
 	}
 	
 	public function getTeams(){
@@ -83,5 +89,36 @@ class Anmeldung implements ServiceLocatorAwareInterface, TournamentAwareInterfac
 		}
 		
 		return array_diff($icons, $used);
+	}
+	
+	public function setAPIData(){
+		$api = $this->getAPI();
+		$anmeldungen = $this->getAll();
+		
+		$summonerdata = array();
+		
+		$cache = $this->getServiceLocator()->get('FSMPILoL\SummonerdataCache');
+		$cacheKey = $this->getSummonerCacheKey();
+		if($cache->hasItem($cacheKey) && (!$cache->itemHasExpired($cacheKey))){
+			$summonerdata = unserialize($cache->getItem($cacheKey));
+		} else {
+			$summoners = $this->getTournamentSummoners();
+			foreach($anmeldungen as $anmeldung){
+				/* @var $anmeldung FSMPILoL\Entity\Anmeldung */
+				$standardname = RiotAPI::getStandardName($anmeldung->getSummonerName());
+				if(!empty($summoners[$standardname])){
+					$summoner = $summoners[$standardname];
+				} elseif(!empty($anmeldung->getPlayer()) && !empty($summoners[$anmeldung->getPlayer()->getSummonerId()])) {
+					$summoner = $summoners[$anmeldung->getPlayer()->getSummonerId()];
+				}
+				$summonerdata[$anmeldung->getId()] = new Summonerdata($api, $anmeldung, $summoner);
+			}
+			$cache->addItem($cacheKey, serialize($summonerdata));
+		}
+		
+		foreach($anmeldungen as $anmeldung){
+			$summonerdata[$anmeldung->getId()]->setAnmeldung($anmeldung);
+			$anmeldung->setSummonerdata($summonerdata[$anmeldung->getId()]);
+		}
 	}
 }

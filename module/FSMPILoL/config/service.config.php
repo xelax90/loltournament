@@ -90,6 +90,8 @@ return array(
 	),
 	'invokables' => array(
 		Tournament\Anmeldung::class => Tournament\Anmeldung::class,
+		Riot\RiotAPI::class => Riot\RiotAPI::class,
+		Tournament\Tournament::class => Tournament\Tournament::class,
 	),
 	'aliases' => array(
 		'FSMPILoL\Options\API' => Options\APIOptions::class,

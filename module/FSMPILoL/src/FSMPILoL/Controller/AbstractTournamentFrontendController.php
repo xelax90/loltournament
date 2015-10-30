@@ -12,6 +12,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Doctrine\ORM\EntityManager;
 use FSMPILoL\Entity\Tournament as TournamentEntity;
 use FSMPILoL\Tournament\Group;
+use FSMPILoL\Tournament\Tournament;
 
 /**
  * Description of AbstractTournamentFrontendController
@@ -27,6 +28,9 @@ abstract class AbstractTournamentFrontendController extends AbstractActionContro
 	
 	/** @var array */
 	protected $groups = array();
+	
+	/** @var Tournament */
+	protected $tournamentService;
 	
 	/**
 	 * @return EntityManager
@@ -46,6 +50,13 @@ abstract class AbstractTournamentFrontendController extends AbstractActionContro
 			$this->tournament = $this->getServiceLocator()->get(TournamentEntity::class);
 		}
 		return $this->tournament;
+	}
+	
+	public function getTournamentService(){
+		if(null === $this->tournamentService){
+			$this->tournamentService = $this->getServiceLocator()->get(Tournament::class);
+		}
+		return $this->tournamentService;
 	}
 	
 	/**
@@ -75,21 +86,8 @@ abstract class AbstractTournamentFrontendController extends AbstractActionContro
 	 * @return void
 	 */
 	protected function setAPIData(){
-		$tournament = $this->getTournament();
-		if(!$tournament){
-			return;
-		}
-		
-		foreach($tournament->getGroups() as $group){
-			/* @var $group \FSMPILoL\Entity\Group */
-			if(!isset($this->groups[$group->getId()])){
-				$gGroup = $this->groups[$group->getId()];
-			} else {
-				$gGroup = new Group($group, $this->getServiceLocator());
-				$this->groups[$group->getId()] = $gGroup;
-			}
-			$gGroup->setAPIData();
-		}
+		$service = $this->getTournamentService();
+		$service->setAPIData();
 	}
 	
 	protected function getLoginForm(){
