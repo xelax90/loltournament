@@ -24,7 +24,7 @@ class RoundCreatorController extends AbstractTournamentAdminController{
 	protected $creatorOptions;
 	
 	public function indexAction() {
-		$tournament = $this->getTournament();
+		$tournament = $this->getTournament()->getTournament();
 		return new ViewModel(array('tournament' => $tournament));
 	}
 	
