@@ -8,15 +8,11 @@
 
 namespace FSMPILoL\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use FSMPILoL\Form\AnmeldungSingleForm;
 use FSMPILoL\Form\AnmeldungTeamForm;
 use FSMPILoL\Entity\Anmeldung as AnmeldungEntity;
 use FSMPILoL\Tournament\Anmeldung;
-use Doctrine\ORM\EntityManager;
-use FSMPILoL\Options\AnmeldungOptions;
-use FSMPILoL\Entity\Tournament as TournamentEntity;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
 
@@ -25,39 +21,18 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
  *
  * @author schurix
  */
-class AnmeldungController extends AbstractActionController
-{
-	/** @var EntityManager */
-	protected $em;
-	protected $tournament;
+class AnmeldungController extends AbstractTournamentFrontendController {
+	/** @var Anmeldung */
 	protected $anmeldung;
 	
-	public function getEntityManager(){
-		if (null === $this->em) {
-			$this->em = $this->getServiceLocator()->get(EntityManager::class);
-		}
-		return $this->em;
-	}
-	
+	/**
+	 * @return Anmeldung
+	 */
 	public function getAnmeldung(){
 		if(null === $this->anmeldung){
-			$this->anmeldung = new Anmeldung($this->getTournament(), $this->getServiceLocator());
+			$this->anmeldung = $this->getServiceLocator()->get(Anmeldung::class);
 		}
 		return $this->anmeldung;
-	}
-	
-	/**
-	 * 
-	 * @return \FSMPILoL\Entity\Tournament
-	 */
-	public function getTournament(){
-		if(null === $this->tournament){
-			$options = $this->getServiceLocator()->get('FSMPILoL\Options\Anmeldung');
-			$tournamentId = $options->getTournamentId();
-			$em = $this->getEntityManager();
-			$this->tournament = $em->getRepository(TournamentEntity::class)->find($tournamentId);
-		}
-		return $this->tournament;
 	}
 
 	/**
@@ -185,13 +160,7 @@ class AnmeldungController extends AbstractActionController
 			}
 		}
 		
-		$loginForm = $this->getServiceLocator()->get('zfcuser_login_form');
-		$fm = $this->flashMessenger()->setNamespace('zfcuser-login-form')->getMessages();
-		if (isset($fm[0])) {
-			$loginForm->setMessages(
-				array('identity' => array($fm[0]))
-			);
-		}
+		$loginForm = $this->getLoginForm();
 		
 		return new ViewModel(array( 'singleForm' => $singleForm, 'teamForm' => $teamForm, 'icons' => $icons, 'loginForm' => $loginForm));
 	}
@@ -205,25 +174,13 @@ class AnmeldungController extends AbstractActionController
 		
 		$icons = $this->getAnmeldung()->getAvailableIcons();
 		
-		$loginForm = $this->getServiceLocator()->get('zfcuser_login_form');
-		$fm = $this->flashMessenger()->setNamespace('zfcuser-login-form')->getMessages();
-		if (isset($fm[0])) {
-			$loginForm->setMessages(
-				array('identity' => array($fm[0]))
-			);
-		}
+		$loginForm = $this->getLoginForm();
 		
 		return new ViewModel(array('form' => $form, 'icons' => $icons, 'loginForm' => $loginForm));
 	}
 	
 	public function readyAction(){
-		$loginForm = $this->getServiceLocator()->get('zfcuser_login_form');
-		$fm = $this->flashMessenger()->setNamespace('zfcuser-login-form')->getMessages();
-		if (isset($fm[0])) {
-			$loginForm->setMessages(
-				array('identity' => array($fm[0]))
-			);
-		}
+		$loginForm = $this->getLoginForm();
 		
 		$params = array('loginForm' => $loginForm);
 		
@@ -266,16 +223,5 @@ class AnmeldungController extends AbstractActionController
 		}
 		
 		return new ViewModel($params);
-	}
-	
-	protected function authenticate(){
-		if($this->zfcUserAuthentication()->hasIdentity()){
-			return true;
-		}
-		
-        $adapter = $this->zfcUserAuthentication()->getAuthAdapter();
-        $result = $adapter->prepareForAuthentication($this->getRequest());
-        $auth = $this->zfcUserAuthentication()->getAuthService()->authenticate($adapter);
-		return $auth;
 	}
 }

@@ -1,0 +1,52 @@
+<div class="games">
+	<div class="loginForm">
+		<ul>
+			<?php echo $this->partial('fsmpi-lo-l/tournament/partial/loginForm.phtml', array('loginForm' => $this->loginForm, 'formAction' => $this->url('teilnehmer'))) ?>
+		</ul>
+	</div>
+	<div class="content">
+		<?php $singles = $this->singles; ?>
+		<h3>Einzelanmeldungen<span style="padding-left: 5px; font-size: 10px;"><?= count($singles) ?> Spieler</span></h3>
+		<ul>
+			<li style="border: none">
+				<?php if(count($singles) == 0) : ?>
+					<p>Noch keine Anmeldungen vorhanden</p>
+				<?php else : 
+					foreach($singles as $anmeldung){
+						echo $this->partial('fsmpi-lo-l/teilnehmer/partial/anmeldung.phtml', array(
+							'anmeldung' => $anmeldung,
+							'showWins' => true,
+						));
+					}
+				?>
+				<?php endif; ?>
+			</li>
+		</ul>
+	</div>
+	<div class="aside">
+		<?php $teams = $this->teams ?>
+		<?php 
+			$playerCount = 0; 
+			foreach($teams as $team){
+				$playerCount += count($team);
+			}
+		?>
+		<h3>Teamanmeldungen<span style="padding-left: 5px; font-size: 10px;"><?= count($teams) ?> Teams/<?= $playerCount ?> Spieler</span></h3>
+		<ul>
+			<li style="border: none">
+				<?php if(count($teams) == 0) : ?>
+					<p style="min-height: 0px; padding: 0;">Noch keine Anmeldungen vorhanden</p>
+				<?php else : 
+					foreach($teams as $teamName => $players){
+						echo $this->partial('fsmpi-lo-l/teilnehmer/partial/team.phtml', array(
+							'players' => $players,
+							'teamName' => $teamName,
+							'showWins' => true,
+						));
+					}
+				?>
+				<?php endif; ?>
+			</li>
+		</ul>
+	</div>
+</div>

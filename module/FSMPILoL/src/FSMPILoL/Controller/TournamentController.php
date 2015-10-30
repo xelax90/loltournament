@@ -1,64 +1,18 @@
 <?php
 namespace FSMPILoL\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use FSMPILoL\Riot\RiotAPI;
 use FSMPILoL\Tournament\Summonerdata;
 use FSMPILoL\Tournament\Group;
 use FSMPILoL\Form\ZeitmeldungForm;
 use FSMPILoL\Form\ErgebnismeldungForm;
+use Doctrine\ORM\EntityManager;
+use FSMPILoL\Entity\Tournament as TournamentEntity;
 
 use DateTime;
 
-class TournamentController extends AbstractActionController
-{
-	/** @var Tournament */
-	protected $tournament;
-
-	/** @var Doctrine\ORM\EntityManager */
-	protected $em;
-	
-	public function getEntityManager(){
-		if (null === $this->em) {
-			$this->em = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
-		}
-		return $this->em;
-	}
-	
-	public function getTournament(){
-		if(null === $this->tournament){
-			$options = $this->getServiceLocator()->get('FSMPILoL\Options\Anmeldung');
-			$tournamentId = $options->getTournamentId();
-			$em = $this->getEntityManager();
-			$this->tournament = $em->getRepository('FSMPILoL\Entity\Tournament')->find($tournamentId);
-		}
-		return $this->tournament;
-	}
-	
-	protected function setTeamdata(){
-		$tournament = $this->getTournament();
-		if(!$tournament)
-		 	return;
-		
-		foreach($tournament->getGroups() as $group){
-			$gGroup = new Group($group, $this->getServiceLocator());
-			$gGroup->setTeamdata();
-		}
-	}
-
-	
-	protected function setAPIData(){
-		$tournament = $this->getTournament();
-		if(!$tournament)
-		 	return;
-		
-		foreach($tournament->getGroups() as $group){
-			$gGroup = new Group($group, $this->getServiceLocator());
-			$gGroup->setAPIData();
-		}
-	}
-	
+class TournamentController extends AbstractTournamentFrontendController {
 	public function indexAction(){
 		return new ViewModel();
 	}
@@ -82,14 +36,7 @@ class TournamentController extends AbstractActionController
 
 		$this->setAPIData();
 		
-		//$api = new RiotAPI($this->getServiceLocator());
-		$loginForm = $this->getServiceLocator()->get('zfcuser_login_form');
-		$fm = $this->flashMessenger()->setNamespace('zfcuser-login-form')->getMessages();
-		if (isset($fm[0])) {
-			$loginForm->setMessages(
-				array('identity' => array($fm[0]))
-			);
-		}
+		$loginForm = $this->getLoginForm();
 		
 		return new ViewModel(array('tournament' => $tournament, 'loginForm' => $loginForm));
 	}
@@ -104,13 +51,7 @@ class TournamentController extends AbstractActionController
 		$this->setTeamdata();
 		$this->setAPIData();
 		
-		$loginForm = $this->getServiceLocator()->get('zfcuser_login_form');
-		$fm = $this->flashMessenger()->setNamespace('zfcuser-login-form')->getMessages();
-		if (isset($fm[0])) {
-			$loginForm->setMessages(
-				array('identity' => array($fm[0]))
-			);
-		}
+		$loginForm = $this->getLoginForm();
 		
 		return new ViewModel(array('tournament' => $tournament, 'loginForm' => $loginForm));
 	}
@@ -464,16 +405,4 @@ class TournamentController extends AbstractActionController
 		
 		return new ViewModel(array('tournament' => $tournament, 'team' => $team));
 	}
-	
-	protected function authenticate(){
-		if($this->zfcUserAuthentication()->hasIdentity()){
-			return true;
-		}
-		
-        $adapter = $this->zfcUserAuthentication()->getAuthAdapter();
-        $result = $adapter->prepareForAuthentication($this->getRequest());
-        $auth = $this->zfcUserAuthentication()->getAuthService()->authenticate($adapter);
-		return $auth;
-	}
-	
 }

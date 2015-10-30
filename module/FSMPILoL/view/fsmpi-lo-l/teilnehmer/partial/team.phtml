@@ -1,0 +1,15 @@
+<?php 
+	$players = $this->players;
+	$teamName = $this->teamName;
+	$showWins = $this->showWins;
+?>
+<div class="team" style="background-image: url('<?= $this->basePath() ?>/img/teamIcons/<?= $players[0]->getIcon() ?>')">
+	<div class="teamname"><?= $teamName ?></div>
+	<div class="players">
+<?php
+	foreach($players as $player):
+		echo $this->partial('fsmpi-lo-l/teilnehmer/partial/anmeldung.phtml', array('anmeldung' => $player, 'showWins' => $showWins));
+	endforeach;
+?>
+	</div>
+</div>

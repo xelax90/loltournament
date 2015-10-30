@@ -51,6 +51,7 @@ $guardConfig = array(
 	['route' => 'paarungen',                'roles' => ['guest', 'user'] ],
 	['route' => 'meldung',                  'roles' => ['user', 'guest'] ],
 	['route' => 'teams',                    'roles' => ['guest', 'user'] ],
+	['route' => 'teilnehmer',               'roles' => ['guest', 'user'] ],
 	['route' => 'myteam',                   'roles' => ['user', 'guest'] ],
 	['route' => 'anmeldung',                'roles' => ['guest', 'user'] ],
 	['route' => 'anmeldung/form',           'roles' => ['guest', 'user'] ],
@@ -132,6 +133,7 @@ return array(
 			Controller\MyTeamAdminController::class => Controller\MyTeamAdminController::class,
 			Controller\AnmeldungController::class => Controller\AnmeldungController::class,
 			Controller\PlayerController::class => Controller\PlayerController::class,
+			Controller\TeilnehmerController::class => Controller\TeilnehmerController::class,
         ),
     ),
     
@@ -205,83 +207,7 @@ return array(
 	
 	
 	
-    'service_manager' => array(
-		'factories' => array(
-			'FSMPILoL\Log' => function ($sm) {
-				$log = new Zend\Log\Logger();
-				$writer = new Zend\Log\Writer\Stream('./data/logs/fsmpilol.log');
-				$log->addWriter($writer);
-				return $log;
-			},
-			'FSMPILoL\RiotCache' => function (){
-
-				$cache = \Zend\Cache\StorageFactory::factory(array(
-				    'adapter' => array(
-						'name' => 'FSMPILoL\Cache\Storage\Adapter\Filesystem',
-						'options' => array(
-							'ttl' => 11200,
-							'namespace' => 'riotcache',
-							'cache_dir' => './data/cache/',
-						),
-					),
-				    'plugins' => array(
-				        'exception_handler' => array('throw_exceptions' => false),
-				    ),
-				));
-				return $cache;
-			},
-			'FSMPILoL\TeamdataCache' => function (){
-
-				$cache = \Zend\Cache\StorageFactory::factory(array(
-				    'adapter' => array(
-						'name' => 'FSMPILoL\Cache\Storage\Adapter\Filesystem',
-						'options' => array(
-							'ttl' => 11200,
-							'namespace' => 'teamdata',
-							'cache_dir' => './data/cache/',
-						),
-					),
-				    'plugins' => array(
-				        'exception_handler' => array('throw_exceptions' => false),
-				    ),
-				));
-				return $cache;
-			},
-			'FSMPILoL\SummonerdataCache' => function (){
-
-				$cache = \Zend\Cache\StorageFactory::factory(array(
-				    'adapter' => array(
-						'name' => 'FSMPILoL\Cache\Storage\Adapter\Filesystem',
-						'options' => array(
-							'ttl' => 11200,
-							'namespace' => 'summonerdata',
-							'cache_dir' => './data/cache/',
-						),
-					),
-				    'plugins' => array(
-				        'exception_handler' => array('throw_exceptions' => false),
-				    ),
-				));
-				return $cache;
-			},
-			'FSMPILoL\Options\API' => function ($sm) {
-                $config = $sm->get('Config');
-                return new Options\APIOptions(isset($config['fsmpilol_api']) ? $config['fsmpilol_api'] : array());
-            },
-			'FSMPILoL\Options\Anmeldung' => function ($sm) {
-                $config = $sm->get('Config');
-                return new Options\AnmeldungOptions(isset($config['fsmpilol_anmeldung']) ? $config['fsmpilol_anmeldung'] : array());
-            },
-			'FSMPILoL\Options\RoundCreator' => function ($sm) {
-                $config = $sm->get('Config');
-                return new Options\RoundCreatorOptions(isset($config['fsmpilol_roundcreator']) ? $config['fsmpilol_roundcreator'] : array());
-            },
-			'FSMPILoL\Tournament\Permission' => function($sm){
-				return new Service\Tournament\Permission();
-			},
-			'StreamNavigation' => Navigation\Service\StreamNavigationFactory::class,
-		),
-    ),
+    'service_manager' => include 'service.config.php',
     
     'translator' => array(
         'translation_file_patterns' => array(

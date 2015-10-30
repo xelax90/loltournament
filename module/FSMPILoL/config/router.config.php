@@ -74,6 +74,16 @@ $routerConfig = array(
 			),
 		),
 	),
+	'teilnehmer' => array(
+		'type' => 'literal',
+		'options' => array(
+			'route'    => '/teilnehmer',
+			'defaults' => array(
+				'controller' => Controller\TeilnehmerController::class,
+				'action'     => 'teilnehmer',
+			),
+		),
+	),
 	'myteam' => array(
 		'type' => 'literal',
 		'options' => array(

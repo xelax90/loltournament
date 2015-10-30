@@ -652,7 +652,7 @@ body {
 			text-transform: uppercase;
 		}
 		
-		div {
+		&>div {
 			margin: 0;
 			padding: 0;
 			
@@ -792,6 +792,7 @@ body {
 						}
 						
 						.players{
+							display: block;
 							.player {
 								margin: 0 0 10px 0;
 								background-repeat: no-repeat;
@@ -846,7 +847,7 @@ body {
 				}
 			}
 		}
-		.article {
+		&>.article {
 			clear: both;
 			float: left;
 			width: 960px;
@@ -860,6 +861,127 @@ body {
 					color: #797979;
 					&:hover{
 						color: #a3a3a3;
+					}
+				}
+			}
+		}
+		.loginForm{
+			background: url(../img/border.gif) repeat-x top left;
+			float: left;
+			margin: 0 0 0 20px;
+			padding: 3px 0 0;
+			width: 920px;
+			ul {
+				border: none;
+				background-color: transparent;
+				li {
+					border: none;
+					padding: 0 0 20px;
+					.header{
+						background: #070707 url(../img/gradient5.png) repeat-x top center;
+						border: 1px solid #22272a;
+						color: #fff;
+						font-size: 14px;
+						line-height: 24px;
+						margin: 0 0 1px;
+						overflow: hidden;
+						padding: 10px 18px 15px;
+						
+						b {
+							display: inline;
+							float:left;
+							line-height: 24px;
+							margin: 0;
+							padding: 0;
+							
+							a {
+								color: #fff;
+								
+								&:hover{
+									color: #727272;
+								}
+							}
+						}
+						
+						span {
+							background: #181818;
+							border: 1px solid #22272a;
+							border-radius: 4px;
+							display: inline;
+							float: left;
+							margin: 0 0 0 34px;
+							overflow: hidden;
+							padding: 0;
+							
+							a {
+								color: #bababa;
+								display: block;
+								float: left;
+								font-size: 10px;
+								height: 23px;
+								line-height: 23px;
+								margin: 0;
+								padding: 0 15px;
+								text-align: center;
+								text-decoration: none;
+								text-transform: capitalize;
+								
+								&:first-child{
+									border-right: 1px solid #22272a;
+								}
+								
+								&:hover{
+									color: #fff;
+								}
+							}
+						}
+					}
+					
+					.article {
+						background: #181818;
+						border: 1px solid #22272a;
+						margin: 0;
+						overflow: hidden;
+						padding: 14px 19px 19px;
+						
+						a.figure{
+							.figure_link();
+							float: left;
+							margin: 6px 20px 0 0;
+						}
+						
+						p {
+							line-height: 18px;
+							margin-bottom: 8px;
+							
+							a{
+								&.more{
+									background: url("../img/bg-more.png") no-repeat center center;
+									color: #bababa;
+									display: inline-block;
+									font-size: 10px;
+									font-weight: normal;
+									height: 23px;
+									line-height: 22px;
+									margin: 0;
+									padding: 0;
+									text-align: center;
+									text-decoration: none;
+									text-transform: lowercase;
+									width: 70px;
+									
+									&:hover{
+										color: #fff;
+									}
+								}
+							}
+						}
+						
+						form input{
+							border: 1px solid #22272a;
+							background-color: #7e7e7e;
+							color: black;
+						}
 					}
 				}
 			}

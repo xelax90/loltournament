@@ -1,0 +1,46 @@
+<?php 
+/* @var $anmeldung \FSMPILoL\Entity\Anmeldung */
+$anmeldung = $this->anmeldung; 
+
+$iconId = 0;
+$rankedWins = 0;
+$level = 0;
+$tier = 'Unranked';
+$normalWins = 0;
+$noData = true;
+if(!empty($anmeldung->getSummonerdata())){
+	$noData = false;
+	$iconId = $anmeldung->getSummonerdata()->getProfileIconId();
+	$rankedWins = $anmeldung->getSummonerdata()->getRankedWins();
+	$level = $anmeldung->getSummonerdata()->getLevel();
+	$normalWins = $anmeldung->getSummonerdata()->getNormalWins();
+	$tier = $anmeldung->getSummonerdata()->getTier();
+}
+
+?>
+<div class="player" style="margin: 0  0 10px 0; background-image: url('<?= $this->fsmpiLoLDDragon()->profileIcon($iconId) ?>'); <?= $this->addStyles ?: '' ?>">
+	<div class="player-data" style="">
+		<div class="player_summonername"><?= $anmeldung->getSummonerName() ?></div>
+
+		<?php if($this->showWins && !$noData) : ?>
+		<div class="player_rankedWins">Ranked: <?= $rankedWins ?> Siege</div>
+		<?php endif; ?>
+
+		<?php if(!$noData) : ?>
+		<div class="player_level">Level <?= $level ?>, <?= $tier ?></div>
+		<?php else: ?>
+		<div class="player_level">Fehler beim Laden der Daten</div>
+		<?php endif; ?>
+
+		<?php if($this->showWins && !$noData) : ?>
+		<div class="player_normalWins">Normal: <?= $normalWins ?> Siege</div>
+		<?php endif; ?>
+
+		<?php if($anmeldung->getIsSub() > 1) : ?>
+		<div class="player_subborder"></div>
+		<?php elseif($this->isAllowed('debug', 'moderator') && $anmeldung->getIsSub() > 0) : ?>
+		<div class="player_subborder" style="border-color: #FFD700"></div>
+		<?php endif; ?>
+		<div style="clear: both"></div>
+	</div>
+</div>

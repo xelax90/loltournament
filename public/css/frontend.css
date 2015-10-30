@@ -10235,48 +10235,48 @@ body {
   padding: 0 19px;
   text-transform: uppercase;
 }
-#body .games div {
+#body .games > div {
   margin: 0;
   padding: 0;
 }
-#body .games div ul {
+#body .games > div ul {
   background: #181818;
   border: 1px solid #22272a;
   margin: 0;
   padding: 0;
 }
-#body .games div ul li {
+#body .games > div ul li {
   border: 1px solid #22272a;
   list-style: none;
   margin: 0;
   padding: 0;
 }
-#body .games div ul li a.figure {
+#body .games > div ul li a.figure {
   border: 1px solid #22272a;
   display: block;
   margin: 0;
   padding: 0;
 }
-#body .games div ul li a.figure:hover {
+#body .games > div ul li a.figure:hover {
   opacity: 0.8;
 }
-#body .games div ul li a.figure img {
+#body .games > div ul li a.figure img {
   border: 1px solid #000;
   display: block;
 }
-#body .games div ul li span {
+#body .games > div ul li span {
   background: #181a1a url(../img/gradient3.png) repeat-x bottom left;
   border-top: 1px solid #22272a;
   display: block;
 }
-#body .games div ul li span a {
+#body .games > div ul li span a {
   color: #a7a9ac;
   display: block;
   margin: 0;
   padding: 0 9px;
   text-decoration: none;
 }
-#body .games div ul li span a:hover {
+#body .games > div ul li span a:hover {
   color: #fff;
 }
 #body .games .content {
@@ -10366,6 +10366,9 @@ body {
   margin: 0 0 10px 0;
   font-size: 17px;
 }
+#body .games .aside ul li .team .players {
+  display: block;
+}
 #body .games .aside ul li .team .players .player {
   margin: 0 0 10px 0;
   background-repeat: no-repeat;
@@ -10410,21 +10413,137 @@ body {
   height: 48px;
   line-height: 48px;
 }
-#body .games .article {
+#body .games > .article {
   clear: both;
   float: left;
   width: 960px;
 }
-#body .games .article p {
+#body .games > .article p {
   font-size: 12px;
   line-height: 24px;
   padding: 11px 20px 0;
 }
-#body .games .article p a {
+#body .games > .article p a {
   color: #797979;
 }
-#body .games .article p a:hover {
+#body .games > .article p a:hover {
   color: #a3a3a3;
+}
+#body .games .loginForm {
+  background: url(../img/border.gif) repeat-x top left;
+  float: left;
+  margin: 0 0 0 20px;
+  padding: 3px 0 0;
+  width: 920px;
+}
+#body .games .loginForm ul {
+  border: none;
+  background-color: transparent;
+}
+#body .games .loginForm ul li {
+  border: none;
+  padding: 0 0 20px;
+}
+#body .games .loginForm ul li .header {
+  background: #070707 url(../img/gradient5.png) repeat-x top center;
+  border: 1px solid #22272a;
+  color: #fff;
+  font-size: 14px;
+  line-height: 24px;
+  margin: 0 0 1px;
+  overflow: hidden;
+  padding: 10px 18px 15px;
+}
+#body .games .loginForm ul li .header b {
+  display: inline;
+  float: left;
+  line-height: 24px;
+  margin: 0;
+  padding: 0;
+}
+#body .games .loginForm ul li .header b a {
+  color: #fff;
+}
+#body .games .loginForm ul li .header b a:hover {
+  color: #727272;
+}
+#body .games .loginForm ul li .header span {
+  background: #181818;
+  border: 1px solid #22272a;
+  border-radius: 4px;
+  display: inline;
+  float: left;
+  margin: 0 0 0 34px;
+  overflow: hidden;
+  padding: 0;
+}
+#body .games .loginForm ul li .header span a {
+  color: #bababa;
+  display: block;
+  float: left;
+  font-size: 10px;
+  height: 23px;
+  line-height: 23px;
+  margin: 0;
+  padding: 0 15px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: capitalize;
+}
+#body .games .loginForm ul li .header span a:first-child {
+  border-right: 1px solid #22272a;
+}
+#body .games .loginForm ul li .header span a:hover {
+  color: #fff;
+}
+#body .games .loginForm ul li .article {
+  background: #181818;
+  border: 1px solid #22272a;
+  margin: 0;
+  overflow: hidden;
+  padding: 14px 19px 19px;
+}
+#body .games .loginForm ul li .article a.figure {
+  border: 1px solid #22272a;
+  display: block;
+  margin: 0;
+  padding: 0;
+  float: left;
+  margin: 6px 20px 0 0;
+}
+#body .games .loginForm ul li .article a.figure:hover {
+  opacity: 0.8;
+}
+#body .games .loginForm ul li .article a.figure img {
+  border: 1px solid #000;
+  display: block;
+}
+#body .games .loginForm ul li .article p {
+  line-height: 18px;
+  margin-bottom: 8px;
+}
+#body .games .loginForm ul li .article p a.more {
+  background: url("../img/bg-more.png") no-repeat center center;
+  color: #bababa;
+  display: inline-block;
+  font-size: 10px;
+  font-weight: normal;
+  height: 23px;
+  line-height: 22px;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  text-decoration: none;
+  text-transform: lowercase;
+  width: 70px;
+}
+#body .games .loginForm ul li .article p a.more:hover {
+  color: #fff;
+}
+#body .games .loginForm ul li .article form input {
+  border: 1px solid #22272a;
+  background-color: #7e7e7e;
+  color: black;
 }
 #body .about {
   overflow: hidden;

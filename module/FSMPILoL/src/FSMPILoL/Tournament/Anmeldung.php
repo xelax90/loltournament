@@ -4,51 +4,29 @@ namespace FSMPILoL\Tournament;
 use FSMPILoL\Entity\Tournament;
 use Doctrine\ORM\EntityManager;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use FSMPILoL\Tournament\TournamentAwareInterface;
+use FSMPILoL\Tournament\TournamentAwareTrait;
+use FSMPILoL\Options\AnmeldungOptions;
 
-class Anmeldung{
-	
-	/**
-	 * @var EntityManager
-	 */
-	protected $em;
-	
-	/**
-	 * @var Tournament
-	 */
-	protected $tournament;
+class Anmeldung implements ServiceLocatorAwareInterface, TournamentAwareInterface{
+	use ServiceLocatorAwareTrait, TournamentAwareTrait;
 	
 	protected $config;
 	
-	/**
-	 * @var ServiceLocatorInterface
-	 */
-	protected $serviceLocator;
-	
-	protected function getServiceLocator(){
-		return $this->serviceLocator;
-	}
-	
 	public function getEntityManager(){
 		if (null === $this->entityManager) {
-			$this->entityManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+			$this->entityManager = $this->getServiceLocator()->get(EntityManager::class);
 		}
 		return $this->entityManager;
 	}
 
 	protected function getConfig(){
 		if (null === $this->config) {
-			$this->config = $this->getServiceLocator()->get('FSMPILoL\Options\Anmeldung');
+			$this->config = $this->getServiceLocator()->get(AnmeldungOptions::class);
 		}
 		return $this->config;
-	}
-	
-	public function getTournament(){
-		return $this->tournament;
-	}
-	
-	public function __construct(Tournament $tournament, ServiceLocatorInterface $sl){
-		$this->tournament = $tournament;
-		$this->serviceLocator = $sl;
 	}
 	
 	public function getTeams(){
