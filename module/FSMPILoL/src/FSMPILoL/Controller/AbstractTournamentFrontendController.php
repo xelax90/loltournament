@@ -71,7 +71,7 @@ abstract class AbstractTournamentFrontendController extends AbstractActionContro
 		
 		foreach($tournament->getGroups() as $group){
 			/* @var $group \FSMPILoL\Entity\Group */
-			if(!isset($this->groups[$group->getId()])){
+			if(isset($this->groups[$group->getId()])){
 				$gGroup = $this->groups[$group->getId()];
 			} else {
 				$gGroup = new Group($group, $this->getServiceLocator());
