@@ -1,4 +1,4 @@
-e<?php
+<?php
 namespace FSMPILoL\Tournament;
 
 use Doctrine\ORM\EntityManager;
