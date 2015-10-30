@@ -10,18 +10,12 @@ use Zend\View\Model\ViewModel;
  * @author schurix
  */
 class TeilnehmerController extends AbstractTournamentFrontendController{
-	/** @var Anmeldung */
-	protected $anmeldung;
-	
 	public function getAnmeldung(){
-		if(null === $this->anmeldung){
-			$this->anmeldung = $this->getServiceLocator()->get(Anmeldung::class);
-		}
-		return $this->anmeldung;
+		return $this->getTournamentService()->getAnmeldung();
 	}
 	
 	public function teilnehmerAction(){
-		$this->setAPIData();
+		$this->getTournamentService()->setAPIData();
 		
 		$anmeldung = $this->getAnmeldung();
 		$singles = $anmeldung->getSingles();

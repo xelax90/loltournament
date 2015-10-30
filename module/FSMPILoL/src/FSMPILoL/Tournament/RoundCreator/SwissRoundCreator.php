@@ -2,7 +2,6 @@
 namespace FSMPILoL\Tournament\RoundCreator;
 use FSMPILoL\Entity\Round;
 use FSMPILoL\Entity\Match;
-use FSMPILoL\Entity\Game;
 use FSMPILoL\Entity\Team;
 use Doctrine\Common\Collections\ArrayCollection;
 use FSMPILoL\Tournament\Teamdata;

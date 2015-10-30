@@ -1,8 +1,6 @@
 <?php
 namespace FSMPILoL\Tournament;
 
-use FSMPILoL\Entity\Tournament as TournamentEntity;
-
 /**
  * Provides implementation of TournamentAwareInterface
  *
@@ -16,14 +14,14 @@ trait TournamentAwareTrait {
 	protected $tournament;
 	
 	/**
-	 * @param TournamentEntity $tournament
+	 * @param Tournament $tournament
 	 */
-	public function setTournament(TournamentEntity $tournament) {
+	public function setTournament(Tournament $tournament) {
 		$this->tournament = $tournament;
 	}
 	
 	/**
-	 * @return TournamentEntity
+	 * @return Tournament
 	 */
 	public function getTournament(){
 		return $this->tournament;

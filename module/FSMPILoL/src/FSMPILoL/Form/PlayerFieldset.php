@@ -6,18 +6,16 @@ use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use DoctrineModule\Persistence\ProvidesObjectManager;
 use FSMPILoL\Entity\Player;
-use FSMPILoL\Entity\Tournament;
 use FSMPILoL\Tournament\TournamentAwareInterface;
+use FSMPILoL\Tournament\TournamentAwareTrait;
 
 /**
  * Fieldset to add/edit players
  */
 class PlayerFieldset  extends Fieldset implements InputFilterProviderInterface, ObjectManagerAwareInterface, TournamentAwareInterface{
-	protected $objectManager;
-	protected $tournament;
-
+	use ProvidesObjectManager, TournamentAwareTrait;
 
 	public function __construct($name = "", $options = array()){
 		if($name == ""){
@@ -45,7 +43,7 @@ class PlayerFieldset  extends Fieldset implements InputFilterProviderInterface, 
 	}
 	
 	public function init(){
-		$tournament = $this->getTournament();
+		$tournament = $this->getTournament()->getTournament();
 		if(empty($tournament)){
 			throw new \RuntimeException('Tournament cannot be empty');
 		}
@@ -151,22 +149,4 @@ class PlayerFieldset  extends Fieldset implements InputFilterProviderInterface, 
 		);
 		return $filters;
 	}
-
-	public function getObjectManager() {
-		return $this->objectManager;
-	}
-
-	public function setObjectManager(ObjectManager $objectManager) {
-		$this->objectManager = $objectManager;
-		return $this;
-	}
-
-	public function getTournament() {
-		return $this->tournament;
-	}
-
-	public function setTournament(Tournament $tournament) {
-		$this->tournament = $tournament;
-	}
-
 }

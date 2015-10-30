@@ -5,18 +5,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use FSMPILoL\Tournament\Group;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use FSMPILoL\Entity\Game;
+use FSMPILoL\Options\RoundCreatorOptions;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use Doctrine\ORM\EntityManager;
 
-abstract class AbstractRoundCreator {
+abstract class AbstractRoundCreator implements ServiceLocatorAwareInterface{
+	use ServiceLocatorAwareTrait;
 	
-	protected $tournament;
+	/** @var Group */
 	protected $group;
-	protected $serviceLocator;
-	
-	/**
-	 * @var Doctrine\ORM\EntityManager
-	 */
-	protected $em;
-	
+	/** @var EntityManager */
+	protected $entityManager;
 	
 	protected static $globalDefaults = array(
 		'gamesPerMatch' => 3,
@@ -28,10 +28,16 @@ abstract class AbstractRoundCreator {
 		'ignoreColors' => false
 	);
 	
-	public function __construct(Group $group, ServiceLocatorInterface $sl){
-		$this->group = $group;
-		$this->serviceLocator = $sl;
+	/**
+	 * @return EntityManager
+	 */
+	public function getEntityManager(){
+		if (null === $this->entityManager) {
+			$this->entityManager = $this->getServiceLocator()->get(EntityManager::class);
+		}
+		return $this->entityManager;
 	}
+	
 	
 	/**
 	 * 
@@ -41,12 +47,14 @@ abstract class AbstractRoundCreator {
 	 * @return \FSMPILoL\Tournament\RoundCreator\AbstractRoundCreator
 	 */
 	public static function getInstance(Group $group, $type, ServiceLocatorInterface $sl){
-		/* @var $options \FSMPILoL\Options\RoundCreatorOptions */
-		$options = $sl->get('FSMPILoL\Options\RoundCreator');
+		/* @var $options RoundCreatorOptions */
+		$options = $sl->get(RoundCreatorOptions::class);
 		$types = $options->getRoundTypes();
 		if(!empty($types[$type]) && class_exists($types[$type]) ){
 			try{
-				$creator = new $types[$type]($group, $sl);
+				$creator = new $types[$type]();
+				$creator->setGroup($group);
+				$creator->setServiceLocator($sl);
 				return $creator;
 			} catch (Exception $ex) {}
 		}
@@ -58,10 +66,7 @@ abstract class AbstractRoundCreator {
 	}
 	
 	public function getTournament(){
-		if(null === $this->tournament){
-			$this->tournament = $group->getGroup()->getTournament();
-		}
-		return $this->tournament;
+		return $this->getGroup()->getTournament();
 	}
 	
 	/**
@@ -74,25 +79,6 @@ abstract class AbstractRoundCreator {
 	public function setGroup($group){
 		return $this->group = $group;
 	}
-	
-	/**
-	 * @return ServiceLocatorInterface
-	 */
-	protected function getServiceLocator(){
-		return $this->serviceLocator;
-	}
-
-
-	/**
-	 * @return \Doctrine\ORM\EntityManager
-	 */
-	public function getEntityManager(){
-		if (null === $this->em) {
-			$this->em = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
-		}
-		return $this->em;
-	}
-	
 	
 	abstract protected function _getDefaultProperties();
 	

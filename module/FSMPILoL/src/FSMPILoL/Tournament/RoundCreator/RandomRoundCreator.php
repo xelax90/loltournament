@@ -2,13 +2,13 @@
 namespace FSMPILoL\Tournament\RoundCreator;
 use FSMPILoL\Entity\Round;
 use FSMPILoL\Entity\Match;
-use FSMPILoL\Entity\Game;
 use Doctrine\Common\Collections\ArrayCollection;
+use DateTime;
 
 class RandomRoundCreator extends AbstractRoundCreator {
 	const roundType = 'random';
 	
-	public function nextRound(AlreadyPlayedInterface $gameCheck, \DateTime $startDate, $properties, $isHidden = true, $duration = 14, $timeForDates = 7){
+	public function nextRound(AlreadyPlayedInterface $gameCheck, DateTime $startDate, $properties, $isHidden = true, $duration = 14, $timeForDates = 7){
 		$properties = $properties + $this->getDefaultProperties();
 		
 		$round = new Round();

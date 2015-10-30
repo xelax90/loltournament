@@ -2,48 +2,42 @@
 namespace FSMPILoL\Tournament;
 
 use Doctrine\ORM\EntityManager;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use FSMPILoL\Entity\Group AS GroupEntity;
+use FSMPILoL\Entity\Round AS RoundEntity;
 use DateTime;
 use FSMPILoL\Riot\RiotAPI;
 use FSMPILoL\Tournament\Summonerdata;
 
-class Group {
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
 
-	/**
-	 * @var EntityManager
-	 */
-	protected $em;
-	
-	/**
-	 * @var GroupEntity
-	 */
+use Exception;
+
+class Group implements ServiceLocatorAwareInterface, TournamentAwareInterface{
+	use ServiceLocatorAwareTrait, TournamentAwareTrait;
+
+	/** @var EntityManager */
+	protected $entityManager;
+	/** @var GroupEntity */
 	protected $group;
-	
-	/**
-	 * @var ServiceLocatorInterface
-	 */
-	protected $serviceLocator;
-	
+	/** @var \Zend\Cache\Storage\Adapter\AbstractAdapter */
 	protected $cache;
-	
 	/** @var array */
 	protected $summoners;
 	
-	/** @var RiotAPI */
-	protected $api;
-	
-	protected function getServiceLocator(){
-		return $this->serviceLocator;
-	}
-	
+	/**
+	 * @return EntityManager
+	 */
 	public function getEntityManager(){
 		if (null === $this->entityManager) {
-			$this->entityManager = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+			$this->entityManager = $this->getServiceLocator()->get(EntityManager::class);
 		}
 		return $this->entityManager;
 	}
-
+	
+	/**
+	 * @return \Zend\Cache\Storage\Adapter\AbstractAdapter
+	 */
 	protected function getCache(){
 		if (null === $this->cache) {
 			$this->cache = $this->getServiceLocator()->get('FSMPILoL\TeamdataCache');
@@ -51,26 +45,27 @@ class Group {
 		return $this->cache;
 	}
 	
+	/**
+	 * @return GroupEntity
+	 */
 	public function getGroup(){
+		if(!$this->group instanceof GroupEntity){
+			throw new Exception('No group entity provided');
+		}
 		return $this->group;
 	}
 	
-	public function getTournament(){
-		return $this->getGroup()->getTournament();
-	}
-
-	public function getAPI(){
-		if(null === $this->api){
-			$this->api = $this->getServiceLocator()->get(RiotAPI::class);
-		}
-		return $this->api;
-	}
-	
-	public function __construct(GroupEntity $group, ServiceLocatorInterface $sl){
+	/**
+	 * @param GroupEntity $group
+	 */
+	public function setGroup(GroupEntity $group){
 		$this->group = $group;
-		$this->serviceLocator = $sl;
 	}
 	
+	/**
+	 * Returns round number of last round
+	 * @return int
+	 */
 	public function getMaxRoundNumber(){
 		$max = 0;
 		foreach($this->getGroup()->getRounds() as $round){
@@ -79,6 +74,10 @@ class Group {
 		return $max;
 	}
 	
+	/**
+	 * Injects team scores into teams
+	 * @return void
+	 */
 	public function setTeamdata(){
 		$data = $this->getTeamdataPerRound();
 		$round = $this->getCurrentRound();
@@ -91,6 +90,10 @@ class Group {
 		}
 	}
 	
+	/**
+	 * Returns last round with end date in the past
+	 * @return RoundEntity
+	 */
 	public function getLastFinishedRound(){
 		$rounds = $this->getGroup()->getRounds()->toArray();
 		// sort rounds by round number in descending order
@@ -108,6 +111,10 @@ class Group {
 		return null;
 	}
 	
+	/**
+	 * Returns the visible round with highest number
+	 * @return RoundEntity
+	 */
 	public function getCurrentRound(){
 		$rounds = $this->getGroup()->getRounds()->toArray();
 		if (empty($rounds)) {
@@ -129,7 +136,10 @@ class Group {
 		return $round;
 	}
 	
-	// TODO optimize cache key to update when data changed
+	/**
+	 * TODO optimize cache key to update when data changed
+	 * @return string
+	 */
 	public function getCacheKey(){
 		$rounds = $this->getGroup()->getRounds();
 		$maxRoundId = 0;
@@ -144,6 +154,10 @@ class Group {
 		return $maxRoundId."_".$maxTeamId;
 	}
 	
+	/**
+	 * Returns two-dimensinal array $teamdata[$roundId][$teamId] that contains teamdata for each round
+	 * @return array
+	 */
 	public function getTeamdataPerRound(){
 		$cache = $this->getCache();
 		
@@ -273,62 +287,8 @@ class Group {
 		return $result;
 	}
 	
-	/**
-	 * @return array
-	 */
-	public function getTournamentSummoners(){
-		if(null === $this->summoners){
-			$tournament = $this->getTournament();
-			if(!$tournament){
-				return null;
-			}
-			$anmeldungen = $tournament->getAnmeldungen();
-			$api = $this->getAPI();
-			$this->summoners = $api->getSummoners($anmeldungen);
-		}
-		return $this->summoners;
-	}
-	
-	protected function getSummonerCacheKey(){
-		$anmeldungen = $this->getTournament()->getAnmeldungen();
-		$maxAnmeldungId = 0;
-		foreach($anmeldungen as $anmeldung){
-			$maxAnmeldungId = max($maxAnmeldungId, $anmeldung->getId());
-		}
-		return $maxAnmeldungId;
-	}
-	
-	
 	public function setAPIData(){
-		$tournament = $this->getTournament();
-		$api = $this->getAPI();
-		$anmeldungen = $tournament->getAnmeldungen();
-		
-		$summonerdata = array();
-		
-		$cache = $this->getServiceLocator()->get('FSMPILoL\SummonerdataCache');
-		$cacheKey = $this->getSummonerCacheKey();
-		if($cache->hasItem($cacheKey) && (!$cache->itemHasExpired($cacheKey))){
-			$summonerdata = unserialize($cache->getItem($cacheKey));
-		} else {
-			$summoners = $this->getTournamentSummoners();
-			foreach($anmeldungen as $anmeldung){
-				/* @var $anmeldung FSMPILoL\Entity\Anmeldung */
-				$standardname = RiotAPI::getStandardName($anmeldung->getSummonerName());
-				if(!empty($summoners[$standardname])){
-					$summoner = $summoners[$standardname];
-				} elseif(!empty($anmeldung->getPlayer()) && !empty($summoners[$anmeldung->getPlayer()->getSummonerId()])) {
-					$summoner = $summoners[$anmeldung->getPlayer()->getSummonerId()];
-				}
-				$summonerdata[$anmeldung->getId()] = new Summonerdata($api, $anmeldung, $summoner);
-			}
-			$cache->addItem($cacheKey, serialize($summonerdata));
-		}
-		
-		foreach($anmeldungen as $anmeldung){
-			$summonerdata[$anmeldung->getId()]->setAnmeldung($anmeldung);
-			$anmeldung->setSummonerdata($summonerdata[$anmeldung->getId()]);
-		}
+		$this->getTournament()->setAPIData();
 	}
 	
 }

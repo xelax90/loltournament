@@ -12,6 +12,7 @@ use Zend\View\Model\ViewModel;
 use FSMPILoL\Form\CommentPaarungForm;
 use FSMPILoL\Form\WarningForm;
 use FSMPILoL\Entity\Team;
+use FSMPILoL\Entity\Player;
 use FSMPILoL\Entity\Warning;
 use FSMPILoL\Form\AddSubToTeamForm;
 use FSMPILoL\Form\TeamForm;
@@ -24,12 +25,12 @@ use FSMPILoL\Form\TeamForm;
 class TeamAdminController extends AbstractTournamentAdminController{
 	
 	public function indexAction() {
-		$tournament = $this->getTournament();
+		$tournament = $this->getTournament()->getTournament();
 		if(!$tournament){
 			return new ViewModel();
 		}
-		$this->setTeamdata();
-		$this->setAPIData();
+		$this->getTournament()->setTeamdata();
+		$this->getTournament()->setAPIData();
 		
 		return new ViewModel(array('tournament' => $tournament, 'identity' => $this->zfcUserAuthentication()->getIdentity()));
 	}
@@ -45,12 +46,12 @@ class TeamAdminController extends AbstractTournamentAdminController{
 		}
         $team_id = $this->getEvent()->getRouteMatch()->getParam('team_id');
 		$em = $this->getEntityManager();
-		/* @var $team \FSMPILoL\Entity\Team */
-		$team = $em->getRepository('FSMPILoL\Entity\Team')->find((int)$team_id);
+		/* @var $team Team */
+		$team = $em->getRepository(Team::class)->find((int)$team_id);
 		if(!$team){
 			return $this->_redirectToTeams();
 		}
-		$form = new CommentPaarungForm();
+		$form = $this->getServiceLocator()->get('FormElementManager')->get(CommentPaarungForm::class);
 		
         /** @var $request \Zend\Http\Request */
         $request = $this->getRequest();
@@ -73,8 +74,8 @@ class TeamAdminController extends AbstractTournamentAdminController{
 		}
         $team_id = $this->getEvent()->getRouteMatch()->getParam('team_id');
 		$em = $this->getEntityManager();
-		/* @var $team \FSMPILoL\Entity\Team */
-		$team = $em->getRepository('FSMPILoL\Entity\Team')->find((int)$team_id);
+		/* @var $team Team */
+		$team = $em->getRepository(Team::class)->find((int)$team_id);
 		if(!$team){
 			return $this->_redirectToTeams();
 		}
@@ -93,8 +94,8 @@ class TeamAdminController extends AbstractTournamentAdminController{
 		}
         $team_id = $this->getEvent()->getRouteMatch()->getParam('team_id');
 		$em = $this->getEntityManager();
-		/* @var $team \FSMPILoL\Entity\Team */
-		$team = $em->getRepository('FSMPILoL\Entity\Team')->find((int)$team_id);
+		/* @var $teamTeam */
+		$team = $em->getRepository(Team::class)->find((int)$team_id);
 		if(!$team){
 			return $this->_redirectToTeams();
 		}
@@ -113,12 +114,12 @@ class TeamAdminController extends AbstractTournamentAdminController{
 		}
         $team_id = $this->getEvent()->getRouteMatch()->getParam('team_id');
 		$em = $this->getEntityManager();
-		/* @var $team \FSMPILoL\Entity\Team */
-		$team = $em->getRepository('FSMPILoL\Entity\Team')->find((int)$team_id);
+		/* @var $team Team */
+		$team = $em->getRepository(Team::class)->find((int)$team_id);
 		if(!$team){
 			return $this->_redirectToTeams();
 		}
-		$form = new WarningForm();
+		$form = $this->getServiceLocator()->get('FormElementManager')->get(WarningForm::class);
 		
         /** @var $request \Zend\Http\Request */
         $request = $this->getRequest();
@@ -144,12 +145,12 @@ class TeamAdminController extends AbstractTournamentAdminController{
 		}
         $player_id = $this->getEvent()->getRouteMatch()->getParam('player_id');
 		$em = $this->getEntityManager();
-		/* @var $team \FSMPILoL\Entity\Player */
-		$player = $em->getRepository('FSMPILoL\Entity\Player')->find((int)$player_id);
+		/* @var $team Player */
+		$player = $em->getRepository(Player::class)->find((int)$player_id);
 		if(!$player){
 			return $this->_redirectToTeams();
 		}
-		$form = new WarningForm();
+		$form = $this->getServiceLocator()->get('FormElementManager')->get(WarningForm::class);
 		
         /** @var $request \Zend\Http\Request */
         $request = $this->getRequest();
@@ -175,8 +176,8 @@ class TeamAdminController extends AbstractTournamentAdminController{
 		}
         $warning_id = $this->getEvent()->getRouteMatch()->getParam('warning_id');
 		$em = $this->getEntityManager();
-		/* @var $warning \FSMPILoL\Entity\Warning */
-		$warning = $em->getRepository('FSMPILoL\Entity\Warning')->find((int)$warning_id);
+		/* @var $warning Warning */
+		$warning = $em->getRepository(Warning::class)->find((int)$warning_id);
 		if(!$warning){
 			return $this->_redirectToTeams();
 		}
@@ -201,12 +202,12 @@ class TeamAdminController extends AbstractTournamentAdminController{
 		}
         $team_id = $this->getEvent()->getRouteMatch()->getParam('team_id');
 		$em = $this->getEntityManager();
-		/* @var $team \FSMPILoL\Entity\Team */
-		$team = $em->getRepository('FSMPILoL\Entity\Team')->find((int)$team_id);
+		/* @var $team Team */
+		$team = $em->getRepository(Team::class)->find((int)$team_id);
 		if(!$team){
 			return $this->_redirectToTeams();
 		}
-		/* @var $form \FSMPILoL\Form\AddSubToTeamForm */
+		/* @var $form AddSubToTeamForm */
 		$form = $this->getServiceLocator()->get('FormElementManager')->get(AddSubToTeamForm::class);
 		$data = array(
 			'team' => $team->getId()
@@ -222,7 +223,7 @@ class TeamAdminController extends AbstractTournamentAdminController{
 			$form->setData($data);
 			if ($form->isValid()) {
 				$data = $form->getData();
-				$player = $em->getRepository('FSMPILoL\Entity\Player')->find((int)$data['player']);
+				$player = $em->getRepository(Player::class)->find((int)$data['player']);
 				if(empty($player)){
 					$form->get('player')->setMessages(array(
 						'Spieler nicht gefunden'
@@ -249,15 +250,15 @@ class TeamAdminController extends AbstractTournamentAdminController{
 		}
         $team_id = $this->getEvent()->getRouteMatch()->getParam('team_id');
 		$em = $this->getEntityManager();
-		/* @var $team \FSMPILoL\Entity\Team */
-		$team = $em->getRepository('FSMPILoL\Entity\Team')->find((int)$team_id);
+		/* @var $team Team */
+		$team = $em->getRepository(Team::class)->find((int)$team_id);
 		if(!$team){
 			$this->flashMessenger()->addErrorMessage(sprintf($this->teamNotFoundFormat, $team_id));
 			return $this->_redirectToTeams();
 		}
 
         $player_id = $this->getEvent()->getRouteMatch()->getParam('player_id');
-		$player = $em->getRepository('FSMPILoL\Entity\Player')->find((int)$player_id);
+		$player = $em->getRepository(Player::class)->find((int)$player_id);
 		if(!$player){
 			$this->flashMessenger()->addErrorMessage(sprintf($this->playerNotFoundFormat, $player_id));
 			return $this->_redirectToTeams();

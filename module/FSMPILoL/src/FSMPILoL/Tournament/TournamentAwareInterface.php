@@ -2,19 +2,17 @@
 
 namespace FSMPILoL\Tournament;
 
-use FSMPILoL\Entity\Tournament as TournamentEntity;
-
 interface TournamentAwareInterface {
 	
 	/**
 	 * Set tournament
-	 * @param TournamentEntity $tournament
+	 * @param Tournament $tournament
 	 */
-	public function setTournament(TournamentEntity $tournament);
+	public function setTournament(Tournament $tournament);
 	
 	/**
 	 * return tournament
-	 * @return TournamentEntity
+	 * @return Tournament
 	 */
 	public function getTournament();
 	

@@ -1,19 +1,23 @@
 <?php
 namespace FSMPILoL\Tournament;
 
-use FSMPILoL\Entity\Tournament as TournamentEntity;
 use FSMPILoL\Entity\Player;
 use FSMPILoL\Entity\Team;
 
 use FSMPILoL\Riot\RiotAPI;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
-use Zend\ServiceManager\ServiceLocatorInterface;
+
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+
+use Exception;
 
 /**
  * Takes all tournament registrations and creates teams with 5 players each
  */
-class TeamMatcher{
+class TeamMatcher implements ServiceLocatorAwareInterface, TournamentAwareInterface{
+	use ServiceLocatorAwareTrait, TournamentAwareTrait;
 	
 	protected $matched;
 	protected $teams;
@@ -21,17 +25,9 @@ class TeamMatcher{
 	protected $subs;
 	private $fixed_subs = array();
 	
-	protected $serviceLocator;
-	
-	protected $api;
-	protected $tournament;
-	protected $em;
-	protected $anmeldung;
 	protected $entityManager;
-
-	public function getServiceLocator(){
-		return $this->serviceLocator;
-	}
+	
+	protected $initialized = false;
 	
 	public function getEntityManager(){
 		if (null === $this->entityManager) {
@@ -40,27 +36,24 @@ class TeamMatcher{
 		return $this->entityManager;
 	}
 	
-	public function getAPI(){
-		if(null === $this->api){
-			$this->api = $this->getServiceLocator()->get(RiotAPI::class);
-		}
-		return $this->api;
-	}
-	
 	public function getAnmeldung(){
-		if(null === $this->anmeldung){
-			$this->anmeldung = $this->getServiceLocator()->get(Anmeldung::class);
-		}
-		return $this->anmeldung;
+		return $this->getTournament()->getAnmeldung();
 	}
 	
-	public function __construct(TournamentEntity $tournament, ServiceLocatorInterface $sl){
-		$this->tournament = $tournament;
-		$this->serviceLocator = $sl;
-		$api = $this->getAPI();
+	public function init(){
+		if($this->initialized){
+			return;
+		}
 		
-		$anmeldungen = $tournament->getAnmeldungen();
-		$summoners = $api->getSummoners($anmeldungen);
+		if(!$this->getTournament()){
+			throw new Exception('No Tournament service provided');
+		}
+		
+		if(!$this->getServiceLocator()){
+			throw new Exception('No Service locator provided');
+		}
+		
+		$this->getTournament()->setAPIData();
 		
 		$this->teams = array();
 		$teams = $this->getAnmeldung()->getTeams();
@@ -74,25 +67,16 @@ class TeamMatcher{
 			$players = array();
 			/** @var Anmeldung $anmeldung */
 			foreach($team as $anmeldung){
-				$standardname = RiotAPI::getStandardName($anmeldung->getSummonerName());
-				$summoner = $summoners[$standardname];
-				$players[] = new Player($anmeldung, $tTeam, false, $summoner, $api);
+				$player = new Player();
+				$player->setAnmeldung($anmeldung);
+				$player->setTeam($tTeam);
+				$player->setIsCaptain(false);
+				$players[] = $player;
 			}
 			
 			$tTeam->setPlayers(new ArrayCollection($players));
 			
 			$plCount += count($tTeam->getPlayers());
-			
-			/*
-			if($tTeam->score() >= 24){
-				$split = $this->splitTeam($tTeam);
-				foreach($split as $t){
-					$this->teams[] = $t;
-				}
-			} else {
-				$this->teams[] = $tTeam;
-			}
-			*/
 			
 			$this->teams[] = $tTeam;
 		}
@@ -108,8 +92,10 @@ class TeamMatcher{
 			if($anmeldung->getIsSub() != 2 && !in_array($standardname, $this->fixed_subs)){
 				$plCount++;
 			} else{
-				$summoner = $summoners[$standardname];
-				$subs[] = new Player($anmeldung, null, false, $summoner, $api);
+				$player = new Player();
+				$player->setAnmeldung($anmeldung);
+				$player->setIsCaptain(false);
+				$subs[] = $player;
 				$subbed[] = $standardname;
 			}
 		}
@@ -129,8 +115,10 @@ class TeamMatcher{
 			}
 			
 			$standardname = RiotAPI::getStandardName($anmeldung->getSummonerName());
-			$summoner = $summoners[$standardname];
-			$subs[] = new Player($anmeldung, null, false, $summoner, $api);
+			$player = new Player();
+			$player->setAnmeldung($anmeldung);
+			$player->setIsCaptain(false);
+			$subs[] = $player;
 			$subbed[] = $standardname;
 			$subCount--;
 			unset($keys[$r]);
@@ -142,15 +130,21 @@ class TeamMatcher{
 		// add remaining singles
 		foreach($singles as $anmeldung){
 			$standardname = RiotAPI::getStandardName($anmeldung->getSummonerName());
-			$summoner = $summoners[$standardname];
 			if(in_array($standardname, $subbed)){
 				continue;
 			}
-			$this->singles[] = new Player($anmeldung, null, false, $summoner, $api);
+			$player = new Player();
+			$player->setAnmeldung($anmeldung);
+			$player->setIsCaptain(false);
+			$this->singles[] = $player;
 		}
+		
+		$this->initialized = true;
 	}
 	
 	public function match(){
+		$this->init();
+		
 		$toMatch = array();
 		
 		// prepare data

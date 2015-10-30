@@ -12,7 +12,9 @@ use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
-use Doctrine\Common\Persistence\ObjectManager;
+use DoctrineModule\Persistence\ProvidesObjectManager;
+use FSMPILoL\Tournament\TournamentAwareTrait;
+use DoctrineModule\Persistence\ProvidesObjectManager;
 use FSMPILoL\Entity\Anmeldung;
 use FSMPILoL\Tournament\TournamentAwareInterface;
 use FSMPILoL\Entity\Player;
@@ -24,9 +26,7 @@ use FSMPILoL\Validator\MinMaxEmailsRwth;
  * @author schurix
  */
 class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface, ObjectManagerAwareInterface, TournamentAwareInterface{
-	protected $objectManager;
-	
-	protected $tournament;
+	use ProvidesObjectManager, TournamentAwareTrait;
 	
 	public function __construct($name = "", $options = array()){
 		if($name == ""){
@@ -197,6 +197,7 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
      * @return array
      \*/
     public function getInputFilterSpecification(){
+		$tournament = $this->getTournament()->getTournament();
 		$filters = array();
 		
 		$conditionalRequire = function($value, $context){
@@ -241,7 +242,7 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 				'name' => 'FSMPILoL\Validator\NoObjectExistsInTournament',
 				'options' => array(
 					'object_repository' => $this->getObjectManager()->getRepository(Anmeldung::class),
-					'tournament' => $this->getTournament(),
+					'tournament' => $tournament,
 					'fields' => 'email'
 				)
 			);
@@ -250,7 +251,7 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 				'name' => 'FSMPILoL\Validator\PlayerEmail',
 				'options' => array(
 					'object_repository' => $this->getObjectManager()->getRepository(Player::class),
-					'tournament' => $this->getTournament(),
+					'tournament' => $tournament,
 					'fields' => 'email'
 				)
 			);
@@ -261,7 +262,7 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 				'name' => 'FSMPILoL\Validator\NoObjectExistsInTournament',
 				'options' => array(
 					'object_repository' => $this->getObjectManager()->getRepository(Anmeldung::class),
-					'tournament' => $this->getTournament(),
+					'tournament' => $tournament,
 					'fields' => 'summonerName'
 				)
 			);
@@ -270,7 +271,7 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 				'name' => 'FSMPILoL\Validator\PlayerSummonerName',
 				'options' => array(
 					'object_repository' => $this->getObjectManager()->getRepository(Player::class),
-					'tournament' => $this->getTournament(),
+					'tournament' => $tournament,
 					'fields' => 'summonerName'
 				)
 			);
@@ -299,23 +300,6 @@ class AnmeldungFieldset extends Fieldset implements InputFilterProviderInterface
 			)
 		);
 		return $filters;
-	}
-
-	public function getObjectManager() {
-		return $this->objectManager;
-	}
-
-	public function setObjectManager(ObjectManager $objectManager) {
-		$this->objectManager = $objectManager;
-		return $this;
-	}
-
-	public function getTournament() {
-		return $this->tournament;
-	}
-
-	public function setTournament(\FSMPILoL\Entity\Tournament $tournament) {
-		$this->tournament = $tournament;
 	}
 
 }

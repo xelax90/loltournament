@@ -3,6 +3,7 @@
 namespace FSMPILoL\Controller;
 
 use FSMPILoL\Tournament\Group;
+use FSMPILoL\Tournament\Tournament;
 
 /**
  * Description of AbstractTournamentAdminController
@@ -10,44 +11,17 @@ use FSMPILoL\Tournament\Group;
  * @author schurix
  */
 class AbstractTournamentAdminController extends AbstractAdminController{
-	/** @var \FSMPILoL\Entity\Tournament */
+	/** @var Tournament */
 	protected $tournament;
 	
 	/**
 	 * 
-	 * @return \FSMPILoL\Entity\Tournament
+	 * @return Tournament
 	 */
 	public function getTournament(){
 		if(null === $this->tournament){
-			$options = $this->getServiceLocator()->get('FSMPILoL\Options\Anmeldung');
-			$tournamentId = $options->getTournamentId();
-			$em = $this->getEntityManager();
-			$this->tournament = $em->getRepository('FSMPILoL\Entity\Tournament')->find($tournamentId);
+			$this->tournament = $this->getServiceLocator()->get(Tournament::class);
 		}
 		return $this->tournament;
-	}
-	
-	protected function setTeamdata(){
-		$tournament = $this->getTournament();
-		if (!$tournament) {
-			return;
-		}
-
-		foreach($tournament->getGroups() as $group){
-			$gGroup = new Group($group, $this->getServiceLocator());
-			$gGroup->setTeamdata();
-		}
-	}
-
-	protected function setAPIData(){
-		$tournament = $this->getTournament();
-		if (!$tournament) {
-			return;
-		}
-
-		foreach($tournament->getGroups() as $group){
-			$gGroup = new Group($group, $this->getServiceLocator());
-			$gGroup->setAPIData();
-		}
 	}
 }

@@ -5,6 +5,7 @@ namespace FSMPILoL\Controller;
 use FSMPILoL\Form\CommentPaarungForm;
 use FSMPILoL\Form\ResultPaarungForm;
 use Zend\View\Model\ViewModel;
+use FSMPILoL\Entity\Match;
 
 /**
  * Description of TournamentAdminController
@@ -13,12 +14,13 @@ use Zend\View\Model\ViewModel;
  */
 class TournamentAdminController extends AbstractTournamentAdminController{
 	public function paarungenAdminAction(){
-		$tournament = $this->getTournament();
+		$tournament = $this->getTournament()->getTournament();
 		if(!$tournament){
 			return new ViewModel();
 		}
-		$this->setTeamdata();
-		$this->setAPIData();
+		
+		$this->getTournament()->setTeamdata();
+		$this->getTournament()->setAPIData();
 		
 		return new ViewModel(array('tournament' => $tournament));
 	}
@@ -34,7 +36,7 @@ class TournamentAdminController extends AbstractTournamentAdminController{
 		}
         $matchId = $this->getEvent()->getRouteMatch()->getParam('match_id');
 		$em = $this->getEntityManager();
-		$match = $em->getRepository('FSMPILoL\Entity\Match')->find((int)$matchId);
+		$match = $em->getRepository(Match::class)->find((int)$matchId);
 		if(!$match){
 			return $this->_redirectToPaarungen();
 		}
@@ -52,7 +54,7 @@ class TournamentAdminController extends AbstractTournamentAdminController{
 		}
         $matchId = $this->getEvent()->getRouteMatch()->getParam('match_id');
 		$em = $this->getEntityManager();
-		$match = $em->getRepository('FSMPILoL\Entity\Match')->find((int)$matchId);
+		$match = $em->getRepository(Match::class)->find((int)$matchId);
 		if(!$match){
 			return $this->_redirectToPaarungen();
 		}
@@ -69,11 +71,11 @@ class TournamentAdminController extends AbstractTournamentAdminController{
 		}
         $matchId = $this->getEvent()->getRouteMatch()->getParam('match_id');
 		$em = $this->getEntityManager();
-		$match = $em->getRepository('FSMPILoL\Entity\Match')->find((int)$matchId);
+		$match = $em->getRepository(Match::class)->find((int)$matchId);
 		if(!$match){
 			return $this->_redirectToPaarungen();
 		}
-		$form = new CommentPaarungForm();
+		$form = $this->getServiceLocator()->get('FormElementManager')->get(CommentPaarungForm::class);
 		$form->setBindOnValidate(false);
 		$form->bind($match);
 		
@@ -97,11 +99,11 @@ class TournamentAdminController extends AbstractTournamentAdminController{
 		}
         $matchId = $this->getEvent()->getRouteMatch()->getParam('match_id');
 		$em = $this->getEntityManager();
-		$match = $em->getRepository('FSMPILoL\Entity\Match')->find((int)$matchId);
+		$match = $em->getRepository(Match::class)->find((int)$matchId);
 		if(!$match){
 			return $this->_redirectToPaarungen();
 		}
-		$form = new ResultPaarungForm();
+		$form = $this->getServiceLocator()->get('FormElementManager')->get(ResultPaarungForm::class);
 		$form->setBindOnValidate(false);
 		$form->bind($match);
 		

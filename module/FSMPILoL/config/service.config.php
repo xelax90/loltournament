@@ -80,13 +80,9 @@ return array(
 		},
 		'StreamNavigation' => Navigation\Service\StreamNavigationFactory::class,
 		Entity\Tournament::class => function($sm){
-			/* @var $anmeldungOptions Options\AnmeldungOptions */
-			$anmeldungOptions = $sm->get(Options\AnmeldungOptions::class);
-			/* @var $em EntityManager */
-			$em = $sm->get(EntityManager::class);
-			
-			$tournamentId = $anmeldungOptions->getTournamentId();
-			return $em->getRepository(Entity\Tournament::class)->find($tournamentId);
+			/* @var $tournament Tournament\Tournament */
+			$tournament = $sm->get(Tournament\Tournament::class);
+			return $tournament->getTournament();
 		},
 	),
 	'invokables' => array(
@@ -103,7 +99,7 @@ return array(
 	'initializers' => array(
 		'TournamentInitializer' => function($instance, $sm){
 			if($instance instanceof Tournament\TournamentAwareInterface){
-				$tournament = $sm->get(Entity\Tournament::class);
+				$tournament = $sm->get(Tournament\Tournament::class);
 				$instance->setTournament($tournament);
 			}
 		}

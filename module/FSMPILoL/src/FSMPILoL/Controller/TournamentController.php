@@ -23,8 +23,8 @@ class TournamentController extends AbstractTournamentFrontendController {
 			return new ViewModel();
 		}
 
-		$this->setTeamdata();
-		$this->setAPIData();
+		$this->getTournamentService()->setTeamdata();
+		$this->getTournamentService()->setAPIData();
 		return new ViewModel(array('tournament' => $tournament));
 	}
 	
@@ -34,7 +34,7 @@ class TournamentController extends AbstractTournamentFrontendController {
 			return new ViewModel();
 		}
 
-		$this->setAPIData();
+		$this->getTournamentService()->setAPIData();
 		
 		$loginForm = $this->getLoginForm();
 		
@@ -48,8 +48,8 @@ class TournamentController extends AbstractTournamentFrontendController {
 			return new ViewModel();
 		}
 
-		$this->setTeamdata();
-		$this->setAPIData();
+		$this->getTournamentService()->setTeamdata();
+		$this->getTournamentService()->setAPIData();
 		
 		$loginForm = $this->getLoginForm();
 		
@@ -91,7 +91,7 @@ class TournamentController extends AbstractTournamentFrontendController {
 				
 				if($match->getTeamHome() == $team || $match->getTeamGuest() == $team){
 					$isHome = $team == $match->getTeamHome();
-					
+					// TODO FormElementManager
 					$zeitForm = new ZeitmeldungForm($match, $team);
 					$data = array('match_id' => $match->getId());
 					
@@ -110,6 +110,7 @@ class TournamentController extends AbstractTournamentFrontendController {
 					} else {
 						$anmerkungGetter = 'getAnmerkungGuest';
 					}
+					// TODO FormElementManager
 					$ergebnisForm = new ErgebnismeldungForm($match, $team);
 					$data = array('match_id' => $match->getId());
 					foreach($match->getGames() as $game){
@@ -236,8 +237,8 @@ class TournamentController extends AbstractTournamentFrontendController {
 			}
 		}
 		
-		$this->setTeamdata();
-		$this->setAPIData();
+		$this->getTournamentService()->setTeamdata();
+		$this->getTournamentService()->setAPIData();
 		
 		return new ViewModel(array('tournament' => $tournament, 'forms' => $forms, 'messages' => $viewMessages));
 	}
@@ -401,7 +402,7 @@ class TournamentController extends AbstractTournamentFrontendController {
 			return $this->redirect()->toRoute('teams');
 		}
 
-		$this->setAPIData();
+		$this->getTournamentService()->setAPIData();
 		
 		return new ViewModel(array('tournament' => $tournament, 'team' => $team));
 	}

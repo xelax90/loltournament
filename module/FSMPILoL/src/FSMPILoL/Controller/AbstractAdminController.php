@@ -2,22 +2,20 @@
 namespace FSMPILoL\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use FSMPILoL\Entity\User;
+use Doctrine\ORM\EntityManager;
 use Zend\Mvc\MvcEvent;
 
 abstract class AbstractAdminController extends AbstractActionController
 {
-	/**
-	 * @var Doctrine\ORM\EntityManager
-	 */
+	/** @var EntityManager */
 	protected $em;
 	
 	/**
-	 * @return \Doctrine\ORM\EntityManager
+	 * @return EntityManager
 	 */
 	public function getEntityManager(){
 		if (null === $this->em) {
-			$this->em = $this->getServiceLocator()->get('Doctrine\ORM\EntityManager');
+			$this->em = $this->getServiceLocator()->get(EntityManager::class);
 		}
 		return $this->em;
 	}

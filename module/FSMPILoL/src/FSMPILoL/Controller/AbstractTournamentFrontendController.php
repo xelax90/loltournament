@@ -46,10 +46,7 @@ abstract class AbstractTournamentFrontendController extends AbstractActionContro
 	 * @return TournamentEntity
 	 */
 	public function getTournament(){
-		if(null === $this->tournament){
-			$this->tournament = $this->getServiceLocator()->get(TournamentEntity::class);
-		}
-		return $this->tournament;
+		return $this->getTournamentService()->getTournament();
 	}
 	
 	public function getTournamentService(){
@@ -79,15 +76,6 @@ abstract class AbstractTournamentFrontendController extends AbstractActionContro
 			}
 			$gGroup->setTeamdata();
 		}
-	}
-
-	/**
-	 * Injects Riot API Data into players
-	 * @return void
-	 */
-	protected function setAPIData(){
-		$service = $this->getTournamentService();
-		$service->setAPIData();
 	}
 	
 	protected function getLoginForm(){

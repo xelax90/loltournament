@@ -15,11 +15,9 @@ use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use DoctrineModule\Persistence\ProvidesObjectManager;
 use Zend\InputFilter\InputFilterProviderInterface;
 use FSMPILoL\Tournament\TournamentAwareInterface;
+use FSMPILoL\Tournament\TournamentAwareTrait;
 use FSMPILoL\Validator\MinMaxEmailsRwth;
 use FSMPILoL\Validator\MinMaxEmailsNotRwth;
-use FSMPILoL\Validator\AnmeldungTeamName;
-use FSMPILoL\Validator\AnmeldungSummonerName;
-use FSMPILoL\Validator\AnmeldungIcon;
 use FSMPILoL\Entity\Anmeldung as AnmeldungEntity;
 use FSMPILoL\Validator\NoObjectExistsInTournament;
 
@@ -30,10 +28,8 @@ use FSMPILoL\Validator\NoObjectExistsInTournament;
  * @author schurix
  */
 class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, InputFilterProviderInterface, TournamentAwareInterface{
-	use ProvidesObjectManager;
+	use ProvidesObjectManager, TournamentAwareTrait;
 	
-	protected $tournament;
-
 	public function __construct($name = "", $options = array()){
 		// we want to ignore the name passed
 		parent::__construct('anmeldung_team', $options);
@@ -137,6 +133,7 @@ class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, Inp
 	}
 	
 	public function getInputFilterSpecification() {
+		$tournament = $this->getTournament();
 		$filterSpec = array(
 			'teamName' => array(
 				'required' => true,
@@ -150,7 +147,7 @@ class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, Inp
 						'name' => NoObjectExistsInTournament::class,
 						'options' => array(
 							'object_repository' => $this->getObjectManager()->getRepository(AnmeldungEntity::class),
-							'tournament' => $this->getTournament(),
+							'tournament' => $tournament,
 							'fields' => 'teamName'
 						),
 					),
@@ -186,7 +183,7 @@ class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, Inp
 						'name' => NoObjectExistsInTournament::class,
 						'options' => array(
 							'object_repository' => $this->getObjectManager()->getRepository(AnmeldungEntity::class),
-							'tournament' => $this->getTournament(),
+							'tournament' => $tournament,
 							'fields' => 'icon'
 						),
 					),
@@ -221,13 +218,5 @@ class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, Inp
 		);
 		
 		return $filterSpec;
-	}
-
-	public function getTournament() {
-		return $this->tournament;
-	}
-
-	public function setTournament(\FSMPILoL\Entity\Tournament $tournament) {
-		$this->tournament = $tournament;
 	}
 }

@@ -6,25 +6,17 @@ use Zend\Form\Form;
 use Zend\InputFilter\InputFilter;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
-use Doctrine\Common\Persistence\ObjectManager;
 use Zend\InputFilter\InputFilterProviderInterface;
 use FSMPILoL\Tournament\TournamentAwareInterface;
-use FSMPILoL\Entity\Tournament;
+use FSMPILoL\Tournament\TournamentAwareTrait;
+use DoctrineModule\Persistence\ProvidesObjectManager;
 
 /**
  * Form for Players
  */
 class AddSubToTeamForm extends Form implements ObjectManagerAwareInterface, InputFilterProviderInterface, TournamentAwareInterface{
-	/**
-	 * @var ObjectManager
-	 */
-	protected $objectManager;
+	use ProvidesObjectManager, TournamentAwareTrait;
 	
-	/**
-	 * @var Tournament
-	 */
-	protected $tournament;
-
 	public function __construct($name = null, $options = array()){
 		// we want to ignore the name passed
 		parent::__construct('addsub', $options);
@@ -32,7 +24,7 @@ class AddSubToTeamForm extends Form implements ObjectManagerAwareInterface, Inpu
 	}
 	
 	public function init() {
-		$tournament = $this->getTournament();
+		$tournament = $this->getTournament()->getTournament();
 		if(empty($tournament)){
 			throw new \RuntimeException('Tournament cannot be empty');
 		}
@@ -127,22 +119,4 @@ class AddSubToTeamForm extends Form implements ObjectManagerAwareInterface, Inpu
 		);
 		return $filters;
 	}
-	
-	public function getObjectManager() {
-		return $this->objectManager;
-	}
-
-	public function setObjectManager(ObjectManager $objectManager) {
-		$this->objectManager = $objectManager;
-		return $this;
-	}
-	
-	public function getTournament() {
-		return $this->tournament;
-	}
-
-	public function setTournament(Tournament $tournament) {
-		$this->tournament = $tournament;
-	}
-	
 }
