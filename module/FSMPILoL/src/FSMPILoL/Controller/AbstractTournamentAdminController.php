@@ -2,7 +2,6 @@
 
 namespace FSMPILoL\Controller;
 
-use FSMPILoL\Tournament\Group;
 use FSMPILoL\Tournament\Tournament;
 
 /**

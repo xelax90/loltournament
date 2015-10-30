@@ -1,0 +1,150 @@
+body {
+	
+}
+
+.table>tbody>tr>td.matchGame-table-container{
+	padding-left: 30px;
+}
+
+.admin-paarung .position{
+	float: left;
+	line-height: 48px;
+	font-size: 28px;
+	width: 50px;
+}
+
+.admin-paarung .gamedate{
+	float: left;
+	width: 80px;
+	padding: 9px 0;
+	line-height: 17px;
+	text-align: left;
+}
+
+.team{
+    background-repeat: no-repeat;
+    background-size: 52px;
+    background-position-x: left;
+    min-height: 48px;
+    padding: 2px 2px 2px 58px;
+    margin-left: 0px;
+}
+
+.admin-paarung .team{
+    width: 430px;
+    float: left;
+}
+
+.admin-paarung .team.guest{
+    margin-left: 20px;
+}
+
+.team .teamname{
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    font-size: 17px;
+
+}
+.team .teamname.blocked{
+    color: red;
+}
+
+.team .players{
+    display: none;
+}
+
+.admin-team .team .players{
+    clear: both;
+}
+
+
+.admin-paarung .result,
+.admin-team .result{
+    float: right;
+    line-height: 24px;
+    /*font-size: 28px; */
+    width: 75px;
+    text-align: center;
+}
+
+.admin-team .result{
+    width: 110px;
+    margin-left: 20px;
+}
+
+.player{
+    margin: 0 0 10px 0;
+    background-repeat: no-repeat;
+    background-size: 52px;
+    background-position-x: left;
+    min-height: 44px;
+    padding: 6px 2px 2px 58px;	
+    line-height: 20px;
+    position: relative;
+    overflow: auto;
+}
+
+.player .player-controls{
+	float: right;
+	width: 8%;
+	line-height: 24px;
+	text-align: center;
+	margin-top: 15px;
+}
+
+.player .player_summonername,
+.player .player_level{
+    float: left;
+    clear: left;
+}
+
+.player .player_level{
+    clear: left;
+}
+.player .player_summonername{
+    font-weight: bold;
+}
+.player .player_summonername.captain{
+    color: red;
+}
+.player .player_normalWins,
+.player .player_rankedWins{
+    float: right;
+}
+
+.player .player_rankedWins{
+    clear: right;
+}
+.player .player_subborder{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 52px;
+    height: 52px;
+    border: 2px solid #FF4400;
+}
+
+.admin-paarung .table .cell-screen-gast,
+.admin-paarung .table .cell-screen-heim{
+    width: 40%;
+}
+
+.admin-paarung .table .cell-id{
+    width: 40px;
+}
+
+.admin-paarung .table .cell-meldung-heim,
+.admin-paarung .table .cell-meldung-gast,
+.admin-paarung .table .cell-ergebnis{
+    width: 70px;
+    text-align: center;
+}
+
+.team .teamname[onclick]:not([onclick='']) {
+    cursor: pointer;
+}
+
+.team-ansprechpartner{
+    float: right;
+}
+

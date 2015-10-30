@@ -5,6 +5,7 @@ namespace FSMPILoL\Form;
 use Zend\Form\Form;
 use Zend\InputFilter\InputFilter;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
+use DoctrineModule\Persistence\ProvidesObjectManager;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -12,10 +13,7 @@ use Doctrine\Common\Persistence\ObjectManager;
  * Form for Players
  */
 class PlayerForm extends Form implements ObjectManagerAwareInterface{
-	/**
-	 * @var ObjectManager
-	 */
-	protected $objectManager;
+	use ProvidesObjectManager;
 	
 	public function __construct($name = null, $options = array()){
 		// we want to ignore the name passed
@@ -58,14 +56,4 @@ class PlayerForm extends Form implements ObjectManagerAwareInterface{
 			)
 		));
 	}
-	
-	public function getObjectManager() {
-		return $this->objectManager;
-	}
-
-	public function setObjectManager(ObjectManager $objectManager) {
-		$this->objectManager = $objectManager;
-		return $this;
-	}
-
 }
