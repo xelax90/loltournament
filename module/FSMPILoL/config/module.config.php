@@ -164,7 +164,8 @@ return array(
                 'deny' => array(
                     // ...
                 ),
-            )
+            ),
+			\FSMPILoL\Provider\TournamentRuleProvider::class => array(),
 		),
 		
         'guards' => array(
@@ -261,12 +262,14 @@ return array(
 	
 	'navigation' => array(
 		'default' => array(
-			//array('label' => 'Home', 'route' => 'home'),
-			array('label' => 'Info', 'route' => 'info'),
-			array('label' => 'Tabelle', 'route' => 'ergebnisse'),
-			array('label' => 'Paarungen', 'route' => 'paarungen'),
-			array('label' => 'Teilnehmer', 'route' => 'teams'),
-			array('label' => 'Kontakt', 'route' => 'kontakt'),
+			array('label' => 'Home', 'route' => 'home', 'resource' => 'tournament', 'privilege' => 'navigation/home'),
+			array('label' => 'Info', 'route' => 'info', 'resource' => 'tournament', 'privilege' => 'navigation/info'),
+			array('label' => 'Anmeldung', 'route' => 'anmeldung/form', 'resource' => 'tournament', 'privilege' => 'navigation/anmeldung'),
+			array('label' => 'Teilnehmer', 'route' => 'teilnehmer', 'resource' => 'tournament', 'privilege' => 'navigation/teilnehmer'),
+			array('label' => 'Tabelle', 'route' => 'ergebnisse', 'resource' => 'tournament', 'privilege' => 'navigation/ergebnisse'),
+			array('label' => 'Paarungen', 'route' => 'paarungen', 'resource' => 'tournament', 'privilege' => 'navigation/paarungen'),
+			array('label' => 'Teilnehmer', 'route' => 'teams', 'resource' => 'tournament', 'privilege' => 'navigation/teams'),
+			array('label' => 'Kontakt', 'route' => 'kontakt', 'resource' => 'tournament', 'privilege' => 'navigation/kontakt'),
 		),
 		'admin' => array(
 			array('label' => gettext_noop('Tournaments'),           'route' => 'zfcadmin/tournament',        'resource' => 'tournament', 'privilege' => 'debug/administrator' ),
@@ -297,10 +300,7 @@ return array(
 			'TournamentInitializer' => function($element, $formElements){
 				if($element instanceof Tournament\TournamentAwareInterface){
 					$services      = $formElements->getServiceLocator();
-					$options       = $services->get('FSMPILoL\Options\Anmeldung');
-					$tournamentId  = $options->getTournamentId();
-					$em            = $services->get('Doctrine\ORM\EntityManager');
-					$tournament    = $em->getRepository('FSMPILoL\Entity\Tournament')->find($tournamentId);
+					$tournament    = $services->get(Tournament\Tournament::class);
 					$element->setTournament($tournament);
 				}
 			}

@@ -1,6 +1,7 @@
 <ul>
 	<?php $i = 0; ?>
 	<?php foreach($this->container as $key => $page): ?>
+		<?php if (!$this->navigation()->accept($page)){ continue; } ?>
 		<li <?= $page->active ? 'class="selected"' : '' ?> id="menu<?=($i + 1) ?>"><?= $this->navigation()->menu()->htmlify($page) ?></li>
 	<?php $i++; endforeach; ?>
 </ul>

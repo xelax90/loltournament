@@ -27,7 +27,7 @@ class Tournament implements ServiceLocatorAwareInterface{
 	protected $api;
 	
 	/** @var EntityManager */
-	protected $em;
+	protected $entityManager;
 	
 	/** @var array */
 	protected $summoners;

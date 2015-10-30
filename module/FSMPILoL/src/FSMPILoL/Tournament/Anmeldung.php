@@ -21,7 +21,7 @@ class Anmeldung implements ServiceLocatorAwareInterface, TournamentAwareInterfac
 		return $this->entityManager;
 	}
 
-	protected function getConfig(){
+	public function getConfig(){
 		if (null === $this->config) {
 			$this->config = $this->getServiceLocator()->get(AnmeldungOptions::class);
 		}

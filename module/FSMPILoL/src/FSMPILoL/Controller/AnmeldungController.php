@@ -22,17 +22,11 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
  * @author schurix
  */
 class AnmeldungController extends AbstractTournamentFrontendController {
-	/** @var Anmeldung */
-	protected $anmeldung;
-	
 	/**
 	 * @return Anmeldung
 	 */
 	public function getAnmeldung(){
-		if(null === $this->anmeldung){
-			$this->anmeldung = $this->getServiceLocator()->get(Anmeldung::class);
-		}
-		return $this->anmeldung;
+		return $this->getTournamentService()->getAnmeldung();
 	}
 
 	/**
@@ -88,6 +82,8 @@ class AnmeldungController extends AbstractTournamentFrontendController {
 
 	public function formAction(){
 		$this->authenticate();
+		var_dump($this->isAllowed('tournament', 'navigation/info'));
+		var_dump($this->isAllowed('tournament', 'navigation/teams'));
 		$lastPlayer = null;
 		if($this->zfcUserAuthentication()->hasIdentity()){
 			/* @var $identity \FSMPILoL\Entity\User */

@@ -133,7 +133,7 @@ class AnmeldungTeamForm extends Form implements ObjectManagerAwareInterface, Inp
 	}
 	
 	public function getInputFilterSpecification() {
-		$tournament = $this->getTournament();
+		$tournament = $this->getTournament()->getTournament();
 		$filterSpec = array(
 			'teamName' => array(
 				'required' => true,

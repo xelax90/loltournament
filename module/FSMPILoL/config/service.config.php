@@ -89,6 +89,7 @@ return array(
 		Tournament\Anmeldung::class => Tournament\Anmeldung::class,
 		Riot\RiotAPI::class => Riot\RiotAPI::class,
 		Tournament\Tournament::class => Tournament\Tournament::class,
+		Provider\TournamentRuleProvider::class => Provider\TournamentRuleProvider::class,
 	),
 	'aliases' => array(
 		'FSMPILoL\Options\API' => Options\APIOptions::class,

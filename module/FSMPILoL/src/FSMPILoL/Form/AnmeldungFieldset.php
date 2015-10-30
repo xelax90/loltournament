@@ -14,7 +14,6 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use DoctrineModule\Persistence\ProvidesObjectManager;
 use FSMPILoL\Tournament\TournamentAwareTrait;
-use DoctrineModule\Persistence\ProvidesObjectManager;
 use FSMPILoL\Entity\Anmeldung;
 use FSMPILoL\Tournament\TournamentAwareInterface;
 use FSMPILoL\Entity\Player;
