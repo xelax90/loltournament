@@ -82,8 +82,6 @@ class AnmeldungController extends AbstractTournamentFrontendController {
 
 	public function formAction(){
 		$this->authenticate();
-		var_dump($this->isAllowed('tournament', 'navigation/info'));
-		var_dump($this->isAllowed('tournament', 'navigation/teams'));
 		$lastPlayer = null;
 		if($this->zfcUserAuthentication()->hasIdentity()){
 			/* @var $identity \FSMPILoL\Entity\User */
