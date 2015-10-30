@@ -251,6 +251,8 @@ $ressourceAllowRules = array(
 	[['administrator'], 'siteconfig', 'registration/edit'],
 	[['moderator'], 'siteconfig', 'emails/list'],
 	[['administrator'], 'siteconfig', 'emails/edit'],
+	[['administrator'], 'siteconfig', 'tournament/list'],
+	[['administrator'], 'siteconfig', 'tournament/edit'],
 );
 
 return array(
@@ -416,7 +418,7 @@ return array(
 		'admin' => array(
 			'zfcuseradmin' => null,
 			array('label' => gettext_noop('Home'),            'route' => 'home'),
-			array('label' => gettext_noop('Config'),          'route' => 'zfcadmin/siteconfig/email', 'resource' => 'siteconfig', 'privilege' => 'list', 'pages' => array(
+			'siteconfig' => array('label' => gettext_noop('Config'),          'route' => 'zfcadmin/siteconfig/email', 'resource' => 'siteconfig', 'privilege' => 'list', 'pages' => array(
 				array('label' => gettext_noop('E-Mail'),            'route' => 'zfcadmin/siteconfig/email', 'action' => 'index' , 'resource' => 'siteconfig', 'privilege' => 'registration/list'),
 				array('label' => gettext_noop('Registration'),      'route' => 'zfcadmin/siteconfig/registration', 'action' => 'index'  , 'resource' => 'siteconfig', 'privilege' => 'registration/list'),
 				array('label' => gettext_noop('E-Mail Templates'),  'route' => 'zfcadmin/siteconfig/emails', 'action' => 'index'  , 'resource' => 'siteconfig', 'privilege' => 'emails/list'),

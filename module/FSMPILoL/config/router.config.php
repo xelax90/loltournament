@@ -548,6 +548,23 @@ $routerConfig = array(
 					),
 				),
 			),
+			'siteconfig' => array(
+				'child_routes' => array(
+					'tournament' => array(
+						'type' => 'segment',
+						'options' => array(
+							'route' => '/tournament[/:action]',
+							'defaults' => array(
+								'controller' => Controller\TournamentConfigController::class,
+								'action' => 'index',
+							),
+							'constraints' => array(
+								'action' => '(index|edit)',
+							),
+						),
+					),
+				)
+			)
 		),
 	),
 );

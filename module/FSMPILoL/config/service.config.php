@@ -74,6 +74,7 @@ return array(
 			$config = $sm->get('Config');
 			return new Options\RoundCreatorOptions(isset($config['fsmpilol_roundcreator']) ? $config['fsmpilol_roundcreator'] : array());
 		},
+		Options\TournamentOptions::class => Options\TournamentOptionsFactory::class,
 		Service\Tournament\Permission::class => function($sm){
 			return new Service\Tournament\Permission();
 		},
