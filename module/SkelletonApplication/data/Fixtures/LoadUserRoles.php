@@ -74,6 +74,7 @@ class LoadUserRoles extends AbstractFixture implements FixtureInterface, Service
 				if(empty($children) && strpos(strtolower($roleName), 'admin') !== false){
 					$this->addReference('admin-role', $found);
 				}
+				$this->saveRoles($manager, $children, $found);
 				continue;
 			}
 			

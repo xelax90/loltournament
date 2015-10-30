@@ -37,7 +37,6 @@ class Module
 		$translator = $sm->get('MvcTranslator');
 		// add Db Loader factory
 		$translator->getPluginManager()->setFactory(I18n\Translator\Loader\Db::class, I18n\Translator\Loader\Factory\DbFactory::class);
-		
 		if($e->getRouter() instanceof \Zend\Mvc\Router\Http\TranslatorAwareTreeRouteStack){
 			$e->getRouter()->setTranslator($translator);
 		}

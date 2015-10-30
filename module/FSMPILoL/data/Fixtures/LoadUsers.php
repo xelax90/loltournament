@@ -22,7 +22,7 @@ namespace FSMPILoL\Fixtures;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\FixtureInterface;
-use FSMPILoL\Entity\User;
+use SkelletonApplication\Entity\User;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -106,8 +106,17 @@ class LoadUsers extends AbstractFixture implements FixtureInterface, ServiceLoca
 		$role = $this->getReference('admin-role');
 		
 		
+		/* @var $userService \ZfcUser\Service\User */
+		$userService = $this->getServiceLocator()->get('zfcuser_user_service');
+		
         $zfcUserOptions = $this->getZfcUserOptions();
 		foreach($users as $user){
+			$found = $userService->getUserMapper()->findByEmail($user['email']);
+			if($found){
+				continue;
+			}
+			
+			
 			$u = new User();
 			$u->setId($user['id']);
 			$u->setUsername($user['email']);
