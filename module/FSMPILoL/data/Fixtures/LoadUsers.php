@@ -28,6 +28,7 @@ use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use SkelletonApplication\Fixtures\LoadUserRoles;
 
 class LoadUsers extends AbstractFixture implements FixtureInterface, ServiceLocatorAwareInterface, DependentFixtureInterface
 {
@@ -142,7 +143,7 @@ class LoadUsers extends AbstractFixture implements FixtureInterface, ServiceLoca
 	}
 
 	public function getDependencies() {
-		return array('FSMPILoL\Fixtures\LoadUserRoles');
+		return array(LoadUserRoles::class);
 	}
 
 }
