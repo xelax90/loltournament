@@ -48,8 +48,18 @@
 			<b>Hallo <?= $identity->getDisplayName() ?>, was möchtest du tun?</b>
 		</div>
 		<div class="article">
-			<a href="<?= $this->url('meldung') ?>">Ergebnis/Spieltermin melden</a> | 
-			<a href="<?= $this->url('myteam') ?>">Dein Team/Ersatzspieler ansehen</a>
+			<?php
+				$links = array();
+				if($this->isAllowed('tournament', 'navigation/meldung')){
+					$links[] = array( 'url' => 'meldung', 'text' =>  'Ergebnis/Spieltermin melden');
+				}
+				if($this->isAllowed('tournament', 'navigation/myteam')){
+					$links[] = array( 'url' => 'myteam', 'text' =>  'Dein Team/Ersatzspieler ansehen');
+				}
+			?>
+			<?php foreach($links as $i => $link): ?>
+			<?= $i > 0 ? ' | ' : ''  ?><a href="<?= $this->url($link['url']) ?>"><?= $link['text']; ?></a>
+			<?php endforeach; ?>
 		</div>
 	<?php endif; ?>
 </li>

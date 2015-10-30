@@ -37,7 +37,7 @@ class TournamentRuleProvider implements ProviderInterface, TournamentAwareInterf
 			case TournamentOptions::TOURNAMENT_PHASE_MAIN_ROUND:
 			case TournamentOptions::TOURNAMENT_PHASE_PLAYOFFS:
 			default:
-				$allow = array_merge($allow, array('ergebnisse', 'paarungen', 'teams'));
+				$allow = array_merge($allow, array('ergebnisse', 'paarungen', 'teams', 'myteam', 'meldung'));
 				break;
 		}
 		

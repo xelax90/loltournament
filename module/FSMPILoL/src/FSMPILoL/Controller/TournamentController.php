@@ -398,7 +398,7 @@ class TournamentController extends AbstractTournamentFrontendController {
 			}
 		}
 		
-		if (!$player | !$team | !$group) {
+		if(empty($player) || empty($team) || empty($group)){
 			return $this->redirect()->toRoute('teams');
 		}
 
