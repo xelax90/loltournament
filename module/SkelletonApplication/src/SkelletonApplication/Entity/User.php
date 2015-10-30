@@ -78,6 +78,7 @@ class User extends ZfcUserEntity implements JsonSerializable, ProviderInterface
     public function __construct()
     {
         $this->roles = new ArrayCollection();
+		$this->players = new ArrayCollection();
     }
 
     /**
