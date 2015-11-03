@@ -233,6 +233,15 @@ class User extends ZfcUserEntity implements JsonSerializable, ProviderInterface
 		return $mask | (!!$value << $bit);
 	}
 	
+	public function getLocale() {
+		return $this->locale;
+	}
+	
+	public function setLocale($locale) {
+		$this->locale = $locale;
+		return $this;
+	}
+	
 	/**
 	 * Generates token for email verification
 	 */
@@ -242,15 +251,6 @@ class User extends ZfcUserEntity implements JsonSerializable, ProviderInterface
             '0#c#n#c#r#u0#y#h7' . 
             $this->getTokenCreatedAt()->format('U')
         ),0,15)));
-	}
-	
-	public function getLocale() {
-		return $this->locale;
-	}
-	
-	public function setLocale($locale) {
-		$this->locale = $locale;
-		return $this;
 	}
 	
 	/** 
@@ -343,7 +343,8 @@ class User extends ZfcUserEntity implements JsonSerializable, ProviderInterface
 			'createdAt' => $this->getCreatedAt(),
 			'updatedAt' => $this->getUpdatedAt(),
 			'token' => $this->getToken(),
-			'tokenCretedAt' => $this->getTokenCreatedAt()
+			'tokenCretedAt' => $this->getTokenCreatedAt(),
+			'locale' => $this->getLocale()
 		);
 		return $data;
 	}

@@ -25,7 +25,6 @@ use Zend\ServiceManager\ServiceLocatorAwareTrait;
 use SkelletonApplication\Entity\User;
 use Doctrine\ORM\EntityManager;
 use SkelletonApplication\Options\SiteRegistrationOptions;
-use Doctrine\ORM\EntityManager;
 
 /**
  * Description of UserService

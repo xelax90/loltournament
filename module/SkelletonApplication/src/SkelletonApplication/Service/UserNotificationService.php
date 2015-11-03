@@ -159,6 +159,7 @@ class UserNotificationService implements ServiceLocatorAwareInterface{
 		if($parameters === null){
 			$parameters = array('user' => $user);
 		}
+		
 		$templateKey = SiteRegistrationOptions::getEmailTemplateKey($flag);
 		if(!$templateKey){
 			return null;
