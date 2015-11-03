@@ -18,11 +18,11 @@ $settings = array(
      * instead of the default one provided. Default is ZfcUser\Entity\User.
      * The entity class should implement ZfcUser\Entity\UserInterface
      */
-    'user_entity_class' => 'SkelletonApplication\Entity\User',
+    'user_entity_class' => \FSMPILoL\Entity\LoLUser::class,
 	'enable_default_entities' => false,
 	
 	'new_user_default_role' => 'user',
-	'role_entity_class' => 'SkelletonApplication\Entity\Role',
+	'role_entity_class' => \SkelletonApplication\Entity\Role::class,
     /**
      * Enable registration
      *

@@ -13,7 +13,6 @@ use FSMPILoL\Form\RoundForm;
 use FSMPILoL\Form\RoundPresetForm;
 use FSMPILoL\Tournament\Group;
 use FSMPILoL\Tournament\RoundCreator\AbstractRoundCreator;
-use FSMPILoL\Entity\User;
 
 /**
  * Description of RoundCreatorController

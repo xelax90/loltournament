@@ -84,7 +84,7 @@ class AnmeldungController extends AbstractTournamentFrontendController {
 		$this->authenticate();
 		$lastPlayer = null;
 		if($this->zfcUserAuthentication()->hasIdentity()){
-			/* @var $identity \FSMPILoL\Entity\User */
+			/* @var $identity \FSMPILoL\Entity\LoLUser */
 			$identity = $this->zfcUserAuthentication()->getIdentity();
 			$lastPlayer = $identity->getMostRecentPlayer();
 		}

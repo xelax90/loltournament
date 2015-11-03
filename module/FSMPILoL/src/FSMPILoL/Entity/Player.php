@@ -4,7 +4,6 @@ namespace FSMPILoL\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Json\Json;
 use JsonSerializable;
-use SkelletonApplication\Entity\User;
 
 /**
  * A Player
@@ -49,7 +48,7 @@ class Player implements JsonSerializable
 	protected $summonerId;
 	
 	/**
-	 * @ORM\ManyToOne(targetEntity="SkelletonApplication\Entity\User",inversedBy="players")
+	 * @ORM\ManyToOne(targetEntity="LoLUser",inversedBy="players")
 	 * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", onDelete="SET NULL")
 	 */
 	protected $user;

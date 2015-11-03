@@ -18,8 +18,8 @@
 		<?php $this->bower('backend', \BowerModule\View\Helper\Bower::CONTAINER_HEAD); ?>
 		<?php $this->bower('ieLT9', \BowerModule\View\Helper\Bower::CONTAINER_HEAD); ?>
 		<?php echo $this->headScript()
-				->appendFile($this->basePath('/js/select2.autoload.js')); ?>
-
+				->appendFile($this->basePath('/js/select2.autoload.js'))
+				->appendFile($this->basePath() . '/js/bootstrap-lightbox.js'); ?> 
 	</head>
 	<body>
 		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">

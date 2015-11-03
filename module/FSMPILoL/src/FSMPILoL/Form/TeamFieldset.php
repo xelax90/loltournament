@@ -7,12 +7,13 @@ use Zend\InputFilter\InputFilterProviderInterface;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use DoctrineModule\Persistence\ObjectManagerAwareInterface;
 use DoctrineModule\Persistence\ProvidesObjectManager;
-use Doctrine\Common\Persistence\ObjectManager;
 use FSMPILoL\Entity\Team;
-use FSMPILoL\Entity\Tournament;
 use FSMPILoL\Tournament\TournamentAwareInterface;
 use FSMPILoL\Tournament\TournamentAwareTrait;
-use SkelletonApplication\Entity\User;
+use FSMPILoL\Entity\LoLUser as User;
+use FSMPILoL\Entity\Group;
+use DoctrineModule\Form\Element\ObjectSelect;
+use XelaxHTMLPurifier\Filter\HTMLPurifier;
 
 /**
  * Fieldset to add/edit players
@@ -44,10 +45,10 @@ class TeamFieldset  extends Fieldset implements InputFilterProviderInterface, Ob
 		
 		$this->add(array(
 			'name' => 'group',
-			'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+			'type' => ObjectSelect::class,
 			'options' => array(
 				'object_manager' => $this->getObjectManager(),
-				'target_class'   => 'FSMPILoL\Entity\Group',
+				'target_class'   => Group::class,
 				'label_generator' => function($group) {
 					return 'Gruppe '.$group->getNumber();
 				},
@@ -85,7 +86,7 @@ class TeamFieldset  extends Fieldset implements InputFilterProviderInterface, Ob
 		
 		$this->add(array(
 			'name' => 'ansprechpartner',
-			'type' => 'DoctrineModule\Form\Element\ObjectSelect',
+			'type' => ObjectSelect::class,
 			'options' => array(
 				'object_manager' => $this->getObjectManager(),
 				'target_class'   => User::class,
@@ -209,7 +210,7 @@ class TeamFieldset  extends Fieldset implements InputFilterProviderInterface, Ob
 				'filters' => array(
 					array('name' => 'StringTrim'),
 					array('name' => 'StripTags'),
-					array('name' => 'XelaxHTMLPurifier\Filter\HTMLPurifier'),
+					array('name' => HTMLPurifier::class),
 				)
 			),
 			'ansprechpartner' => array(

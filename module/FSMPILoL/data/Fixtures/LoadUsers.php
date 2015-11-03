@@ -22,7 +22,7 @@ namespace FSMPILoL\Fixtures;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\FixtureInterface;
-use SkelletonApplication\Entity\User;
+use FSMPILoL\Entity\LoLUser as User;
 use Zend\Crypt\Password\Bcrypt;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;

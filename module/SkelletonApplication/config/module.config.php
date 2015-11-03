@@ -1,7 +1,6 @@
 <?php
 namespace SkelletonApplication;
 
-use XelaxAdmin\Router\ListRoute;
 use BjyAuthorize\Provider;
 use BjyAuthorize\Guard;
 use XelaxAdmin\Controller\ListController;
@@ -135,8 +134,6 @@ $ressourceAllowRules = array(
 	[['administrator'], 'siteconfig', 'registration/edit'],
 	[['moderator'], 'siteconfig', 'emails/list'],
 	[['administrator'], 'siteconfig', 'emails/edit'],
-	[['administrator'], 'siteconfig', 'tournament/list'],
-	[['administrator'], 'siteconfig', 'tournament/edit'],
 );
 
 return array(
@@ -160,7 +157,7 @@ return array(
 		),
 	),
 	
-    'xelax' => $xelaxConfig,
+	'xelax' => $xelaxConfig,
 	
 	'router' => array(
 		'router_class' => Mvc\Router\Http\LanguageTreeRouteStack::class,
@@ -262,7 +259,7 @@ return array(
 	// Site navigation
 	'navigation' => array(
 		// default navigation
-		/*'default' => array(
+		'default' => array(
 			'home'            => array('label' => gettext_noop('Home'),            'route' => 'home'),
 			'admin'           => array('label' => gettext_noop('Admin'),           'route' => 'zfcadmin',               'resource' => 'administration', 'privilege' => 'login'),
 			'login'           => array('label' => gettext_noop('Login'),           'route' => 'zfcuser/login',          'resource' => 'user',           'privilege' => 'login'),
@@ -270,7 +267,7 @@ return array(
 			'profile'         => array('label' => gettext_noop('Profile'),         'route' => 'zfcuser',                'resource' => 'user',           'privilege' => 'profile'),
 			'change-password' => array('label' => gettext_noop('Change Password'), 'route' => 'zfcuser/changepassword', 'resource' => 'user',           'privilege' => 'changepassword'),
 			'logout'          => array('label' => gettext_noop('Logout'),          'route' => 'zfcuser/logout',         'resource' => 'user',           'privilege' => 'logout'),
-		),*/
+		),
 		// admin navigation
 		'admin' => array(
 			'zfcuseradmin'  => null,

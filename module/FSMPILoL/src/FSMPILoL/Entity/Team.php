@@ -4,7 +4,6 @@ namespace FSMPILoL\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Zend\Json\Json;
 use JsonSerializable;
-use SkelletonApplication\Entity\User;
 
 /**
  * A Team
@@ -17,7 +16,7 @@ use SkelletonApplication\Entity\User;
  * @property int $number
  * @property boolean $isBlocked
  * @property string $icon
- * @property User $ansprechpartner
+ * @property LoLUser $ansprechpartner
  */
 class Team implements JsonSerializable
 {
@@ -60,7 +59,7 @@ class Team implements JsonSerializable
 	protected $anmerkung;
  	
 	/**
-     * @ORM\ManyToOne(targetEntity="SkelletonApplication\Entity\User")
+     * @ORM\ManyToOne(targetEntity="LoLUser")
 	 * @ORM\JoinColumn(name="ansprechpartner_id", referencedColumnName="user_id")
 	 */
 	protected $ansprechpartner;
@@ -136,7 +135,7 @@ class Team implements JsonSerializable
 	}
 	
 	/**
-	 * @return User
+	 * @return LoLUser
 	 */
 	public function getAnsprechpartner(){
 		return $this->ansprechpartner;
@@ -204,30 +203,37 @@ class Team implements JsonSerializable
 	public static function comparePoints($a, $b){
 		$dataA = $a->getData();
 		$dataB = $b->getData();
-		if(empty($dataA) || empty($dataB))
+		if(empty($dataA) || empty($dataB)){
 			return self::compare($b, $a);
-		if($dataB->getPoints() == $dataA->getPoints() && $dataB->getBuchholz() == $dataA->getBuchholz())
+		}
+		if($dataB->getPoints() == $dataA->getPoints() && $dataB->getBuchholz() == $dataA->getBuchholz()){
 			return self::compare($b, $a);
-		if($dataB->getPoints() == $dataA->getPoints())
+		}
+		if($dataB->getPoints() == $dataA->getPoints()){
 			return $dataB->getBuchholz() - $dataA->getBuchholz();
+		}
 		return $dataB->getPoints() - $dataA->getPoints();
 	}
 
 	public static function compareFarberwartung($a, $b){
 		$dataA = $a->getData();
 		$dataB = $b->getData();
-		if(empty($dataA) || empty($dataB))
+		if(empty($dataA) || empty($dataB)){
 			return self::compare($b, $a);
+		}
 		
 		$erwartungen = array("+g" => 3, "+h" => 3, "g" => 2, "h" => 2, "-o" => 1, "+o" => 1, "o" => 0);
-		if($dataB->getPoints() != $dataA->getPoints())
+		if($dataB->getPoints() != $dataA->getPoints()){
 			return $dataB->getPoints() - $dataA->getPoints();
+		}
 			
-		if($dataB->getBuchholz() != $dataA->getBuchholz())
+		if($dataB->getBuchholz() != $dataA->getBuchholz()){
 			return $dataB->getBuchholz() - $dataA->getBuchholz();
+		}
 		
-		if($dataB->getFarberwartung() != $dataA->getFarberwartung())
+		if($dataB->getFarberwartung() != $dataA->getFarberwartung()){
 			return $erwartungen[$dataB->getFarberwartung()] - $erwartungen[$dataA->getFarberwartung()];
+		}
 		
 		return self::compare($b, $a);
 	}

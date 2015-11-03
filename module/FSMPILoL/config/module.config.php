@@ -112,6 +112,8 @@ $ressourceAllowRules = array(
 	[['moderator'],     'tournament', 'round/viewHidden'],
 	[['moderator'],     'tournament', 'debug/moderator'],
 	[['administrator'], 'tournament', 'debug/administrator'],
+	[['administrator'], 'siteconfig', 'tournament/list'],
+	[['administrator'], 'siteconfig', 'tournament/edit'],
 );
 
 return array(
@@ -171,6 +173,10 @@ return array(
         'guards' => array(
             Guard\Route::class => $guardConfig
 		),
+	),
+	
+	'skelleton_application' => array(
+		'user_profile_entity' => Entity\LoLUserProfile::class,
 	),
 	
 	/*'skelleton_application' => array(
@@ -262,7 +268,13 @@ return array(
 	
 	'navigation' => array(
 		'default' => array(
-			array('label' => 'Home', 'route' => 'home', 'resource' => 'tournament', 'privilege' => 'navigation/home'),
+			'admin'           => null,
+			'login'           => null,
+			'register'        => null,
+			'profile'         => null,
+			'change-password' => null,
+			'logout'          => null,
+			'home'            => array('resource' => 'tournament', 'privilege' => 'navigation/home'),
 			array('label' => 'Info', 'route' => 'info', 'resource' => 'tournament', 'privilege' => 'navigation/info'),
 			array('label' => 'Anmeldung', 'route' => 'anmeldung/form', 'resource' => 'tournament', 'privilege' => 'navigation/anmeldung'),
 			array('label' => 'Teilnehmer', 'route' => 'teilnehmer', 'resource' => 'tournament', 'privilege' => 'navigation/teilnehmer'),

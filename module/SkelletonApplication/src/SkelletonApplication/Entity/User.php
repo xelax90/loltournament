@@ -8,7 +8,6 @@ use JsonSerializable;
 use Zend\Json\Json;
 use Doctrine\Common\Collections\ArrayCollection;
 use DateTime;
-use FSMPILoL\Entity\Tournament;
 
 /**
  * A User.
@@ -16,6 +15,7 @@ use FSMPILoL\Entity\Tournament;
  * @ORM\Entity(repositoryClass="SkelletonApplication\Model\UserRepository")
  * @ORM\Table(name="user")
  * @ORM\HasLifecycleCallbacks
+ * @ORM\InheritanceType("SINGLE_TABLE")
  */
 class User extends ZfcUserEntity implements JsonSerializable, ProviderInterface
 {
@@ -63,11 +63,6 @@ class User extends ZfcUserEntity implements JsonSerializable, ProviderInterface
 	protected $updatedAt;
 	
 	/**
-	 * @ORM\OneToMany(targetEntity="FSMPILoL\Entity\Player", mappedBy="user")
-	 */
-	protected $players;
-	
-	/**
 	 * @ORM\Column(type="string", nullable=true)
 	 */
 	protected $locale;
@@ -78,7 +73,6 @@ class User extends ZfcUserEntity implements JsonSerializable, ProviderInterface
     public function __construct()
     {
         $this->roles = new ArrayCollection();
-		$this->players = new ArrayCollection();
     }
 
     /**
@@ -252,7 +246,7 @@ class User extends ZfcUserEntity implements JsonSerializable, ProviderInterface
             $this->getTokenCreatedAt()->format('U')
         ),0,15)));
 	}
-	
+
 	/** 
 	 * @ORM\PrePersist 
 	 */  
@@ -278,36 +272,6 @@ class User extends ZfcUserEntity implements JsonSerializable, ProviderInterface
 	 */
 	public function getArrayCopy(){
 		return $this->jsonSerialize();
-	}
-	
-	/**
-	 * Returns player for given tournament
-	 * 
-	 * @param Tournament $tournament
-	 * @return \FSMPILoL\Entity\Player
-	 */
-	public function getPlayer(Tournament $tournament){
-		foreach($this->players as $player){
-			/* @var $player Player */
-			if($player->getAnmeldung()->getTournament() == $tournament)
-				return $player;
-		}
-		return null;
-	}
-	
-	/**
-	 * @return \FSMPILoL\Entity\Player
-	 */
-	public function getMostRecentPlayer(){
-		$maxId = 0;
-		$found = null;
-		foreach($this->players as $player){
-			/* @var $player \FSMPILoL\Entity\Player */
-			if($player->getAnmeldung()->getTournament()->getId() >= $maxId){
-				$found = $player;
-			}
-		}
-		return $found;
 	}
 	
 	/**

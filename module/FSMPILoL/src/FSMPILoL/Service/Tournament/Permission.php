@@ -9,8 +9,8 @@
 namespace FSMPILoL\Service\Tournament;
 
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use FSMPILoL\Entity\User;
+use Zend\ServiceManager\ServiceLocatorAwareTrait;
+use FSMPILoL\Entity\LoLUser as User;
 use FSMPILoL\Entity\Role;
 use FSMPILoL\Entity\Team;
 use FSMPILoL\Entity\Tournament;
@@ -19,17 +19,14 @@ use FSMPILoL\Entity\Tournament;
  * Permission handling for Tournaments
  */
 class Permission implements ServiceLocatorAwareInterface {
+	use ServiceLocatorAwareTrait;
+	
 	protected $ressources = array();
 
 	/**
 	 * @var TournamentPermissionHelper
 	 */
 	protected static $instance;
-	
-	/**
-	 * @var ServiceLocatorInterface
-	 */
-	protected $serviceLocator;
 	
 	public function __invoke(){
 		if (null === self::$instance) {
@@ -171,20 +168,6 @@ class Permission implements ServiceLocatorAwareInterface {
 		$identity = $auth->getIdentity();
 		
 		return call_user_func($this->ressources[$ressource], $identity, $team);
-	}
-	
-	/**
-	 * @return ServiceLocatorInterface
-	 */
-	public function getServiceLocator() {
-		return $this->serviceLocator;
-	}
-
-	/**
-	 * @param ServiceLocatorInterface $serviceLocator
-	 */
-	public function setServiceLocator(ServiceLocatorInterface $serviceLocator) {
-		$this->serviceLocator = $serviceLocator;
 	}
 	
 	/**
