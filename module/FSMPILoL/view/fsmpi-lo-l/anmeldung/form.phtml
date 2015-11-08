@@ -12,7 +12,7 @@
 			<?php echo $this->partial('fsmpi-lo-l/tournament/partial/loginForm.phtml', array('loginForm' => $this->loginForm, 'formAction' => $this->url())) ?>
 			<li id="einzelanmeldung">
 				<div class="header">
-					<b>Einzelanmeldung zur RWTH Liga</b><span><a href="#teamanmeldung">Zur Teamanmeldung</a></span>
+					<b>Einzelanmeldung zur RWTH Liga</b><?php // <span><a href="#teamanmeldung">Zur Teamanmeldung</a></span> ?>
 				</div>
 				<div class="article">
 					<?php 
@@ -23,6 +23,7 @@
 					?>
 				</div>
 			</li>
+			<?php if(false) : ?>
 			<li id="teamanmeldung">
 				<div class="header">
 					<b>Teamanmeldung zur RWTH Liga</b><span><a href="#einzelanmeldung">Zur Einzelanmeldung</a></span>
@@ -135,6 +136,7 @@
 					</script>
 				</div>
 			</li>
+			<?php endif; ?>
 		</ul>
 	</div>
 </div>

@@ -37,7 +37,7 @@ class AnmeldungSingleForm extends Form implements ObjectManagerAwareInterface, I
             'type' => 'FSMPILoL\Form\AnmeldungFieldset',
             'options' => array(
                 'use_as_base_fieldset' => true,
-				'showSub' => true,
+				'showSub' => false,
 				'showAnmerkungen' => true,
 				'requireRWTH' => true,
             ),
