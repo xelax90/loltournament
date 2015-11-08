@@ -100,7 +100,7 @@ $guardConfig = array(
 	['route' => 'zfcadmin/myteams/makesub',      'roles' => ['moderator']],
 	
 	// site config
-	['route' => 'zfcadmin/siteconfig/tournament',   'roles' => ['moderator']],
+	['route' => 'zfcadmin/config/tournament',   'roles' => ['moderator']],
 );
 
 $ressources = array(
@@ -289,7 +289,7 @@ return array(
 			array('label' => 'Runden', 'route' => 'zfcadmin/runden'),
 			array('label' => 'Teams', 'route' => 'zfcadmin/teams'),
 			array('label' => 'Meine Teams', 'route' => 'zfcadmin/myteams'),
-			'siteconfig' => array(
+			'config' => array(
 				'pages' => array(
 					array('label' => gettext_noop('Tournament'),            'route' => 'zfcadmin/siteconfig/tournament', 'action' => 'index' , 'resource' => 'siteconfig', 'privilege' => 'tournament/list'),
 				),
