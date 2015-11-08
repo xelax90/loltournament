@@ -100,7 +100,7 @@ $guardConfig = array(
 	['route' => 'zfcadmin/myteams/makesub',      'roles' => ['moderator']],
 	
 	// site config
-	['route' => 'zfcadmin/config/tournament',   'roles' => ['moderator']],
+	['route' => 'zfcadmin/siteconfig/tournament',   'roles' => ['moderator']],
 );
 
 $ressources = array(
